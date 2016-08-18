@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E2866CE7-53EB-4742-AC77-C034D50A0A8B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Sub Main</StartupObject>
+    <RootNamespace>AutoGH</RootNamespace>
+    <AssemblyName>AutoGH</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>AutoGH.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>AutoGH.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>..\..\TH\directshow\lib\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="HidLibrary">
+      <HintPath>W:\code\hidlibrary\HidLibrary-3.2.18.0\src\HidLibrary\bin\Debug\HidLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SlimDX SDK (January 2012)\Bin\net40\x86\SlimDX.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clsAction.vb" />
+    <Compile Include="clsCMController.vb" />
+    <Compile Include="clsController.vb" />
+    <Compile Include="clsElements.vb" />
+    <Compile Include="clsPS2Controller.cls" />
+    <Compile Include="clsBBBController.cls" />
+    <Compile Include="clsScript.vb" />
+    <Compile Include="clsSnapshot.vb" />
+    <Compile Include="clsXboxStatus.vb" />
+    <Compile Include="clsCMHIDController.vb" />
+    <Compile Include="frmBridge.Designer.vb">
+      <DependentUpon>frmBridge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmBridge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCaptureCard.Designer.vb">
+      <DependentUpon>frmCaptureCard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCaptureCard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCaptureWizard.Designer.vb">
+      <DependentUpon>frmCaptureWizard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCaptureWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCMIdentify.Designer.vb">
+      <DependentUpon>frmCMIdentify.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCMIdentify.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPattern.Designer.vb">
+      <DependentUpon>frmPattern.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmPattern.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modFormat.vb" />
+    <Compile Include="modMusicConverter.vb" />
+    <Compile Include="frmEdit.Designer.vb">
+      <DependentUpon>frmEdit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEdit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMusic.Designer.vb">
+      <DependentUpon>frmMusic.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMusic.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modMain.vb" />
+    <Compile Include="modTone.vb" />
+    <Compile Include="modVocal.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RefreshingListBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmBridge.resx">
+      <DependentUpon>frmBridge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCaptureCard.resx">
+      <DependentUpon>frmCaptureCard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCaptureWizard.resx">
+      <DependentUpon>frmCaptureWizard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCMIdentify.resx">
+      <DependentUpon>frmCMIdentify.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEdit.resx">
+      <DependentUpon>frmEdit.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMusic.resx">
+      <DependentUpon>frmMusic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPattern.resx">
+      <DependentUpon>frmPattern.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Netduino\ripxbdvd\NAudio-Source\NAudio\NAudio.csproj">
+      <Project>{DA4F02E3-0B5E-42CD-B8D9-5583FA51D66E}</Project>
+      <Name>NAudio</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="gcdapi.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\" />
+    <Folder Include="old\" />
+    <Folder Include="scripts\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
