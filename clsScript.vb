@@ -142,6 +142,8 @@
                 Dim ip As String = controllerIPS(action.controllerNumber)
                 If System.Text.RegularExpressions.Regex.IsMatch(ip, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") Then
                     controllers.Add(action.controllerNumber, New clsBBBController(ip))
+                ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^P(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") Then
+                    controllers.Add(action.controllerNumber, New clsPS3Controller(ip))
                 ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^COM[1-9][0-9]?$") Then
                     controllers.Add(action.controllerNumber, New clsPS2Controller(ip))
                 ElseIf ip.StartsWith("CM") Then
@@ -345,7 +347,7 @@
 
     Public Sub stopScript()
         stopFlag = True
-        runThread.Join()
+        If Not runThread.Join(5000) Then runThread.Abort()
         Me.dispose()
     End Sub
 

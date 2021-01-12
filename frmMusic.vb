@@ -9,7 +9,7 @@ Public Class frmMusic
 
     Private basepath As String
 
-    Private arrGames(4) As clsGame
+    Private arrGames(5) As clsGame
     Private lstSongs As New List(Of clsSong)
     Private lstTracks As New List(Of clsTrack)
     Private arrLevel(3) As clsLevel
@@ -84,6 +84,7 @@ Public Class frmMusic
         arrGames(2) = New clsGame("Rock Band", "RB", enumGame.gmRB)
         arrGames(3) = New clsGame("Rock Band II", "RB2", enumGame.gmRB2)
         arrGames(4) = New clsGame("Rock Band Beatles", "RBB", enumGame.gmRBB)
+        arrGames(5) = New clsGame("Lego Rock Band", "LRB", enumGame.gmLRB)
 
         For i As Integer = 0 To 3
             arrLevel(i) = New clsLevel(i)
@@ -421,7 +422,7 @@ Public Class frmMusic
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        For Each fi As IO.FileInfo In (New IO.DirectoryInfo("G:\AutoGH\AutoGH\bin\Debug\GH\RB2").GetFiles("*.mid"))
+        For Each fi As IO.FileInfo In (New IO.DirectoryInfo("G:\AutoGH\AutoGH\bin\Debug\GH\LRB").GetFiles("*.mid"))
             If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".wav") Then modVocal.generateWAV(fi.FullName)
         Next
     End Sub

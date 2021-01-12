@@ -87,6 +87,7 @@
     <Compile Include="clsSnapshot.vb" />
     <Compile Include="clsXboxStatus.vb" />
     <Compile Include="clsCMHIDController.vb" />
+    <Compile Include="clsPS3Controller.cls" />
     <Compile Include="frmBridge.Designer.vb">
       <DependentUpon>frmBridge.vb</DependentUpon>
     </Compile>
@@ -156,6 +157,7 @@
   <ItemGroup>
     <EmbeddedResource Include="frmBridge.resx">
       <DependentUpon>frmBridge.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCaptureCard.resx">
       <DependentUpon>frmCaptureCard.vb</DependentUpon>

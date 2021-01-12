@@ -4,6 +4,7 @@
     gmRB
     gmRB2
     gmRBB
+    gmLRB
 End Enum
 
 Enum enumLevel
@@ -29,7 +30,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return False
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return True
                 Case Else
                     Return True
@@ -42,7 +43,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return &H10000
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return clsController.XBButtons.btnA
                 Case Else
                     Return True
@@ -55,7 +56,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return clsController.XBButtons.btnLB
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return clsController.XBButtons.btnB
                 Case Else
                     Return True
@@ -68,7 +69,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return &H20000
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return clsController.XBButtons.btnX
                 Case Else
                     Return True
@@ -81,7 +82,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return clsController.XBButtons.btnRB
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return clsController.XBButtons.btnY
                 Case Else
                     Return True
@@ -94,7 +95,7 @@ Friend Class clsGame
             Select Case game
                 Case enumGame.gmGH2, enumGame.gmGH3
                     Return clsController.XBButtons.btnA
-                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB
+                Case enumGame.gmRB, enumGame.gmRB2, enumGame.gmRBB, enumGame.gmLRB
                     Return clsController.XBButtons.btnLB
                 Case Else
                     Return True
@@ -108,7 +109,7 @@ Friend Class clsGame
                 Case enumGame.gmGH2
                     Return 1.0025
                 Case enumGame.gmGH3
-                    Return 1
+                    Return 1.00008
                 Case Else
                     Return 1
             End Select
@@ -143,6 +144,8 @@ Friend Class clsGame
                     Return 50
                 Case enumGame.gmGH3
                     Return 25
+                Case enumGame.gmLRB
+                    Return 35
                 Case Else
                     Return 50
             End Select
@@ -243,7 +246,7 @@ Friend Class clsTrack
                     Select Case _game.name
                         Case "Rock Band"
                             Return _game.noteGreen + IIf(nostrum, 0, strumButton)
-                        Case "Rock Band Beatles", "Rock Band II"
+                        Case "Rock Band Beatles", "Rock Band II", "Lego Rock Band"
                             Return _game.noteOrange + IIf(nostrum, 0, strumButton)
                         Case Else
                             Stop
@@ -272,7 +275,7 @@ Friend Class clsTrack
                     Select Case _game.name
                         Case "Rock Band"
                             Return _game.noteBlue + IIf(nostrum, 0, strumButton)
-                        Case "Rock Band Beatles", "Rock Band II"
+                        Case "Rock Band Beatles", "Rock Band II", "Lego Rock Band"
                             Return _game.noteRed + IIf(nostrum, 0, strumButton)
                         Case Else
                             Stop
@@ -301,7 +304,7 @@ Friend Class clsTrack
                     Select Case _game.name
                         Case "Rock Band"
                             Return _game.noteRed + IIf(nostrum, 0, strumButton)
-                        Case "Rock Band Beatles", "Rock Band II"
+                        Case "Rock Band Beatles", "Rock Band II", "Lego Rock Band"
                             Return _game.noteBlue + IIf(nostrum, 0, strumButton)
                         Case Else
                             Stop
@@ -341,7 +344,7 @@ Friend Class clsTrack
                     Select Case _game.name
                         Case "Rock Band"
                             Return _game.noteOrange + IIf(nostrum, 0, strumButton)
-                        Case "Rock Band Beatles", "Rock Band II"
+                        Case "Rock Band Beatles", "Rock Band II", "Lego Rock Band"
                             Return _game.noteGreen + IIf(nostrum, 0, strumButton)
                         Case Else
                             Stop

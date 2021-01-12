@@ -95,6 +95,7 @@ Partial Class frmEdit
         Me.cbPrecompile = New System.Windows.Forms.CheckBox()
         Me.scMain = New System.Windows.Forms.SplitContainer()
         Me.lblWaitTime = New System.Windows.Forms.Label()
+        Me.lbActions = New AutoGH.RefreshingListBox()
         Me.tcActions = New System.Windows.Forms.TabControl()
         Me.tpController = New System.Windows.Forms.TabPage()
         Me.lblControllerIP = New System.Windows.Forms.Label()
@@ -139,6 +140,7 @@ Partial Class frmEdit
         Me.btnRenameGroup = New System.Windows.Forms.Button()
         Me.btnAddGroup = New System.Windows.Forms.Button()
         Me.btnDeleteGroup = New System.Windows.Forms.Button()
+        Me.lbGroups = New AutoGH.RefreshingListBox()
         Me.gbControllers = New System.Windows.Forms.GroupBox()
         Me.txtController4 = New System.Windows.Forms.TextBox()
         Me.lblController4 = New System.Windows.Forms.Label()
@@ -149,8 +151,7 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
-        Me.lbActions = New AutoGH.RefreshingListBox()
-        Me.lbGroups = New AutoGH.RefreshingListBox()
+        Me.USBDeviceFinderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlControls.SuspendLayout()
@@ -716,7 +717,7 @@ Partial Class frmEdit
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -906,6 +907,19 @@ Partial Class frmEdit
         Me.lblWaitTime.Size = New System.Drawing.Size(100, 13)
         Me.lblWaitTime.TabIndex = 63
         Me.lblWaitTime.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lbActions
+        '
+        Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbActions.FormattingEnabled = True
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(498, 191)
+        Me.lbActions.TabIndex = 45
         '
         'tcActions
         '
@@ -1373,6 +1387,18 @@ Partial Class frmEdit
         Me.btnDeleteGroup.Text = "r"
         Me.btnDeleteGroup.UseVisualStyleBackColor = True
         '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
         'gbControllers
         '
         Me.gbControllers.Controls.Add(Me.txtController4)
@@ -1469,30 +1495,11 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
-        'lbActions
+        'USBDeviceFinderToolStripMenuItem
         '
-        Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbActions.FormattingEnabled = True
-        Me.lbActions.IntegralHeight = False
-        Me.lbActions.Location = New System.Drawing.Point(3, 297)
-        Me.lbActions.Name = "lbActions"
-        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lbActions.Size = New System.Drawing.Size(498, 191)
-        Me.lbActions.TabIndex = 45
-        '
-        'lbGroups
-        '
-        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbGroups.FormattingEnabled = True
-        Me.lbGroups.IntegralHeight = False
-        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
-        Me.lbGroups.Name = "lbGroups"
-        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
-        Me.lbGroups.TabIndex = 0
+        Me.USBDeviceFinderToolStripMenuItem.Name = "USBDeviceFinderToolStripMenuItem"
+        Me.USBDeviceFinderToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.USBDeviceFinderToolStripMenuItem.Text = "USB Device Finder"
         '
         'frmEdit
         '
@@ -1663,4 +1670,5 @@ Partial Class frmEdit
     Friend WithEvents txtVideoPixelX As System.Windows.Forms.TextBox
     Friend WithEvents lblVideoPixelY As System.Windows.Forms.Label
     Friend WithEvents lblVideoPixelX As System.Windows.Forms.Label
+    Friend WithEvents USBDeviceFinderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

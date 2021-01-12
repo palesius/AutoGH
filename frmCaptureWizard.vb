@@ -56,6 +56,7 @@ Public Class frmcaptureWizard
 
         ' Add any initialization after the InitializeComponent() call.
         ListViewItem_SetSpacing(lvCaptures, 136, 82)
+        If Not IO.Directory.Exists("snaps") Then IO.Directory.CreateDirectory("snaps")
 
     End Sub
 

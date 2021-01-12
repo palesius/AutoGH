@@ -122,25 +122,29 @@ Public MustInherit Class clsAction
     End Function
 
     Public Shared Function fromXML(node As XmlElement, group As clsActionGroup)
+        Dim a As clsAction
         Select Case node.Name
             Case "Wait"
-                Return New clsActionWait(node, group)
+                a = New clsActionWait(node, group)
             Case "Loop"
-                Return New clsActionLoop(node, group)
+                a = New clsActionLoop(node, group)
             Case "Hold"
-                Return New clsActionHold(node, group)
+                a = New clsActionHold(node, group)
             Case "Release"
-                Return New clsActionRelease(node, group)
+                a = New clsActionRelease(node, group)
             Case "Press"
-                Return New clsActionPress(node, group)
+                a = New clsActionPress(node, group)
             Case "Group"
-                Return New clsActionAGroup(node, group)
+                a = New clsActionAGroup(node, group)
             Case "VideoInput"
-                Return New clsActionInputVideo(node, group)
+                a = New clsActionInputVideo(node, group)
             Case Else
                 Return Nothing
                 Stop
         End Select
+        Dim comAtt As XmlAttribute = node.Attributes("Comment")
+        If Not comAtt Is Nothing Then a.comment = comAtt.Value
+        Return a
     End Function
 
     Public Overrides Function toString() As String
@@ -205,6 +209,7 @@ Public Class clsActionWait
     Public Overrides Function toXML(doc As XmlDocument) As XmlElement
         Dim tmp As XmlElement = doc.CreateElement("Wait")
         tmp.SetAttribute("Delay", delay)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -267,6 +272,7 @@ Public Class clsActionLoop
         Dim tmp As XmlElement = doc.CreateElement("Loop")
         tmp.SetAttribute("Target", target.index)
         tmp.SetAttribute("Repeat", repeat)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -337,6 +343,7 @@ Public Class clsActionAGroup
         Dim tmp As XmlElement = doc.CreateElement("Group")
         tmp.SetAttribute("Name", target.name)
         tmp.SetAttribute("Repeat", repeat)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -345,10 +352,10 @@ Public Class clsActionAGroup
     End Sub
 
     Public Sub New(node As XmlNode, _group As clsActionGroup)
+        group = _group
         target = Nothing
         tgtName = node.Attributes("Name").Value
         repeat = node.Attributes("Repeat").Value
-        group = _group
     End Sub
 
     Public Overrides Function clone() As clsAction
@@ -461,6 +468,7 @@ Public Class clsActionHold
             tmp.SetAttribute("RSX", RS.X)
             tmp.SetAttribute("RSY", RS.Y)
         End If
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -485,6 +493,7 @@ Public Class clsActionHold
     End Sub
 
     Public Sub New(node As XmlNode, _group As clsActionGroup)
+        group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
         If att Is Nothing Then buttonMask = 0 Else buttonMask = att.Value
@@ -500,7 +509,6 @@ Public Class clsActionHold
         If att Is Nothing Then RS.X = -128 Else RS.X = att.Value
         att = node.Attributes("RSY")
         If att Is Nothing Then RS.Y = -128 Else RS.Y = att.Value
-        group = _group
     End Sub
 
     Public Overrides Function clone() As clsAction
@@ -575,6 +583,7 @@ Public Class clsActionRelease
         tmp.SetAttribute("Controller", controllerNumber)
         If buttonMask > 0 Then tmp.SetAttribute("ButtonMask", buttonMask)
         If LTDefined Or RTDefined Or LSDefined Or RSDefined Then tmp.SetAttribute("AnalogMask", (IIf(LTDefined, &H1, 0) Or IIf(RTDefined, &H2, 0) Or IIf(LSDefined, &H4, 0) Or IIf(RSDefined, &H8, 0)))
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -598,6 +607,7 @@ Public Class clsActionRelease
     End Sub
 
     Public Sub New(node As XmlNode, _group As clsActionGroup)
+        group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
         If att Is Nothing Then buttonMask = 0 Else buttonMask = att.Value
@@ -608,7 +618,6 @@ Public Class clsActionRelease
         RTDefined = mask2 And &H2
         LSDefined = mask2 And &H4
         RSDefined = mask2 And &H8
-        group = _group
     End Sub
 
     Public Overrides Function clone() As clsAction
@@ -731,6 +740,7 @@ Public Class clsActionPress
         tmp.SetAttribute("Hold", holdTime)
         tmp.SetAttribute("Wait", waitTime)
         tmp.SetAttribute("Repeat", repeat)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 
@@ -758,6 +768,7 @@ Public Class clsActionPress
     End Sub
 
     Public Sub New(node As XmlNode, _group As clsActionGroup)
+        group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
         If att Is Nothing Then buttonMask = 0 Else buttonMask = att.Value
@@ -776,7 +787,6 @@ Public Class clsActionPress
         holdTime = node.Attributes("Hold").Value
         waitTime = node.Attributes("Wait").Value
         repeat = node.Attributes("Repeat").Value
-        group = _group
     End Sub
 
     Public Overrides Function clone() As clsAction
@@ -804,12 +814,12 @@ Public Class clsActionInputVideo
     End Sub
 
     Public Sub New(node As XmlNode, _group As clsActionGroup)
+        group = _group
         interval = node.Attributes("Interval").Value
         duration = node.Attributes("Duration").Value
         pixel = New Point(node.Attributes("X").Value, node.Attributes("Y").Value)
         minColor = Color.FromArgb(node.Attributes("minColor").Value)
         maxColor = Color.FromArgb(node.Attributes("maxColor").Value)
-        group = _group
     End Sub
 
     Public Overrides Function Clone() As clsAction
@@ -845,6 +855,7 @@ Public Class clsActionInputVideo
         tmp.SetAttribute("Y", pixel.Y)
         tmp.SetAttribute("minColor", minColor.ToArgb)
         tmp.SetAttribute("maxColor", maxColor.ToArgb)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function
 End Class
@@ -938,7 +949,7 @@ Public Class clsStatelessAction
     End Sub
 
     Public Overrides Function ToString() As String
-        If TypeOf controller Is clsBBBController Then
+        If TypeOf controller Is clsBBBController Or TypeOf controller Is clsPS3Controller Then
             Return timeoffset & "," & CType(controller, clsBBBController).IP & "," & System.BitConverter.ToString(report).Replace("-", "")
         Else
             Return MyBase.ToString

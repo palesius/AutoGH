@@ -20,7 +20,7 @@ Public Class clsCMHIDController
         For Each hdev As HidDevice In HidDevices.Enumerate()
             Dim vpString As String = String.Format("{0:X4}{1:X4}", hdev.Attributes.VendorId, hdev.Attributes.ProductId)
             Select Case vpString
-                Case "20080001"
+                Case "20080001", "25080003", "25080001", "20080010"
                     devicePaths.Add(hdev.DevicePath)
             End Select
         Next
@@ -31,14 +31,21 @@ Public Class clsCMHIDController
         devicePaths.Sort()
         dev = HidDevices.GetDevice(devicePaths(idx))
         dev.OpenDevice()
-        dev.Write(New Byte() {0, 7, 0, 0, 1})
+        If Not dev.Write(New Byte() {0, 7, 0, 0, 1}, 5000) Then
+            MsgBox("Communications timeout")
+            Exit Sub
+        End If
+
         reportData = baseReport()
         update()
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
         Debug.Print(System.BitConverter.ToString(newReport))
-        dev.Write(newReport)
+        If Not dev.Write(newReport, 5000) Then
+            MsgBox("Communications timeout")
+            Exit Sub
+        End If
     End Sub
 
     Public Overrides Function baseReport() As Byte()
@@ -134,7 +141,10 @@ Public Class clsCMHIDController
     Public Overrides Sub dispose()
         If Not dev Is Nothing Then
             If dev.IsOpen Then
-                dev.Write(New Byte() {0, 8, 0, 0, 1})
+                If Not dev.Write(New Byte() {0, 8, 0, 0, 1}, 5000) Then
+                    MsgBox("Communications timeout")
+                    Exit Sub
+                End If
                 dev.CloseDevice()
             End If
             dev.Dispose()
@@ -145,7 +155,10 @@ Public Class clsCMHIDController
     Protected Overrides Sub Finalize()
         If Not dev Is Nothing Then
             If dev.IsOpen Then
-                dev.Write(New Byte() {0, 8, 0, 0, 1})
+                If Not dev.Write(New Byte() {0, 8, 0, 0, 1}, 5000) Then
+                    MsgBox("Communications timeout")
+                    Exit Sub
+                End If
                 dev.CloseDevice()
             End If
             dev.Dispose()

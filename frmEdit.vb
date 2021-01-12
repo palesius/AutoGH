@@ -1,5 +1,6 @@
 ﻿Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports HidLibrary
 Public Class frmEdit
     Private valLS As Point
     Private valRS As Point
@@ -495,8 +496,13 @@ Public Class frmEdit
             If rbPress.Checked Then action = New clsActionPress(cbControllerIP.SelectedItem, btnToMap, valLT, valRT, valLS, valRS, unformatMS(txtControllerHold.Text), unformatMS(txtControllerWait.Text), CInt(txtControllerRepeat.Text), activeGroup)
         ElseIf tcActions.SelectedTab Is tpFlow Then
             If rbWait.Checked Then action = New clsActionWait(unformatMS(txtFlowWait.Text), activeGroup)
-            If rbLoop.Checked Then action = New clsActionLoop(loopTarget, CInt(txtFlowRepeat.Text), activeGroup)
-            If rbGroup.Checked Then action = New clsActionAGroup(groupTarget, CInt(txtFlowRepeat.Text), activeGroup)
+            If rbLoop.Checked Then
+                If loopTarget Is Nothing Then MsgBox("You must select a target") Else action = New clsActionLoop(loopTarget, CInt(txtFlowRepeat.Text), activeGroup)
+            End If
+
+            If rbGroup.Checked Then
+                If groupTarget Is Nothing Then MsgBox("You must select a target") Else action = New clsActionAGroup(groupTarget, CInt(txtFlowRepeat.Text), activeGroup)
+            End If
         ElseIf tcActions.SelectedTab Is tpInput Then
             If rbInputVideo.Checked Then action = New clsActionInputVideo(unformatMS(txtInputInterval.Text), unformatMS(txtInputDuration.Text), New Point(txtVideoPixelX.Text, txtVideoPixelY.Text), btnVideoColorMin.BackColor, btnVideoColorMax.BackColor, activeGroup)
             'If rbInputAudio.Checked Then action = New clsActionInputAudio(txtInputInterval.Text, txtInputDuration.Text, <source>,<minvol>,<maxvol>)
@@ -508,6 +514,7 @@ Public Class frmEdit
 
     Private Sub btnAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnAdd.Click
         Dim action As clsAction = createAction()
+        If action Is Nothing Then Exit Sub
 
         Dim index As Integer = activeGroup.actions.Count
         Select Case Me.cmbAdd.Text
@@ -1116,23 +1123,28 @@ Public Class frmEdit
                         If Not lastAction Is Nothing Then
                             If Not lastAction.group Is activeGroup Then
                                 activeGroup = lastAction.group
-                                If activeGroup Is Nothing Then Stop
-                                lbGroups.SelectedItem = activeGroup
-                                activeGroup = lbGroups.SelectedItem
-                                refreshGroup()
+                                If Not activeGroup Is Nothing Then
+                                    lbGroups.SelectedItem = activeGroup
+                                    activeGroup = lbGroups.SelectedItem
+                                    refreshGroup()
+                                End If
                             End If
                             lbActions.SelectedItems.Clear()
-                            lbActions.SelectedItem = lastAction.original
+                            If lastAction.original Is Nothing Then
+                                lbActions.SelectedItem = lastAction
+                            Else
+                                lbActions.SelectedItem = lastAction.original
+                            End If
                         End If
                     End If
                     lblWaitTime.Text = formatMS(asWait)
                 End If
             Case clsScript.scriptState.finished
-                btnStop.Enabled = False
-                setBtnPP(True)
-                activeScript = Nothing
-                lblWaitTime.Text = vbNullString
-                tmrScriptStatus.Enabled = False
+                    btnStop.Enabled = False
+                    setBtnPP(True)
+                    activeScript = Nothing
+                    lblWaitTime.Text = vbNullString
+                    tmrScriptStatus.Enabled = False
         End Select
     End Sub
 
@@ -1252,7 +1264,7 @@ Public Class frmEdit
 
     Private Sub validateController(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtController1.Validating, txtController2.Validating, txtController3.Validating, txtController4.Validating
         Dim txt As TextBox = CType(sender, TextBox)
-        Dim re As New Regex("^((COM\d+)|(CM\d+)|(CM)|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|)$")
+        Dim re As New Regex("^((COM\d+)|(CM\d+)|(CM)|P?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|)$")
         If Not re.IsMatch(txt.Text) Then
             e.Cancel = True
             MsgBox("Invalid controller target")
@@ -1340,5 +1352,29 @@ Public Class frmEdit
         txtVideoPixelY.Text = vwf.pos.Y
         btnVideoColorMin.BackColor = vwf.minColor
         btnVideoColorMax.BackColor = vwf.maxColor
+    End Sub
+
+    Private Sub USBDeviceFinderToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles USBDeviceFinderToolStripMenuItem.Click
+        MsgBox("Please have the device you want to identify unplugged before proceeding.")
+        Dim before As New Dictionary(Of String, String)
+        For Each hdev As HidDevice In HidDevices.Enumerate()
+            If Not before.ContainsKey(hdev.DevicePath) Then before.Add(hdev.DevicePath, hdev.DevicePath)
+        Next
+        MsgBox("Please attach the device to be identified.")
+        Dim newdevs As New System.Text.StringBuilder
+        For Each hdev As HidDevice In HidDevices.Enumerate()
+            If Not before.ContainsKey(hdev.DevicePath) Then
+                If newdevs.Length > 0 Then newdevs.AppendLine("******************************")
+                newdevs.AppendLine(hdev.DevicePath)
+                newdevs.AppendLine(hdev.Description)
+                newdevs.AppendLine(hdev.Attributes.VendorHexId & ":" & hdev.Attributes.ProductHexId)
+            End If
+        Next
+        If newdevs.Length > 0 Then
+            MsgBox("The new device info has been copied to the clipboard.")
+            Clipboard.SetText(newdevs.ToString)
+        Else
+            MsgBox("No new HID Devices found.")
+        End If
     End Sub
 End Class

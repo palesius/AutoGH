@@ -120,6 +120,15 @@
   <data name="Label1.Text" xml:space="preserve">
     <value>Click "Detect" to identify all connected CronusMax devices.
 
-Then select a number from the dropdown and click identify to determine which physical device corresponds to that number. (It will put the device into "Direct" mode for 1 second and it will display three lines during that time.)</value>
+Identify One: Select a number from the dropdown and click identify to determine which physical device corresponds to that number. (It will put the device into "Direct" mode for 1 second and it will display three lines during that time.)
+
+Identify All: (CronusMax Plus Only), will change LED colors of all connected devices based on their number:
+1: Blue
+2: Green
+3: Cyan
+4: Red
+5: Magenta
+6: Yellow
+7: White</value>
   </data>
 </root>
