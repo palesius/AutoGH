@@ -7,6 +7,7 @@
     Public totalWait As Integer
     Private controllers As Generic.Dictionary(Of String, clsController)
     Private capture As clsSnapshot
+    Private needsCapture As Boolean
 
     Enum scriptState
         ready
@@ -130,12 +131,7 @@
                 Case ActionType.actLoop
                     CType(action, clsActionLoop).repeatLeft = CType(action, clsActionLoop).repeat
                 Case ActionType.actInputVideo
-                    If capture Is Nothing Then capture = createCapture()
-                    If capture Is Nothing Then
-                        state = scriptState.scriptError
-                        Exit Sub
-                    End If
-                    CType(action, clsActionInputVideo).capture = capture
+                    needsCapture = True
             End Select
             If action.controllerNumber AndAlso Not controllers.ContainsKey(action.controllerNumber) Then
                 If Not controllerIPS.ContainsKey(action.controllerNumber) Then Stop
@@ -147,7 +143,7 @@
                 ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^COM[1-9][0-9]?$") Then
                     controllers.Add(action.controllerNumber, New clsPS2Controller(ip))
                 ElseIf ip.StartsWith("CM") Then
-                    controllers.Add(action.controllerNumber, New clsCMHIDController(ip))
+                    controllers.Add(action.controllerNumber, New clsCMHSController(ip))
                 Else
                     Stop
                 End If
@@ -254,6 +250,20 @@
     End Sub
 
     Private Sub runScript()
+        If needsCapture Then
+            If capture Is Nothing Then capture = createCapture()
+            If capture Is Nothing Then
+                state = scriptState.scriptError
+                Exit Sub
+            End If
+            For Each action As clsAction In actions
+                Select Case action.getActType
+                    Case ActionType.actInputVideo
+                        CType(action, clsActionInputVideo).capture = capture
+                End Select
+            Next
+        End If
+
         Me.state = scriptState.running
         Dim i As Integer = 0
         Dim curAction As clsStatelessAction = stateActions(i)

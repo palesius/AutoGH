@@ -385,12 +385,7 @@ Public Class frmMusic
         Next
         Dim devs As New NAudio.CoreAudioApi.MMDeviceEnumerator()
         Dim outdev As NAudio.CoreAudioApi.MMDevice = Nothing
-        For Each dev As NAudio.CoreAudioApi.MMDevice In devs.EnumerateAudioEndPoints(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.DeviceState.Active)
-            If dev.DeviceFriendlyName = "USB Headphone Set" Then
-                outdev = dev
-                Exit For
-            End If
-        Next
+        outdev = devs.GetDefaultAudioEndpoint(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.Role.Multimedia)
         vocalOut = New NAudio.Wave.WasapiOut(outdev, NAudio.CoreAudioApi.AudioClientShareMode.Shared, True, 0)
         vocalOut.Init(vocalProvider)
         MsgBox("Vocals ready to go." & vbCrLf & "Hit enter to start playing!")

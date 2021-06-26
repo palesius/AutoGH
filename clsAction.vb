@@ -909,13 +909,14 @@ Public Class clsSimpleAction
         value = _value
         parent = _parent
         wait = False
-        input = _parent.isInput
+        If Not _parent Is Nothing Then input = _parent.isInput
     End Sub
 
     Function compareTo(other As clsSimpleAction) As Integer Implements IComparable(Of clsSimpleAction).CompareTo
         If timeoffset < other.timeoffset Then Return -1
         If timeoffset > other.timeoffset Then Return 1
         If controllerNumber.CompareTo(other.controllerNumber) <> 0 Then Return controllerNumber.CompareTo(other.controllerNumber)
+        If parent Is Nothing Then Return 0
         If parent.index < other.parent.index Then Return -1
         If parent.index > other.parent.index Then Return 1
         Return 0

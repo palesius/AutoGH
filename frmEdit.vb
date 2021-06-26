@@ -1,6 +1,6 @@
 ﻿Imports System.Text.RegularExpressions
 Imports System.Xml
-Imports HidLibrary
+Imports HidSharp
 Public Class frmEdit
     Private valLS As Point
     Private valRS As Point
@@ -1357,17 +1357,18 @@ Public Class frmEdit
     Private Sub USBDeviceFinderToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles USBDeviceFinderToolStripMenuItem.Click
         MsgBox("Please have the device you want to identify unplugged before proceeding.")
         Dim before As New Dictionary(Of String, String)
-        For Each hdev As HidDevice In HidDevices.Enumerate()
+        For Each hdev As HidDevice In DeviceList.Local.GetDevices(DeviceTypes.Hid)
             If Not before.ContainsKey(hdev.DevicePath) Then before.Add(hdev.DevicePath, hdev.DevicePath)
+            'hdev.Capabilities.
         Next
         MsgBox("Please attach the device to be identified.")
         Dim newdevs As New System.Text.StringBuilder
-        For Each hdev As HidDevice In HidDevices.Enumerate()
+        For Each hdev As HidDevice In DeviceList.Local.GetDevices(DeviceTypes.Hid)
             If Not before.ContainsKey(hdev.DevicePath) Then
                 If newdevs.Length > 0 Then newdevs.AppendLine("******************************")
-                newdevs.AppendLine(hdev.DevicePath)
-                newdevs.AppendLine(hdev.Description)
-                newdevs.AppendLine(hdev.Attributes.VendorHexId & ":" & hdev.Attributes.ProductHexId)
+                newdevs.AppendLine(String.Format("{0,-10}{1}", "Path:", hdev.DevicePath))
+                newdevs.AppendLine(String.Format("{0,-10}{1}", "Name:", hdev.GetFriendlyName))
+                newdevs.AppendLine(String.Format("{0,-10}{1:X4}:{2:X4}", "VIP/PID:", hdev.VendorID, hdev.ProductID))
             End If
         Next
         If newdevs.Length > 0 Then
@@ -1376,5 +1377,25 @@ Public Class frmEdit
         Else
             MsgBox("No new HID Devices found.")
         End If
+    End Sub
+
+    Private Sub DJHero1ToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DJHero1ToolStripMenuItem.Click
+        fdOpen.Filter = "TrackListing.xml|TrackListing.xml"
+        fdOpen.FileName = vbNullString
+        fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH\DJH1"
+        fdOpen.ShowDialog()
+        fdOpen.Filter = "AutoXB Scripts|*.axb"
+        If fdOpen.FileName = vbNullString Then Exit Sub
+        createDJH1Scripts(fdOpen.FileName)
+    End Sub
+
+    Private Sub MirroringToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles MirroringToolStripMenuItem.Click
+        Dim controllerIPS As New Dictionary(Of Byte, String)
+        If txtController1.Text <> vbNullString Then controllerIPS.Add(1, txtController1.Text)
+        If txtController2.Text <> vbNullString Then controllerIPS.Add(2, txtController2.Text)
+        If txtController3.Text <> vbNullString Then controllerIPS.Add(3, txtController3.Text)
+        If txtController4.Text <> vbNullString Then controllerIPS.Add(4, txtController4.Text)
+        Dim frm As New frmMirror(controllerIPS)
+        frm.ShowDialog()
     End Sub
 End Class

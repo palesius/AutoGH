@@ -56,7 +56,7 @@ Public Class frmBridge
         ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^COM[1-9][0-9]?$") Then
             controller = New clsPS2Controller(ip)
         ElseIf ip.StartsWith("CM") Then
-            controller = New clsCMHIDController(ip)
+            controller = New clsCMHSController(ip)
         Else
             MsgBox("Invalid controller type.")
             Exit Sub

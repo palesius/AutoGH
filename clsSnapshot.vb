@@ -281,8 +281,8 @@ Public Class clsSnapshot
     End Sub
 
     Public Function BufferCB(SampleTime As Double, pBuffer As System.IntPtr, BufferLen As Integer) As Integer Implements DirectShowLib.ISampleGrabberCB.BufferCB
-        Debug.Assert(BufferLen = Math.Abs(m_Stride) * m_videoHeight, "Incorrect buffer length")
         If m_WantOne Then
+            Debug.Assert(BufferLen = Math.Abs(m_Stride) * m_videoHeight, "Incorrect buffer length [" & BufferLen & "] should be " & m_Stride & "*" & m_videoHeight)
             m_WantOne = False
             Debug.Assert(m_ipBuffer <> IntPtr.Zero, "Uninitialized buffer")
             CopyMemory(m_ipBuffer, pBuffer, BufferLen)

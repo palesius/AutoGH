@@ -81,6 +81,8 @@ Partial Class frmEdit
         Me.BridgeModeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CronusIdentifyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureCardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.USBDeviceFinderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DJHero1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblGame = New System.Windows.Forms.Label()
         Me.txtGame = New System.Windows.Forms.TextBox()
         Me.lblTitle = New System.Windows.Forms.Label()
@@ -151,7 +153,7 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
-        Me.USBDeviceFinderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MirroringToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlControls.SuspendLayout()
@@ -717,9 +719,9 @@ Partial Class frmEdit
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem, Me.DJHero1ToolStripMenuItem, Me.MirroringToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
         '
         'SongToolStripMenuItem
@@ -755,6 +757,18 @@ Partial Class frmEdit
         Me.CaptureCardToolStripMenuItem.Name = "CaptureCardToolStripMenuItem"
         Me.CaptureCardToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
         Me.CaptureCardToolStripMenuItem.Text = "Capture Card..."
+        '
+        'USBDeviceFinderToolStripMenuItem
+        '
+        Me.USBDeviceFinderToolStripMenuItem.Name = "USBDeviceFinderToolStripMenuItem"
+        Me.USBDeviceFinderToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.USBDeviceFinderToolStripMenuItem.Text = "USB Device Finder"
+        '
+        'DJHero1ToolStripMenuItem
+        '
+        Me.DJHero1ToolStripMenuItem.Name = "DJHero1ToolStripMenuItem"
+        Me.DJHero1ToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.DJHero1ToolStripMenuItem.Text = "DJHero1..."
         '
         'lblGame
         '
@@ -1495,11 +1509,11 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
-        'USBDeviceFinderToolStripMenuItem
+        'MirroringToolStripMenuItem
         '
-        Me.USBDeviceFinderToolStripMenuItem.Name = "USBDeviceFinderToolStripMenuItem"
-        Me.USBDeviceFinderToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.USBDeviceFinderToolStripMenuItem.Text = "USB Device Finder"
+        Me.MirroringToolStripMenuItem.Name = "MirroringToolStripMenuItem"
+        Me.MirroringToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.MirroringToolStripMenuItem.Text = "Mirroring..."
         '
         'frmEdit
         '
@@ -1671,4 +1685,6 @@ Partial Class frmEdit
     Friend WithEvents lblVideoPixelY As System.Windows.Forms.Label
     Friend WithEvents lblVideoPixelX As System.Windows.Forms.Label
     Friend WithEvents USBDeviceFinderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DJHero1ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MirroringToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

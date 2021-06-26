@@ -52,8 +52,14 @@
     <Reference Include="DirectShowLib-2005">
       <HintPath>..\..\TH\directshow\lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
-    <Reference Include="HidLibrary">
-      <HintPath>W:\code\hidlibrary\HidLibrary-3.2.18.0\src\HidLibrary\bin\Debug\HidLibrary.dll</HintPath>
+    <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net40\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XInput.4.2.0\lib\net40\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +85,7 @@
   <ItemGroup>
     <Compile Include="clsAction.vb" />
     <Compile Include="clsCMController.vb" />
+    <Compile Include="clsCMHSController.vb" />
     <Compile Include="clsController.vb" />
     <Compile Include="clsElements.vb" />
     <Compile Include="clsPS2Controller.cls" />
@@ -86,7 +93,6 @@
     <Compile Include="clsScript.vb" />
     <Compile Include="clsSnapshot.vb" />
     <Compile Include="clsXboxStatus.vb" />
-    <Compile Include="clsCMHIDController.vb" />
     <Compile Include="clsPS3Controller.cls" />
     <Compile Include="frmBridge.Designer.vb">
       <DependentUpon>frmBridge.vb</DependentUpon>
@@ -118,6 +124,13 @@
     <Compile Include="frmPattern.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmMirror.Designer.vb">
+      <DependentUpon>frmMirror.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMirror.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modDJH1.vb" />
     <Compile Include="modFormat.vb" />
     <Compile Include="modMusicConverter.vb" />
     <Compile Include="frmEdit.Designer.vb">
@@ -178,6 +191,9 @@
     <EmbeddedResource Include="frmPattern.resx">
       <DependentUpon>frmPattern.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmMirror.resx">
+      <DependentUpon>frmMirror.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -195,6 +211,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Netduino\ripxbdvd\NAudio-Source\NAudio\NAudio.csproj">
