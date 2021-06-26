@@ -18,7 +18,7 @@
     Dim IPList As List(Of String)
     Dim controller(4) As clsController
     Dim running As Boolean = False
-    Dim inputController As New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Two)
+    Dim inputController As New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One)
     Dim mirror(4) As Boolean
     Dim mirrorThread As System.Threading.Thread
 
@@ -72,7 +72,6 @@
     End Sub
 
     Private Sub btnStart_Click(sender As System.Object, e As System.EventArgs) Handles btnStart.Click
-        Dim inputController As New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One)
         If Not inputController.IsConnected Then
             MsgBox("No Input controller found.")
             Exit Sub
@@ -107,8 +106,6 @@
         Next
 
         running = True
-        finished = False
-
         Dim ts As New System.Threading.ThreadStart(AddressOf Me.runMirror)
         mirrorThread = New System.Threading.Thread(ts)
         mirrorThread.Start()
@@ -183,5 +180,9 @@
 
     Private Sub cbTarget4_CheckedChanged(sender As Object, e As EventArgs) Handles cbTarget4.CheckedChanged
         mirror(4) = cbTarget4.Checked
+    End Sub
+
+    Private Sub btnClose_Click(sender As System.Object, e As System.EventArgs) Handles btnClose.Click
+        Me.Close()
     End Sub
 End Class
