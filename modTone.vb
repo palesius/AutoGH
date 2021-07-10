@@ -3,7 +3,8 @@ Option Explicit On
 
 Imports SlimDX
 Imports SlimDX.XAudio2
-Imports SlimDX.Multimedia
+Imports slimDX.Multimedia
+Imports System.IO
 
 Module modTone
     Dim xaudio2 As XAudio2
@@ -13,7 +14,7 @@ Module modTone
     Public Sub makeTone()
         xaudio2 = New XAudio2
         masteringVoice = New MasteringVoice(xaudio2)
-        Dim ms As New IO.MemoryStream
+        Dim ms As New MemoryStream
         Dim format As WaveFormat = CreateWaveFormat(44100, 1, 16) ' 44.1kSamples/sec, mono, 16 bit
         Dim bl As New List(Of Byte)
         bl.AddRange(CreateSineData16Bit(format, 261.63, 1))
@@ -25,7 +26,7 @@ Module modTone
         '329.63
         '392.00
         ms.Write(bytes, 0, bytes.Length)
-        ms.Seek(0, IO.SeekOrigin.Begin)
+        ms.Seek(0, SeekOrigin.Begin)
         Dim audioBuffer As New AudioBuffer
         audioBuffer.AudioData = ms
         audioBuffer.AudioBytes = bytes.Length
