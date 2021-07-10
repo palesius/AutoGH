@@ -65,10 +65,24 @@
         tmp(7) = buttonLo
         tmp(8) = LT
         tmp(9) = RT
-        If joyLx < 128 Then tmp(11) = joyLx + 128 Else tmp(11) = joyLx - 128
-        If joyLy <= 128 Then tmp(13) = 128 - joyLy Else tmp(13) = 384 - joyLy
-        If joyRx < 128 Then tmp(15) = joyRx + 128 Else tmp(15) = joyRx - 128
-        If joyRY <= 128 Then tmp(17) = 128 - joyRY Else tmp(17) = 384 - joyRY
+
+        Dim uVal As Integer
+        If joyLXInt >= 0 Then uVal = joyLXInt Else uVal = 65536 + joyLXInt
+        tmp(10) = uVal Mod 256
+        tmp(11) = uVal >> 8
+
+        If joyLYInt < 0 Then uVal = 1 - joyLYInt Else uVal = 65535 - joyLYInt
+        tmp(12) = uVal Mod 256
+        tmp(13) = uVal >> 8
+
+        If joyRXInt >= 0 Then uVal = joyRXInt Else uVal = 65536 + joyRXInt
+        tmp(14) = uVal Mod 256
+        tmp(15) = uVal >> 8
+
+        If joyRYInt < 0 Then uVal = 1 - joyRYInt Else uVal = 65535 - joyRYInt
+        tmp(16) = uVal Mod 256
+        tmp(17) = uVal >> 8
+
         Return tmp
     End Function
 
@@ -77,10 +91,23 @@
         reportData(7) = buttonLo
         reportData(8) = LT
         reportData(9) = RT
-        If joyLx < 128 Then reportData(11) = joyLx + 128 Else reportData(11) = joyLx - 128
-        If joyLy <= 128 Then reportData(13) = 128 - joyLy Else reportData(13) = 383 - joyLy
-        If joyRx < 128 Then reportData(15) = joyRx + 128 Else reportData(15) = joyRx - 128
-        If joyRY <= 128 Then reportData(17) = 128 - joyRY Else reportData(17) = 383 - joyRY
+
+        Dim uVal As Integer
+        If joyLXInt >= 0 Then uVal = joyLXInt Else uVal = 65536 + joyLXInt
+        reportData(10) = uVal Mod 256
+        reportData(11) = uVal >> 8
+
+        If joyLYInt < 0 Then uVal = 1 - joyLYInt Else uVal = 65535 - joyLYInt
+        reportData(12) = uVal Mod 256
+        reportData(13) = uVal >> 8
+
+        If joyRXInt >= 0 Then uVal = joyRXInt Else uVal = 65536 + joyRXInt
+        reportData(14) = uVal Mod 256
+        reportData(15) = uVal >> 8
+
+        If joyRYInt < 0 Then uVal = 1 - joyRYInt Else uVal = 65535 - joyRYInt
+        reportData(16) = uVal Mod 256
+        reportData(17) = uVal >> 8
         sendReport(reportData)
     End Sub
 

@@ -92,10 +92,16 @@
         tmp(0) = &H5A
         tmp(1) = ps2buttonHi
         tmp(2) = ps2buttonLo
-        tmp(3) = joyRx
-        tmp(4) = joyRY
-        tmp(5) = joyLx
-        tmp(6) = joyLy
+
+        Dim uVal As Integer
+        If joyRXInt >= 0 Then uVal = joyRXInt Else uVal = 65536 + joyRXInt
+        tmp(3) = uVal >> 8
+        If joyRYInt >= 0 Then uVal = joyRYInt Else uVal = 65536 + joyRYInt
+        tmp(4) = uVal >> 8
+        If joyLXInt >= 0 Then uVal = joyLXInt Else uVal = 65536 + joyLXInt
+        tmp(5) = uVal >> 8
+        If joyLYInt >= 0 Then uVal = joyLYInt Else uVal = 65536 + joyLYInt
+        tmp(6) = uVal >> 8
         Return tmp
     End Function
 
@@ -122,10 +128,16 @@
         ps2buttonLo = Not ps2buttonLo
         reportData(1) = ps2buttonHi
         reportData(2) = ps2buttonLo
-        reportData(3) = joyRx
-        reportData(4) = joyRY
-        reportData(5) = joyLx
-        reportData(6) = joyLy
+
+        Dim uVal As Integer
+        If joyRXInt >= 0 Then uVal = joyRXInt Else uVal = 65536 + joyRXInt
+        reportData(3) = uVal >> 8
+        If joyRYInt >= 0 Then uVal = joyRYInt Else uVal = 65536 + joyRYInt
+        reportData(4) = uVal >> 8
+        If joyLXInt >= 0 Then uVal = joyLXInt Else uVal = 65536 + joyLXInt
+        reportData(5) = uVal >> 8
+        If joyLYInt >= 0 Then uVal = joyLYInt Else uVal = 65536 + joyLYInt
+        reportData(6) = uVal >> 8
         sendReport(reportData)
     End Sub
 

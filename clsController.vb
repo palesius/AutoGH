@@ -3,10 +3,10 @@
 
     Protected buttonHi As Byte
     Protected buttonLo As Byte
-    Protected joyRx As Byte
-    Protected joyRY As Byte
-    Protected joyLx As Byte
-    Protected joyLy As Byte
+    Protected joyRXInt As Int16
+    Protected joyRYInt As Int16
+    Protected joyLXInt As Int16
+    Protected joyLYInt As Int16
     Protected LT As Byte
     Protected RT As Byte
     Private mut As New System.Threading.Mutex
@@ -23,8 +23,8 @@
     End Sub
 
     Public Structure joystickPosition
-        Public x As SByte
-        Public y As SByte
+        Public x As Int16
+        Public y As Int16
     End Structure
 
     Public Enum XBButtons
@@ -48,10 +48,10 @@
     Public Sub New()
         buttonHi = &H0
         buttonLo = &H0
-        joyRx = 128
-        joyRY = 128
-        joyLx = 128
-        joyLy = 128
+        joyRXInt = 0
+        joyRYInt = 0
+        joyLXInt = 0
+        joyLYInt = 0
         LT = 0
         RT = 0
     End Sub
@@ -59,24 +59,24 @@
     Public Sub reset(Optional doUpdate As Boolean = True)
         buttonHi = &H0
         buttonLo = &H0
-        joyRx = 128
-        joyRY = 128
-        joyLx = 128
-        joyLy = 128
+        joyRXInt = 0
+        joyRYInt = 0
+        joyLXInt = 0
+        joyLYInt = 0
         LT = 0
         RT = 0
         If doUpdate Then update(True)
     End Sub
 
-    Public Sub setState(_buttonHi As Byte, _LT As Byte, _RT As Byte, _buttonLo As Byte, _joyLx As Byte, _joyLy As Byte, _joyRx As Byte, _joyRy As Byte)
+    Public Sub setState(_buttonHi As Byte, _LT As Byte, _RT As Byte, _buttonLo As Byte, _joyLx As Int16, _joyLy As Int16, _joyRx As Int16, _joyRy As Int16)
         buttonHi = _buttonHi
         buttonLo = _buttonLo
         LT = _LT
         RT = _RT
-        joyLx = _joyLx
-        joyLy = _joyLy
-        joyRx = _joyRx
-        joyRY = _joyRy
+        joyLXInt = _joyLx
+        joyLYInt = _joyLy
+        joyRXInt = _joyRx
+        joyRYInt = _joyRy
         update()
     End Sub
 
@@ -118,60 +118,60 @@
 
     Public Sub setJoyL(pos As joystickPosition, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyLx = pos.x + 128
-        joyLy = pos.y + 128
+        joyLXInt = pos.x
+        joyLYInt = pos.y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
     Public Sub setJoyR(pos As joystickPosition, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyRx = pos.x + 128
-        joyRY = pos.y + 128
+        joyRXInt = pos.x
+        joyRYInt = pos.y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyL(x As SByte, y As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyL(x As Int16, y As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyLx = x + 128
-        joyLy = y + 128
+        joyLXInt = x
+        joyLYInt = y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyR(x As SByte, y As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyR(x As Int16, y As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyRx = x + 128
-        joyRY = y + 128
+        joyRXInt = x
+        joyRYInt = y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyLSX(x As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyLSX(x As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyLx = x + 128
+        joyLXInt = x
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyLSY(y As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyLSY(y As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyLy = y + 128
+        joyLYInt = y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyRSX(x As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyRSX(x As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyRx = x + 128
+        joyRXInt = x
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub
 
-    Public Sub setJoyRSY(y As SByte, Optional doUpdate As Boolean = True)
+    Public Sub setJoyRSY(y As Int16, Optional doUpdate As Boolean = True)
         If doUpdate Then mut.WaitOne()
-        joyRY = y + 128
+        joyRYInt = y
         If doUpdate Then update()
         If doUpdate Then mut.ReleaseMutex()
     End Sub

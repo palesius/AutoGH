@@ -89,8 +89,8 @@ Public Class frmEdit
 
     Private Sub clearScript()
         rbPress.Checked = True
-        valLS = New Point(-128, -128)
-        valRS = New Point(-128, -128)
+        valLS = New Point(-32768, -32768)
+        valRS = New Point(-32768, -32768)
         valLT = -1
         valRT = -1
         drawPB(pbLS)
@@ -153,24 +153,24 @@ Public Class frmEdit
         If pb Is pbLS Then
             x = valLS.X
             y = valLS.Y
-            txtLSX.Text = IIf(x > -128, x, vbNullString)
-            txtLSY.Text = IIf(y > -128, y, vbNullString)
+            txtLSX.Text = IIf(x > -32768, Math.Round(x / 256, 2), vbNullString)
+            txtLSY.Text = IIf(y > -32768, Math.Round(y / 256, 2), vbNullString)
         End If
         If pb Is pbRS Then
             x = valRS.X
             y = valRS.Y
-            txtRSX.Text = IIf(x > -128, x, vbNullString)
-            txtRSY.Text = IIf(y > -128, y, vbNullString)
+            txtRSX.Text = IIf(x > -32768, Math.Round(x / 256, 2), vbNullString)
+            txtRSY.Text = IIf(y > -32768, Math.Round(y / 256, 2), vbNullString)
         End If
-        Dim px As Integer = (CDec(x) + 147) * 52 / 254
-        Dim py As Integer = (CDec(y) + 147) * 52 / 254
+        Dim px As Integer = (CDec(x) / 256 + 147) * 52 / 254
+        Dim py As Integer = (CDec(y) / 256 + 147) * 52 / 254
         With pb
             .Image = New Bitmap(.Width, .Height)
             Dim g As Graphics = Graphics.FromImage(.Image)
             g.Clear(.BackColor)
             g.DrawImage(.BackgroundImage, New Point((.Width - .BackgroundImage.Width) / 2 - 1, (.Height - .BackgroundImage.Height) / 2 - 1))
             g.DrawRectangle(Pens.White, New Rectangle(4, 4, .Width - 11, .Height - 11))
-            If x > -128 And y > -128 Then g.FillRectangle(Brushes.Red, New Rectangle(px - 1, py - 1, 3, 3))
+            If x > -32768 And y > -32768 Then g.FillRectangle(Brushes.Red, New Rectangle(px - 1, py - 1, 3, 3))
             g.Dispose()
             .Invalidate()
         End With
@@ -193,24 +193,24 @@ Public Class frmEdit
 
         Dim pb As PictureBox = CType(sender, PictureBox)
         If pb Is pbLS Then
-            valLS.X = CDec(px) * 254 / 52 - 147
-            valLS.Y = CDec(py) * 254 / 52 - 147
+            valLS.X = Math.Round(CDec(px) * 254 / 52 - 147) * 256
+            valLS.Y = Math.Round(CDec(py) * 254 / 52 - 147) * 256
         End If
         If pb Is pbRS Then
-            valRS.X = CDec(px) * 254 / 52 - 147
-            valRS.Y = CDec(py) * 254 / 52 - 147
+            valRS.X = Math.Round(CDec(px) * 254 / 52 - 147) * 256
+            valRS.Y = Math.Round(CDec(py) * 254 / 52 - 147) * 256
         End If
         drawPB(pb)
     End Sub
 
     Private Sub pb_DoubleClick(sender As Object, e As System.EventArgs)
         If sender Is pbLS Then
-            valLS.X = -128
-            valLS.Y = -128
+            valLS.X = -32768
+            valLS.Y = -32768
         End If
         If sender Is pbRS Then
-            valRS.X = -128
-            valRS.Y = -128
+            valRS.X = -32768
+            valRS.Y = -32768
         End If
         drawPB(sender)
     End Sub
@@ -220,26 +220,26 @@ Public Class frmEdit
         If Trim(txt.Text) = vbNullString Then
             txt.Text = vbNullString
             If txt Is txtLSX Or txt Is txtLSY Then
-                valLS.X = -128
-                valLS.Y = -128
+                valLS.X = -32768
+                valLS.Y = -32768
                 drawPB(pbLS)
             End If
             If txt Is txtRSX Or txt Is txtRSY Then
-                valRS.X = -128
-                valRS.Y = -128
+                valRS.X = -32768
+                valRS.Y = -32768
                 drawPB(pbRS)
             End If
             Exit Sub
         End If
         If Not IsNumeric(txt.Text) Then
-            If txt Is txtLSX Then txt.Text = valLS.X
-            If txt Is txtLSY Then txt.Text = valLS.Y
-            If txt Is txtRSX Then txt.Text = valRS.X
-            If txt Is txtRSY Then txt.Text = valRS.Y
+            If txt Is txtLSX Then txt.Text = valLS.X / 256
+            If txt Is txtLSY Then txt.Text = valLS.Y / 256
+            If txt Is txtRSX Then txt.Text = valRS.X / 256
+            If txt Is txtRSY Then txt.Text = valRS.Y / 256
         End If
-        Dim val As Integer = Math.Round(CDec(txt.Text))
-        If val < -127 Then val = -127
-        If val > 127 Then val = 127
+        Dim val As Integer = CDec(txt.Text) * 256
+        If val < -32767 Then val = -32767
+        If val > 32767 Then val = 32767
         If txt Is txtLSX Then
             valLS.X = val
             drawPB(pbLS)
@@ -717,17 +717,17 @@ Public Class frmEdit
                     refreshLT()
                     valRT = IIf(.RTDefined, .RT, -1)
                     refreshRT()
-                    If .LS.X = -128 Or .LS.Y = -128 Then
-                        valLS.X = -128
-                        valLS.Y = -128
+                    If .LS.X = -32768 Or .LS.Y = -32768 Then
+                        valLS.X = -32768
+                        valLS.Y = -32768
                     Else
                         valLS.X = .LS.X
                         valLS.Y = .LS.Y
                     End If
                     drawPB(pbLS)
-                    If .RS.X = -128 Or .RS.Y = -128 Then
-                        valRS.X = -128
-                        valRS.Y = -128
+                    If .RS.X = -32768 Or .RS.Y = -32768 Then
+                        valRS.X = -32768
+                        valRS.Y = -32768
                     Else
                         valRS.X = .RS.X
                         valRS.Y = .RS.Y
@@ -746,16 +746,16 @@ Public Class frmEdit
                     valRT = IIf(.RTDefined, .RT, -1)
                     refreshRT()
                     If .LS.X = -128 Or .LS.Y = -128 Then
-                        valLS.X = -128
-                        valLS.Y = -128
+                        valLS.X = -32768
+                        valLS.Y = -32768
                     Else
                         valLS.X = .LS.X
                         valLS.Y = .LS.Y
                     End If
                     drawPB(pbLS)
-                    If .RS.X = -128 Or .RS.Y = -128 Then
-                        valRS.X = -128
-                        valRS.Y = -128
+                    If .RS.X = -32768 Or .RS.Y = -32768 Then
+                        valRS.X = -32768
+                        valRS.Y = -32768
                     Else
                         valRS.X = .RS.X
                         valRS.Y = .RS.Y
@@ -883,6 +883,7 @@ Public Class frmEdit
         desc.AppendChild(doc.CreateElement("Game")).InnerText = txtGame.Text
         desc.AppendChild(doc.CreateElement("Title")).InnerText = txtTitle.Text
         desc.AppendChild(doc.CreateElement("Description")).InnerText = Join(txtDesc.Lines, vbCrLf)
+        desc.AppendChild(doc.CreateElement("Version")).InnerText = 2
         Dim agsNode As XmlElement = doc.CreateElement("ActionGroups")
         root.AppendChild(agsNode)
         For Each group As clsActionGroup In groups.Values
@@ -942,18 +943,21 @@ Public Class frmEdit
             loadScriptLegacy(path)
             Exit Sub
         End Try
+        Dim version As Integer = 1
         Dim node As Xml.XmlNode = doc.SelectSingleNode("/XBScript/Information/Game")
         If Not node Is Nothing Then txtGame.Text = node.InnerText
         node = doc.SelectSingleNode("/XBScript/Information/Title")
         If Not node Is Nothing Then txtTitle.Text = node.InnerText
         node = doc.SelectSingleNode("/XBScript/Information/Description")
         If Not node Is Nothing Then txtDesc.Text = node.InnerText
+        node = doc.SelectSingleNode("/XBScript/Information/Version")
+        If Not node Is Nothing Then version = CInt(node.InnerText)
         Dim actionGroups As Xml.XmlNodeList = doc.SelectNodes("/XBScript/ActionGroups/ActionGroup")
         For Each agNode As Xml.XmlNode In actionGroups
             Dim ag As New clsActionGroup(agNode.SelectSingleNode("Name").InnerText)
             For Each actNode As Xml.XmlNode In agNode.ChildNodes
                 If actNode.Name <> "Name" Then
-                    Dim action As clsAction = clsAction.fromXML(actNode, ag)
+                    Dim action As clsAction = clsAction.fromXML(actNode, version, ag)
                     action.index = ag.actions.Count
                     ag.actions.Add(action)
                 End If

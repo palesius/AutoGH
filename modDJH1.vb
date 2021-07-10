@@ -176,7 +176,7 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnB, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnB, 0, 2))
                 Case 3, 7 'scratch up/any green
-                    duration = 12
+                    duration = 15
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
@@ -186,7 +186,7 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
                 Case 5 'scratch down green
-                    duration = 12
+                    duration = 15
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
@@ -196,7 +196,7 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
                 Case 4, 8 'scratch up/any blue
-                    duration = 12
+                    duration = 15
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
@@ -206,7 +206,7 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))
                 Case 6 'scratch down blue
-                    duration = 12
+                    duration = 15
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
