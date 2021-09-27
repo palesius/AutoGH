@@ -121,23 +121,23 @@ Public MustInherit Class clsAction
         End Select
     End Function
 
-    Public Shared Function fromXML(node As XmlElement, group As clsActionGroup)
+    Public Shared Function fromXML(node As XmlElement, version As Integer, group As clsActionGroup)
         Dim a As clsAction
         Select Case node.Name
             Case "Wait"
-                a = New clsActionWait(node, group)
+                a = New clsActionWait(node, version, group)
             Case "Loop"
-                a = New clsActionLoop(node, group)
+                a = New clsActionLoop(node, version, group)
             Case "Hold"
-                a = New clsActionHold(node, group)
+                a = New clsActionHold(node, version, group)
             Case "Release"
-                a = New clsActionRelease(node, group)
+                a = New clsActionRelease(node, version, group)
             Case "Press"
-                a = New clsActionPress(node, group)
+                a = New clsActionPress(node, version, group)
             Case "Group"
-                a = New clsActionAGroup(node, group)
+                a = New clsActionAGroup(node, version, group)
             Case "VideoInput"
-                a = New clsActionInputVideo(node, group)
+                a = New clsActionInputVideo(node, version, group)
             Case Else
                 Return Nothing
                 Stop
@@ -219,7 +219,7 @@ Public Class clsActionWait
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         delay = node.Attributes("Delay").Value
         group = _group
     End Sub
@@ -289,7 +289,7 @@ Public Class clsActionLoop
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         target = Nothing
         tgtIndex = node.Attributes("Target").Value
         repeat = node.Attributes("Repeat").Value
@@ -351,7 +351,7 @@ Public Class clsActionAGroup
         target = l(Me.tgtName)
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         target = Nothing
         tgtName = node.Attributes("Name").Value
@@ -389,13 +389,13 @@ Public Class clsActionHold
 
     Public ReadOnly Property LSDefined As Boolean
         Get
-            Return LS.X > -128 And LS.Y > -128
+            Return LS.X > -32768 And LS.Y > -32768
         End Get
     End Property
 
     Public ReadOnly Property RSDefined As Boolean
         Get
-            Return RS.X > -128 And RS.Y > -128
+            Return RS.X > -32768 And RS.Y > -32768
         End Get
     End Property
 
@@ -404,19 +404,19 @@ Public Class clsActionHold
         buttonMask = _buttonMask
         LT = _LT
         RT = _RT
-        If _LS.X > -128 And _LS.Y > -128 Then
+        If _LS.X > -32768 And _LS.Y > -32768 Then
             LS.X = _LS.X
             LS.Y = _LS.Y
         Else
-            LS.X = -128
-            LS.Y = -128
+            LS.X = -32768
+            LS.Y = -32768
         End If
-        If _RS.X > -128 And _RS.Y > -128 Then
+        If _RS.X > -32768 And _RS.Y > -32768 Then
             RS.X = _RS.X
             RS.Y = _RS.Y
         Else
-            RS.X = -128
-            RS.Y = -128
+            RS.X = -32768
+            RS.Y = -32768
         End If
         group = _group
     End Sub
@@ -433,11 +433,11 @@ Public Class clsActionHold
         If LTDefined Then sb.Append("LT(" & LT & "),")
         If buttonMask And clsController.XBButtons.btnLB Then sb.Append("LB,")
         If buttonMask And clsController.XBButtons.btnL3 Then sb.Append("LS,")
-        If LS.X > -128 And LS.Y > -128 Then sb.Append("LJ(" & LS.X & "," & LS.Y & "),")
+        If LS.X > -32768 And LS.Y > -32768 Then sb.Append("LJ(" & LS.X \ 256 & "," & LS.Y \ 256 & "),")
         If RTDefined Then sb.Append("RT(" & RT & "),")
         If buttonMask And clsController.XBButtons.btnRB Then sb.Append("RB,")
         If buttonMask And clsController.XBButtons.btnR3 Then sb.Append("RS,")
-        If RS.X > -128 And RS.Y > -128 Then sb.Append("RJ(" & RS.X & "," & RS.Y & "),")
+        If RS.X > -32768 And RS.Y > -32768 Then sb.Append("RJ(" & RS.X \ 256 & "," & RS.Y \ 256 & "),")
         If buttonMask And clsController.XBButtons.btnA Then sb.Append("A,")
         If buttonMask And clsController.XBButtons.btnB Then sb.Append("B,")
         If buttonMask And clsController.XBButtons.btnX Then sb.Append("X,")
@@ -460,11 +460,11 @@ Public Class clsActionHold
         If buttonMask > 0 Then tmp.SetAttribute("ButtonMask", buttonMask)
         If LTDefined Then tmp.SetAttribute("LT", LT)
         If RTDefined Then tmp.SetAttribute("RT", RT)
-        If LS.X > -128 And LS.Y > -128 Then
+        If LS.X > -32768 And LS.Y > -32768 Then
             tmp.SetAttribute("LSX", LS.X)
             tmp.SetAttribute("LSY", LS.Y)
         End If
-        If RS.X > -128 And RS.Y > -128 Then
+        If RS.X > -32768 And RS.Y > -32768 Then
             tmp.SetAttribute("RSX", RS.X)
             tmp.SetAttribute("RSY", RS.Y)
         End If
@@ -492,7 +492,7 @@ Public Class clsActionHold
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
@@ -501,14 +501,26 @@ Public Class clsActionHold
         If att Is Nothing Then LT = -1 Else LT = att.Value
         att = node.Attributes("RT")
         If att Is Nothing Then RT = -1 Else RT = att.Value
-        att = node.Attributes("LSX")
-        If att Is Nothing Then LS.X = -128 Else LS.X = att.Value
-        att = node.Attributes("LSY")
-        If att Is Nothing Then LS.Y = -128 Else LS.Y = att.Value
-        att = node.Attributes("RSX")
-        If att Is Nothing Then RS.X = -128 Else RS.X = att.Value
-        att = node.Attributes("RSY")
-        If att Is Nothing Then RS.Y = -128 Else RS.Y = att.Value
+        Select Case version
+            Case 1
+                att = node.Attributes("LSX")
+                If att Is Nothing Then LS.X = -32768 Else LS.X = att.Value * 256
+                att = node.Attributes("LSY")
+                If att Is Nothing Then LS.Y = -32768 Else LS.Y = att.Value * 256
+                att = node.Attributes("RSX")
+                If att Is Nothing Then RS.X = -32768 Else RS.X = att.Value * 256
+                att = node.Attributes("RSY")
+                If att Is Nothing Then RS.Y = -32768 Else RS.Y = att.Value * 256
+            Case 2
+                att = node.Attributes("LSX")
+                If att Is Nothing Then LS.X = -32768 Else LS.X = att.Value
+                att = node.Attributes("LSY")
+                If att Is Nothing Then LS.Y = -32768 Else LS.Y = att.Value
+                att = node.Attributes("RSX")
+                If att Is Nothing Then RS.X = -32768 Else RS.X = att.Value
+                att = node.Attributes("RSY")
+                If att Is Nothing Then RS.Y = -32768 Else RS.Y = att.Value
+        End Select
     End Sub
 
     Public Overrides Function clone() As clsAction
@@ -532,8 +544,8 @@ Public Class clsActionRelease
         buttonMask = _buttonMask
         LTDefined = _LT >= 0
         RTDefined = _RT >= 0
-        LSDefined = _LS.X > -128 And _LS.Y > -128
-        RSDefined = _RS.X > -128 And _RS.Y > -128
+        LSDefined = _LS.X > -32768 And _LS.Y > -32768
+        RSDefined = _RS.X > -32768 And _RS.Y > -32768
         group = _group
     End Sub
 
@@ -606,7 +618,7 @@ Public Class clsActionRelease
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
@@ -654,13 +666,13 @@ Public Class clsActionPress
 
     Public ReadOnly Property LSDefined As Boolean
         Get
-            Return LS.X > -128 And LS.Y > -128
+            Return LS.X > -32768 And LS.Y > -32768
         End Get
     End Property
 
     Public ReadOnly Property RSDefined As Boolean
         Get
-            Return RS.X > -128 And RS.Y > -128
+            Return RS.X > -32768 And RS.Y > -32768
         End Get
     End Property
 
@@ -669,19 +681,19 @@ Public Class clsActionPress
         buttonMask = _buttonMask
         LT = _LT
         RT = _RT
-        If _LS.X > -128 And _LS.Y > -128 Then
+        If _LS.X > -32768 And _LS.Y > -32768 Then
             LS.X = _LS.X
             LS.Y = _LS.Y
         Else
-            LS.X = -128
-            LS.Y = -128
+            LS.X = -32768
+            LS.Y = -32768
         End If
-        If _RS.X > -128 And _RS.Y > -128 Then
+        If _RS.X > -32768 And _RS.Y > -32768 Then
             RS.X = _RS.X
             RS.Y = _RS.Y
         Else
-            RS.X = -128
-            RS.Y = -128
+            RS.X = -32768
+            RS.Y = -32768
         End If
         holdTime = _holdTime
         waitTime = _waitTime
@@ -701,11 +713,11 @@ Public Class clsActionPress
         If LTDefined Then sb.Append("LT(" & LT & "),")
         If buttonMask And clsController.XBButtons.btnLB Then sb.Append("LB,")
         If buttonMask And clsController.XBButtons.btnL3 Then sb.Append("LS,")
-        If LS.X > -128 And LS.Y > -128 Then sb.Append("LJ(" & LS.X & "," & LS.Y & "),")
+        If LS.X > -32768 And LS.Y > -32768 Then sb.Append("LJ(" & LS.X \ 256 & "," & LS.Y \ 256 & "),")
         If RTDefined Then sb.Append("RT(" & RT & "),")
         If buttonMask And clsController.XBButtons.btnRB Then sb.Append("RB,")
         If buttonMask And clsController.XBButtons.btnR3 Then sb.Append("RS,")
-        If RS.X > -128 And RS.Y > -128 Then sb.Append("RJ(" & RS.X & "," & RS.Y & "),")
+        If RS.X > -32768 And RS.Y > -32768 Then sb.Append("RJ(" & RS.X \ 256 & "," & RS.Y \ 256 & "),")
         If buttonMask And clsController.XBButtons.btnA Then sb.Append("A,")
         If buttonMask And clsController.XBButtons.btnB Then sb.Append("B,")
         If buttonMask And clsController.XBButtons.btnX Then sb.Append("X,")
@@ -729,11 +741,11 @@ Public Class clsActionPress
         If buttonMask > 0 Then tmp.SetAttribute("ButtonMask", buttonMask)
         If LTDefined Then tmp.SetAttribute("LT", LT)
         If RTDefined Then tmp.SetAttribute("RT", RT)
-        If LS.X > -128 And LS.Y > -128 Then
+        If LS.X > -32768 And LS.Y > -32768 Then
             tmp.SetAttribute("LSX", LS.X)
             tmp.SetAttribute("LSY", LS.Y)
         End If
-        If RS.X > -128 And RS.Y > -128 Then
+        If RS.X > -32768 And RS.Y > -32768 Then
             tmp.SetAttribute("RSX", RS.X)
             tmp.SetAttribute("RSY", RS.Y)
         End If
@@ -767,7 +779,7 @@ Public Class clsActionPress
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         controllerNumber = node.Attributes("Controller").Value
         Dim att As XmlAttribute = node.Attributes("ButtonMask")
@@ -776,14 +788,26 @@ Public Class clsActionPress
         If att Is Nothing Then LT = -1 Else LT = att.Value
         att = node.Attributes("RT")
         If att Is Nothing Then RT = -1 Else RT = att.Value
-        att = node.Attributes("LSX")
-        If att Is Nothing Then LS.X = -128 Else LS.X = att.Value
-        att = node.Attributes("LSY")
-        If att Is Nothing Then LS.Y = -128 Else LS.Y = att.Value
-        att = node.Attributes("RSX")
-        If att Is Nothing Then RS.X = -128 Else RS.X = att.Value
-        att = node.Attributes("RSY")
-        If att Is Nothing Then RS.Y = -128 Else RS.Y = att.Value
+        Select Case version
+            Case 1
+                att = node.Attributes("LSX")
+                If att Is Nothing Then LS.X = -32768 Else LS.X = att.Value * 256
+                att = node.Attributes("LSY")
+                If att Is Nothing Then LS.Y = -32768 Else LS.Y = att.Value * 256
+                att = node.Attributes("RSX")
+                If att Is Nothing Then RS.X = -32768 Else RS.X = att.Value * 256
+                att = node.Attributes("RSY")
+                If att Is Nothing Then RS.Y = -32768 Else RS.Y = att.Value * 256
+            Case 2
+                att = node.Attributes("LSX")
+                If att Is Nothing Then LS.X = -32768 Else LS.X = att.Value
+                att = node.Attributes("LSY")
+                If att Is Nothing Then LS.Y = -32768 Else LS.Y = att.Value
+                att = node.Attributes("RSX")
+                If att Is Nothing Then RS.X = -32768 Else RS.X = att.Value
+                att = node.Attributes("RSY")
+                If att Is Nothing Then RS.Y = -32768 Else RS.Y = att.Value
+        End Select
         holdTime = node.Attributes("Hold").Value
         waitTime = node.Attributes("Wait").Value
         repeat = node.Attributes("Repeat").Value
@@ -813,7 +837,7 @@ Public Class clsActionInputVideo
         group = _group
     End Sub
 
-    Public Sub New(node As XmlNode, _group As clsActionGroup)
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         interval = node.Attributes("Interval").Value
         duration = node.Attributes("Duration").Value

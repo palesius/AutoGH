@@ -53,7 +53,7 @@ Public Class clsCMHSController
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
-        Debug.Print(System.BitConverter.ToString(newReport))
+        'Debug.Print(System.BitConverter.ToString(newReport))
         Try
             devStream.Write(newReport, 0, newReport.Length)
         Catch ex As TimeoutException
@@ -93,15 +93,22 @@ Public Class clsCMHSController
         tmp(CMButtons.X) = IIf(button And XBButtons.btnX, 100, 0)
         tmp(CMButtons.LT) = Math.Ceiling(CDec(LT) * 100 / 255)
         tmp(CMButtons.RT) = Math.Ceiling(CDec(RT) * 100 / 255)
-        tmp(CMButtons.LX) = CMSByte(joyLx)
-        tmp(CMButtons.LY) = CMSByte(joyLy)
-        tmp(CMButtons.RX) = CMSByte(joyRx)
-        tmp(CMButtons.RY) = CMSByte(joyRY)
+
+        tmp(CMButtons.LX) = CMSInt(joyLXInt)
+        tmp(CMButtons.LY) = CMSInt(-CInt(joyLYInt) - 1)
+        tmp(CMButtons.RX) = CMSInt(joyRXInt)
+        tmp(CMButtons.RY) = CMSInt(-CInt(joyRYInt) - 1)
         Return tmp
     End Function
 
     Private Function CMSByte(src As Byte) As Byte
         Dim tmp As Integer = Math.Ceiling(CDec(src - 128) * 100 / 127)
+        If tmp < 0 Then tmp = tmp + 256
+        Return CByte(tmp)
+    End Function
+
+    Private Function CMSInt(src As Int16) As Byte
+        Dim tmp As Integer = src \ 327
         If tmp < 0 Then tmp = tmp + 256
         Return CByte(tmp)
     End Function
@@ -149,10 +156,19 @@ Public Class clsCMHSController
         reportData(CMButtons.X) = IIf(button And XBButtons.btnX, 100, 0)
         reportData(CMButtons.LT) = Math.Ceiling(CDec(LT) * 100 / 255)
         reportData(CMButtons.RT) = Math.Ceiling(CDec(RT) * 100 / 255)
-        reportData(CMButtons.LX) = CMSByte(joyLx)
-        reportData(CMButtons.LY) = CMSByte(joyLy)
-        reportData(CMButtons.RX) = CMSByte(joyRx)
-        reportData(CMButtons.RY) = CMSByte(joyRY)
+
+        reportData(CMButtons.LX) = CMSInt(joyLXInt)
+        reportData(CMButtons.LY) = CMSInt(-CInt(joyLYInt) - 1)
+        reportData(CMButtons.RX) = CMSInt(joyRXInt)
+        reportData(CMButtons.RY) = CMSInt(-CInt(joyRYInt) - 1)
+
+        Dim x As Int16 = reportData(CMButtons.LX)
+        Dim y As Int16 = reportData(CMButtons.LY)
+        If x > 127 Then x = x - 256
+        If y > 127 Then y = y - 256
+
+        Debug.Print(String.Format("{0,4},{1,4}-{2,6},{3,6}", x, y, joyLXInt, joyLYInt))
+
         sendReport(reportData)
     End Sub
 

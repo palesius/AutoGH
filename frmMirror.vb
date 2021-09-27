@@ -18,7 +18,7 @@
     Dim IPList As List(Of String)
     Dim controller(4) As clsController
     Dim running As Boolean = False
-    Dim inputController As New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One)
+    Dim inputController As SharpDX.XInput.Controller
     Dim mirror(4) As Boolean
     Dim mirrorThread As System.Threading.Thread
 
@@ -72,6 +72,7 @@
     End Sub
 
     Private Sub btnStart_Click(sender As System.Object, e As System.EventArgs) Handles btnStart.Click
+        If inputController Is Nothing Then inputController = New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One)
         If Not inputController.IsConnected Then
             MsgBox("No Input controller found.")
             Exit Sub
@@ -117,10 +118,10 @@
         Dim buttonLo As Byte
         Dim LT As Byte
         Dim RT As Byte
-        Dim joyLX As Byte
-        Dim joyLY As Byte
-        Dim joyRX As Byte
-        Dim joyRY As Byte
+        Dim joyLXInt As Int16
+        Dim joyLYInt As Int16
+        Dim joyRXInt As Int16
+        Dim joyRYInt As Int16
 
         Dim st As Date = Now
         While running
@@ -132,13 +133,13 @@
                     buttonLo = .Buttons >> 8
                     LT = .LeftTrigger
                     RT = .RightTrigger
-                    joyLX = (.LeftThumbX \ 256) + 128
-                    joyLY = 127 - (.LeftThumbY \ 256)
-                    joyRX = (.RightThumbX \ 256) + 128
-                    joyRY = 127 - (.RightThumbY \ 256)
+                    joyLXInt = .LeftThumbX
+                    joyLYInt = .LeftThumbY
+                    joyRXInt = .RightThumbX
+                    joyRYInt = .RightThumbY
                 End With
                 For i = 1 To 4
-                    If mirror(i) Then controller(i).setState(buttonHi, LT, RT, buttonLo, joyLX, joyLY, joyRX, joyRY)
+                    If mirror(i) Then controller(i).setState(buttonHi, LT, RT, buttonLo, joyLXInt, joyLYInt, joyRXInt, joyRYInt)
                 Next
             End If
         End While
@@ -166,7 +167,7 @@
         Return sb.ToString
     End Function
 
-    Private Sub cbTarget1_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub cbTarget1_CheckedChanged(sender As Object, e As EventArgs) Handles cbTarget1.CheckedChanged
         mirror(1) = cbTarget1.Checked
     End Sub
 
