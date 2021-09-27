@@ -7,6 +7,7 @@ Module modMain
 
     Sub main()
         'makeTone()
+        'generateAllXMLMP3("G:\4F4707D4\out\Media\Songs\")
 
         Dim frm As New frmEdit
         'Dim frm As New frmMusic

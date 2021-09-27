@@ -28,13 +28,13 @@
             sa = New clsSimpleAction(parent.controllerNumber, timecode, clsSimpleAction.saButtons.btnRT, RT, parent)
             tmp.Add(sa)
         End If
-        If LS.X > -128 And LS.Y > -128 Then
+        If LS.X > -32768 And LS.Y > -32768 Then
             sa = New clsSimpleAction(parent.controllerNumber, timecode, clsSimpleAction.saButtons.btnLSX, LS.X, parent)
             tmp.Add(sa)
             sa = New clsSimpleAction(parent.controllerNumber, timecode, clsSimpleAction.saButtons.btnLSY, LS.Y, parent)
             tmp.Add(sa)
         End If
-        If RS.X > -128 And RS.Y > -128 Then
+        If RS.X > -32768 And RS.Y > -32768 Then
             sa = New clsSimpleAction(parent.controllerNumber, timecode, clsSimpleAction.saButtons.btnRSX, RS.X, parent)
             tmp.Add(sa)
             sa = New clsSimpleAction(parent.controllerNumber, timecode, clsSimpleAction.saButtons.btnRSY, RS.Y, parent)

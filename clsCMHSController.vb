@@ -95,9 +95,9 @@ Public Class clsCMHSController
         tmp(CMButtons.RT) = Math.Ceiling(CDec(RT) * 100 / 255)
 
         tmp(CMButtons.LX) = CMSInt(joyLXInt)
-        tmp(CMButtons.LY) = CMSInt(-CInt(joyLYInt) - 1)
+        tmp(CMButtons.LY) = CMSInt(joyLYInt)
         tmp(CMButtons.RX) = CMSInt(joyRXInt)
-        tmp(CMButtons.RY) = CMSInt(-CInt(joyRYInt) - 1)
+        tmp(CMButtons.RY) = CMSInt(joyRYInt)
         Return tmp
     End Function
 
@@ -158,9 +158,9 @@ Public Class clsCMHSController
         reportData(CMButtons.RT) = Math.Ceiling(CDec(RT) * 100 / 255)
 
         reportData(CMButtons.LX) = CMSInt(joyLXInt)
-        reportData(CMButtons.LY) = CMSInt(-CInt(joyLYInt) - 1)
+        reportData(CMButtons.LY) = CMSInt(joyLYInt)
         reportData(CMButtons.RX) = CMSInt(joyRXInt)
-        reportData(CMButtons.RY) = CMSInt(-CInt(joyRYInt) - 1)
+        reportData(CMButtons.RY) = CMSInt(joyRYInt)
 
         Dim x As Int16 = reportData(CMButtons.LX)
         Dim y As Int16 = reportData(CMButtons.LY)
