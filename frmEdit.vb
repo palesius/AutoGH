@@ -1309,7 +1309,10 @@ Public Class frmEdit
         End If
         fdSave.Filter = "AutoXB Scripts|*.axb"
     End Sub
-
+    Private Sub Exit_Click(sender As System.Object, e As System.EventArgs) Handles ExitToolStripMenuItem.Click
+        saveSettings()
+        Environment.Exit(0)
+    End Sub
     Private Sub CaptureCardToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CaptureCardToolStripMenuItem.Click
         Dim frmCC As New frmCaptureCard
         frmCC.ShowDialog()

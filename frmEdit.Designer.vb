@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmEdit
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class frmEdit
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEdit))
@@ -75,6 +75,7 @@ Partial Class frmEdit
         Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveAsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SongToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PatternToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -152,8 +153,6 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
-        Me.lbActions = New AutoGH.RefreshingListBox()
-        Me.lbGroups = New AutoGH.RefreshingListBox()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlControls.SuspendLayout()
@@ -608,7 +607,7 @@ Partial Class frmEdit
         '
         'btnAdd
         '
-        Me.btnAdd.Font = New System.Drawing.Font("Wingdings 2", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.btnAdd.ForeColor = System.Drawing.Color.Green
         Me.btnAdd.Location = New System.Drawing.Point(3, 265)
         Me.btnAdd.Name = "btnAdd"
@@ -619,7 +618,7 @@ Partial Class frmEdit
         '
         'btnApply
         '
-        Me.btnApply.Font = New System.Drawing.Font("Wingdings 2", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.btnApply.Location = New System.Drawing.Point(208, 265)
         Me.btnApply.Name = "btnApply"
         Me.btnApply.Size = New System.Drawing.Size(30, 28)
@@ -679,7 +678,7 @@ Partial Class frmEdit
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ExportToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ExportToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -716,6 +715,12 @@ Partial Class frmEdit
         Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
         Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
         Me.ExportToolStripMenuItem.Text = "Export..."
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'ToolsToolStripMenuItem
         '
@@ -1372,7 +1377,7 @@ Partial Class frmEdit
         'btnAddGroup
         '
         Me.btnAddGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnAddGroup.Font = New System.Drawing.Font("Wingdings 2", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnAddGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.btnAddGroup.ForeColor = System.Drawing.Color.Green
         Me.btnAddGroup.Location = New System.Drawing.Point(7, 275)
         Me.btnAddGroup.Name = "btnAddGroup"
@@ -1437,7 +1442,6 @@ Partial Class frmEdit
         Me.txtController3.Name = "txtController3"
         Me.txtController3.Size = New System.Drawing.Size(115, 20)
         Me.txtController3.TabIndex = 1
-        Me.txtController3.Text = "10.100.8.53"
         '
         'lblController3
         '
@@ -1456,7 +1460,6 @@ Partial Class frmEdit
         Me.txtController2.Name = "txtController2"
         Me.txtController2.Size = New System.Drawing.Size(115, 20)
         Me.txtController2.TabIndex = 1
-        Me.txtController2.Text = "10.100.8.52"
         '
         'lblController2
         '
@@ -1475,7 +1478,7 @@ Partial Class frmEdit
         Me.txtController1.Name = "txtController1"
         Me.txtController1.Size = New System.Drawing.Size(115, 20)
         Me.txtController1.TabIndex = 1
-        Me.txtController1.Text = "10.100.8.51"
+        Me.txtController1.Text = "CM1"
         '
         'lblController1
         '
@@ -1490,12 +1493,348 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
         'lbActions
         '
         Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbActions.FormattingEnabled = True
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 297)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(524, 191)
+        Me.lbActions.TabIndex = 45
+        '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(133, 249)
+        Me.lbGroups.TabIndex = 0
+        '
         Me.lbActions.IntegralHeight = False
         Me.lbActions.Location = New System.Drawing.Point(3, 297)
         Me.lbActions.Name = "lbActions"
@@ -1687,4 +2026,5 @@ Partial Class frmEdit
     Friend WithEvents USBDeviceFinderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DJHero1ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MirroringToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
 End Class
