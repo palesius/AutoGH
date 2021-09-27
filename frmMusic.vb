@@ -83,10 +83,8 @@ Public Class frmMusic
         arrGames(1) = New clsGame("Guitar Hero III", "GH3", enumGame.gmGH3)
         arrGames(2) = New clsGame("Rock Band", "RB", enumGame.gmRB)
         arrGames(3) = New clsGame("Rock Band II", "RB2", enumGame.gmRB2)
-        'arrGames(3) = New clsGame("Rock Band III (Pro Guitar/Bass)", "RB3pro", enumGame.gmRB3pro)
         arrGames(4) = New clsGame("Rock Band Beatles", "RBB", enumGame.gmRBB)
         arrGames(5) = New clsGame("Lego Rock Band", "LRB", enumGame.gmLRB)
-
 
         For i As Integer = 0 To 3
             arrLevel(i) = New clsLevel(i)
@@ -130,12 +128,7 @@ Public Class frmMusic
     Private Sub cbGame_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
         If cbGame.SelectedItem Is lastGame Then Exit Sub
         lastGame = cbGame.SelectedItem
-        Try
-            populateSongs(cbSong, lastGame)
-        Catch
-            MessageBox.Show("Unable to populate songs. Check to see if files/directories exist.")
-            Me.Close()
-        End Try
+        populateSongs(cbSong, lastGame)
     End Sub
 
     Private Sub populateSongs(cb As ComboBox, game As clsGame)
@@ -247,18 +240,7 @@ Public Class frmMusic
         allNotes.Sort()
 
         Dim mergedNotes As New List(Of clsNoteEntry)
-        Try
-            Dim Test = allNotes(0)
-        Catch
-            MessageBox.Show("No Songs/Tracks selected!")
-            Exit Sub
-            Me.Close()
-        End Try
-
         Dim lastNote As clsNoteEntry = allNotes(0)
-
-
-
         mergedNotes.Add(lastNote)
         For i = 1 To allNotes.Count - 1
             If allNotes(i).controller = lastNote.controller AndAlso allNotes(i).tickOffset = lastNote.tickOffset Then 'AndAlso allNotes(i).tickDuration = lastNote.tickDuration Then
