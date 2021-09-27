@@ -134,6 +134,9 @@ Public Class frmMusic
     Private Sub populateSongs(cb As ComboBox, game As clsGame)
         cb.Items.Clear()
         lstSongs.Clear()
+        Dim di As New IO.DirectoryInfo(basepath & game.path)
+        If Not di.Exists Then di.Create()
+
         For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & game.path).GetFiles("*.mid")
             Dim song As New clsSong(fi, game)
             lstSongs.Add(song)
@@ -230,9 +233,14 @@ Public Class frmMusic
 
 
     Private Sub btnOk_Click(sender As System.Object, e As System.EventArgs) Handles btnOk.Click
+        If cbSong.SelectedItem Is Nothing OrElse cbSong.SelectedItem.ToString() = "" Then
+            MsgBox("You must select a song.")
+            Exit Sub
+        End If
         saveSettings()
+
         Dim allNotes As New List(Of clsNoteEntry)
-        For i = 0 To 3
+            For i = 0 To 3
             If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") AndAlso (Not cbLevel(i).SelectedItem Is Nothing) Then
                 allNotes.AddRange(getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem))
             End If
