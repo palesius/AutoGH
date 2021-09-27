@@ -239,12 +239,19 @@ Public Class frmMusic
         End If
         saveSettings()
 
+        Dim trackCount As Integer = 0
         Dim allNotes As New List(Of clsNoteEntry)
-            For i = 0 To 3
+        For i = 0 To 3
             If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") AndAlso (Not cbLevel(i).SelectedItem Is Nothing) Then
                 allNotes.AddRange(getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem))
+                trackCount += 1
             End If
         Next
+        If trackCount = 0 Then
+            MsgBox("You must select at least one track to play.")
+            Exit Sub
+        End If
+
         allNotes.Sort()
 
         Dim mergedNotes As New List(Of clsNoteEntry)

@@ -166,7 +166,7 @@ Friend Class clsSong
 
     Friend ReadOnly Property mf As NAudio.Midi.MidiFile
         Get
-            If _mf Is Nothing Then _mf = New NAudio.Midi.MidiFile(fi.FullName)
+            If _mf Is Nothing Then _mf = New NAudio.Midi.MidiFile(fi.FullName, False)
             Return _mf
         End Get
     End Property
