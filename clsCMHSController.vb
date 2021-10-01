@@ -7,6 +7,11 @@ Public Class clsCMHSController
     Dim device As HidDevice
     Dim devStream As DeviceStream
     Private apiLoaded As Boolean = False
+    Private ready As Boolean = False
+
+    Public Overrides Function isReady() As Boolean
+        Return ready
+    End Function
 
     Public Overrides ReadOnly Property IFType As String
         Get
@@ -47,6 +52,7 @@ Public Class clsCMHSController
             MsgBox("Communications timeout")
             Exit Sub
         End Try
+        ready = True
 
         reportData = baseReport()
         update()

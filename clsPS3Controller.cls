@@ -24,6 +24,9 @@
             setupTCP()
         End Set
     End Property
+    Public Overrides Function isReady() As Boolean
+        Return True
+    End Function
 
     Public Overrides ReadOnly Property IFType As String
         Get

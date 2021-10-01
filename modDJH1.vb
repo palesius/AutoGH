@@ -176,42 +176,42 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnB, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnB, 0, 2))
                 Case 3, 7 'scratch up/any green
-                    duration = 15
+                    duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -2, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -0.05, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnA, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
                 Case 5 'scratch down green
-                    duration = 15
+                    duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 2, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 0.05, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnA, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
                 Case 4, 8 'scratch up/any blue
-                    duration = 15
+                    duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -2, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -0.05, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnX, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))
                 Case 6 'scratch down blue
-                    duration = 15
+                    duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 2, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 0.05, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnX, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))

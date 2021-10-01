@@ -8,6 +8,9 @@ Module modMain
     Sub main()
         'makeTone()
         'generateAllXMLMP3("G:\4F4707D4\out\Media\Songs\")
+        'Dim x As New Melanchall.DryWetMidi.Core.MidiFile()
+        'x = Melanchall.DryWetMidi.Core.MidiFile.Read("c:\users\pales\Downloads\arterialblack.mid")
+        'Stop
 
         Dim frm As New frmEdit
         'Dim frm As New frmMusic

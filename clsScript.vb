@@ -149,6 +149,12 @@
                 End If
             End If
         Next
+        For Each c As clsController In controllers.Values
+            If Not c.isReady Then
+                state = scriptState.scriptError
+                Exit Sub
+            End If
+        Next
         For Each number As Byte In controllers.Keys
             Dim finalAction As New clsActionRelease(number, &HFFFF, 0, 0, New Point(0, 0), New Point(0, 0), Nothing)
             finalAction.index = actions.Count

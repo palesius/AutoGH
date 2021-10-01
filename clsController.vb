@@ -17,6 +17,7 @@
     Public MustOverride Sub sendReport(newReport() As Byte)
     Public MustOverride Function baseReport() As Byte()
     Public MustOverride Function getReport() As Byte()
+    Public MustOverride Function isReady() As Boolean
 
     Public Sub resetController()
         sendReport(baseReport)

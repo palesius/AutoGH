@@ -24,6 +24,10 @@
 
     Private com As System.IO.Ports.SerialPort
 
+    Public Overrides Function isReady() As Boolean
+        Return True
+    End Function
+
     Public Overrides ReadOnly Property IFType As String
         Get
             Return "PS2"
