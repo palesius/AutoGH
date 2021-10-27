@@ -75,7 +75,11 @@
         tmp(10) = uVal Mod 256
         tmp(11) = uVal >> 8
 
-        If joyLYInt < 0 Then uVal = 1 - joyLYInt Else uVal = 65535 - joyLYInt
+        If joyLYInt = 0 Then
+            uVal = 0
+        Else
+            If joyLYInt < 0 Then uVal = -1 - joyLYInt Else uVal = 65535 - joyLYInt
+        End If
         tmp(12) = uVal Mod 256
         tmp(13) = uVal >> 8
 
@@ -83,7 +87,11 @@
         tmp(14) = uVal Mod 256
         tmp(15) = uVal >> 8
 
-        If joyRYInt < 0 Then uVal = 1 - joyRYInt Else uVal = 65535 - joyRYInt
+        If joyRYInt = 0 Then
+            uVal = 0
+        Else
+            If joyRYInt < 0 Then uVal = -1 - joyRYInt Else uVal = 65535 - joyRYInt
+        End If
         tmp(16) = uVal Mod 256
         tmp(17) = uVal >> 8
 
@@ -101,7 +109,11 @@
         reportData(10) = uVal Mod 256
         reportData(11) = uVal >> 8
 
-        If joyLYInt < 0 Then uVal = -1 - joyLYInt Else uVal = 65535 - joyLYInt
+        If joyLYInt = 0 Then
+            uVal = 0
+        Else
+            If joyLYInt < 0 Then uVal = -1 - joyLYInt Else uVal = 65535 - joyLYInt
+        End If
         reportData(12) = uVal Mod 256
         reportData(13) = uVal >> 8
 
@@ -109,7 +121,11 @@
         reportData(14) = uVal Mod 256
         reportData(15) = uVal >> 8
 
-        If joyRYInt < 0 Then uVal = -1 - joyRYInt Else uVal = 65535 - joyRYInt
+        If joyRYInt = 0 Then
+            uVal = 0
+        Else
+            If joyRYInt < 0 Then uVal = -1 - joyRYInt Else uVal = 65535 - joyRYInt
+        End If
         reportData(16) = uVal Mod 256
         reportData(17) = uVal >> 8
         sendReport(reportData)

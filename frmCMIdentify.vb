@@ -20,7 +20,7 @@ Public Class frmCMIdentify
             'End Select
             Dim vpString As String = String.Format("{0:X4}{1:X4}", hdev.VendorID, hdev.ProductID)
             Select Case vpString
-                Case "20080001", "25080003", "25080001", "20080010"
+                Case "20080001", "25080003", "25080001", "20080010", "25080032"
                     devicePaths.Add(hdev.DevicePath)
                     deviceDict.Add(hdev.DevicePath, hdev)
             End Select
