@@ -3,7 +3,7 @@ Module modDJH1
     Public Class clsDJHTrack
         Public id As String
         Public path As String
-        Public bpm As Integer
+        Public bpm As Decimal
         Public name As String
         Public levels(4) As String
         Public twoPlayer As Boolean = False
@@ -15,17 +15,19 @@ Module modDJH1
             id = IDTag.Substring(0, pos)
             name = IDTag.Substring(pos + 1)
             path = IO.Path.GetDirectoryName(_path) & "\" & id & "\SinglePlayer\Medium\"
-            If Not IO.Directory.Exists(path) Then
-                path = IO.Path.GetDirectoryName(_path) & "\" & id & "\TwoPlayer\Medium\"
-                twoPlayer = True
-            End If
-            For i As Integer = 0 To 4
-                If twoPlayer Then
-                    If IO.File.Exists(path & "Markup_Main_P2_" & i & ".fsgmub") Then levels(i) = path & "Markup_Main_P2_" & i & ".fsgmub"
-                Else
+            If IO.Directory.Exists(path) Then
+                For i As Integer = 0 To 4
                     If IO.File.Exists(path & "Markup_Main_P1_" & i & ".fsgmub") Then levels(i) = path & "Markup_Main_P1_" & i & ".fsgmub"
-                End If
-            Next
+                Next
+            End If
+
+            path = IO.Path.GetDirectoryName(_path) & "\" & id & "\TwoPlayer\Medium\"
+            If IO.Directory.Exists(path) Then
+                For i As Integer = 0 To 4
+                    If IO.File.Exists(path & "Markup_Main_P2_" & i & ".fsgmub") Then levels(i) = path & "Markup_Main_P2_" & i & ".fsgmub"
+                    If IO.File.Exists(path & "Markup_Main_P1_" & i & ".fsgmub") Then levels(i) = path & "Markup_Main_P1_" & i & ".fsgmub"
+                Next
+            End If
         End Sub
     End Class
 
@@ -134,7 +136,7 @@ Module modDJH1
         End Sub
     End Class
 
-    Public Sub convertFSGMUB(path As String, bpm As Integer, title As String)
+    Public Sub convertFSGMUB(path As String, bpm As Decimal, title As String)
         Debug.Print(path)
         Dim factor As Decimal = 240000 / bpm
         Dim DJHActions As New List(Of clsDJHAction)
@@ -181,7 +183,7 @@ Module modDJH1
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -0.05, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -12, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnA, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
@@ -191,7 +193,7 @@ Module modDJH1
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 0.05, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 12, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnA, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
@@ -201,7 +203,7 @@ Module modDJH1
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -0.05, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, -12, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnX, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))
@@ -211,16 +213,16 @@ Module modDJH1
                         toBegin = toMid - duration \ 2
                         toEnd = toMid + duration \ 2
                     End If
-                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 0.05, 1))
+                    DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnLSY, 12, 1))
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnX, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))
                 Case 9 'XF Right
-                    DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, -127, 1))
+                    DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, -32767, 1))
                 Case 10 'XF Center
                     DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, 0, 1))
                 Case 11 'XF Left
-                    DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, 127, 1))
+                    DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, 32767, 1))
                 Case 12, 13, 14, 50 'Effector Green/Blue/Red
                     'Dim pos As Integer = 0
                     'Dim value As Integer
@@ -386,8 +388,8 @@ Module modDJH1
             offRS = sa.buttonOff And (clsSimpleAction.saButtons.btnRSX Or clsSimpleAction.saButtons.btnRSY)
             offLS = sa.buttonOff And (clsSimpleAction.saButtons.btnLSX Or clsSimpleAction.saButtons.btnLSY)
             If sa.buttonOn > 0 Or onRS Or onLS Or hasRT Then
-                Dim ls As Point = New Point(-129, -129)
-                Dim rs As Point = New Point(-129, -129)
+                Dim ls As Point = New Point(-32768, -32768)
+                Dim rs As Point = New Point(-32768, -32768)
                 If onRS Then rs = New Point(sa.rsX, lastXF)
                 If onLS Then ls = New Point(0, sa.lsY)
                 'If hasRT Then maskOn = maskOn Or clsSimpleAction.saButtons.btnRT
@@ -429,6 +431,7 @@ Module modDJH1
         desc.AppendChild(doc.CreateElement("Game")).InnerText = "DJ Hero 1"
         desc.AppendChild(doc.CreateElement("Title")).InnerText = title
         desc.AppendChild(doc.CreateElement("Description")).InnerText = ""
+        desc.AppendChild(doc.CreateElement("Version")).InnerText = 2
         Dim agsNode As XmlElement = doc.CreateElement("ActionGroups")
         root.AppendChild(agsNode)
         Dim agNode As XmlElement = doc.CreateElement("ActionGroup")
