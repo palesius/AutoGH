@@ -43,7 +43,7 @@ Partial Class frmMusic
         Me.cbTrack1 = New System.Windows.Forms.ComboBox()
         Me.cbLevel1 = New System.Windows.Forms.ComboBox()
         Me.cbManual = New System.Windows.Forms.CheckBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnMakeVocals = New System.Windows.Forms.Button()
         Me.gbSong.SuspendLayout()
         Me.dbParts.SuspendLayout()
         Me.SuspendLayout()
@@ -261,14 +261,14 @@ Partial Class frmMusic
         Me.cbManual.Text = "Manual Start"
         Me.cbManual.UseVisualStyleBackColor = True
         '
-        'Button1
+        'btnMakeVocals
         '
-        Me.Button1.Location = New System.Drawing.Point(146, 149)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 32
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnMakeVocals.Location = New System.Drawing.Point(95, 148)
+        Me.btnMakeVocals.Name = "btnMakeVocals"
+        Me.btnMakeVocals.Size = New System.Drawing.Size(100, 23)
+        Me.btnMakeVocals.TabIndex = 32
+        Me.btnMakeVocals.Text = "Make Vocals"
+        Me.btnMakeVocals.UseVisualStyleBackColor = True
         '
         'frmMusic
         '
@@ -278,7 +278,7 @@ Partial Class frmMusic
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(599, 176)
         Me.ControlBox = False
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btnMakeVocals)
         Me.Controls.Add(Me.cbManual)
         Me.Controls.Add(Me.gbSong)
         Me.Controls.Add(Me.btnCancel)
@@ -316,5 +316,5 @@ Partial Class frmMusic
     Friend WithEvents btnVocal As System.Windows.Forms.Button
     Friend WithEvents cbManual As System.Windows.Forms.CheckBox
     Friend WithEvents btnStar As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnMakeVocals As System.Windows.Forms.Button
 End Class

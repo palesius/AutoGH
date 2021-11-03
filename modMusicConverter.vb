@@ -118,6 +118,7 @@ Module modMusicConverter
         Dim tpq As Integer = mf.DeltaTicksPerQuarterNote
         Dim prevTempo As clsTempoEntry = Nothing
         Dim inSolo As Boolean = False
+
         For Each mev As NAudio.Midi.MidiEvent In mf.Events(0)
             If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.SetTempo Then
                 Dim tev As NAudio.Midi.TempoEvent = CType(mev, NAudio.Midi.TempoEvent)

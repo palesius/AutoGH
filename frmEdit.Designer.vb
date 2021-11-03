@@ -152,6 +152,10 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
+        Me.tpOutput = New System.Windows.Forms.TabPage()
+        Me.rbOutputAudio = New System.Windows.Forms.RadioButton()
+        Me.txtOuputAudio = New System.Windows.Forms.TextBox()
+        Me.btnOutputAudio = New System.Windows.Forms.Button()
         Me.lbActions = New AutoGH.RefreshingListBox()
         Me.lbGroups = New AutoGH.RefreshingListBox()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -170,6 +174,7 @@ Partial Class frmEdit
         Me.gbTest.SuspendLayout()
         Me.gbGroups.SuspendLayout()
         Me.gbControllers.SuspendLayout()
+        Me.tpOutput.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnA
@@ -471,6 +476,7 @@ Partial Class frmEdit
         'rbPress
         '
         Me.rbPress.AutoSize = True
+        Me.rbPress.Checked = True
         Me.rbPress.Location = New System.Drawing.Point(3, 3)
         Me.rbPress.Name = "rbPress"
         Me.rbPress.Size = New System.Drawing.Size(51, 17)
@@ -486,14 +492,14 @@ Partial Class frmEdit
         Me.rbRelease.Name = "rbRelease"
         Me.rbRelease.Size = New System.Drawing.Size(64, 17)
         Me.rbRelease.TabIndex = 6
-        Me.rbRelease.TabStop = True
         Me.rbRelease.Text = "Release"
         Me.rbRelease.UseVisualStyleBackColor = True
         '
         'rbWait
         '
         Me.rbWait.AutoSize = True
-        Me.rbWait.Location = New System.Drawing.Point(5, 3)
+        Me.rbWait.Checked = True
+        Me.rbWait.Location = New System.Drawing.Point(3, 3)
         Me.rbWait.Name = "rbWait"
         Me.rbWait.Size = New System.Drawing.Size(47, 17)
         Me.rbWait.TabIndex = 7
@@ -504,11 +510,10 @@ Partial Class frmEdit
         'rbLoop
         '
         Me.rbLoop.AutoSize = True
-        Me.rbLoop.Location = New System.Drawing.Point(5, 19)
+        Me.rbLoop.Location = New System.Drawing.Point(3, 19)
         Me.rbLoop.Name = "rbLoop"
         Me.rbLoop.Size = New System.Drawing.Size(49, 17)
         Me.rbLoop.TabIndex = 8
-        Me.rbLoop.TabStop = True
         Me.rbLoop.Text = "Loop"
         Me.rbLoop.UseVisualStyleBackColor = True
         '
@@ -591,18 +596,16 @@ Partial Class frmEdit
         Me.rbHold.Name = "rbHold"
         Me.rbHold.Size = New System.Drawing.Size(47, 17)
         Me.rbHold.TabIndex = 5
-        Me.rbHold.TabStop = True
         Me.rbHold.Text = "Hold"
         Me.rbHold.UseVisualStyleBackColor = True
         '
         'rbGroup
         '
         Me.rbGroup.AutoSize = True
-        Me.rbGroup.Location = New System.Drawing.Point(5, 35)
+        Me.rbGroup.Location = New System.Drawing.Point(3, 35)
         Me.rbGroup.Name = "rbGroup"
         Me.rbGroup.Size = New System.Drawing.Size(54, 17)
         Me.rbGroup.TabIndex = 65
-        Me.rbGroup.TabStop = True
         Me.rbGroup.Text = "Group"
         Me.rbGroup.UseVisualStyleBackColor = True
         '
@@ -933,6 +936,7 @@ Partial Class frmEdit
         Me.tcActions.Controls.Add(Me.tpController)
         Me.tcActions.Controls.Add(Me.tpFlow)
         Me.tcActions.Controls.Add(Me.tpInput)
+        Me.tcActions.Controls.Add(Me.tpOutput)
         Me.tcActions.Location = New System.Drawing.Point(3, 126)
         Me.tcActions.Name = "tcActions"
         Me.tcActions.SelectedIndex = 0
@@ -1127,6 +1131,7 @@ Partial Class frmEdit
         Me.tpInput.Controls.Add(Me.rbInputAudio)
         Me.tpInput.Location = New System.Drawing.Point(4, 22)
         Me.tpInput.Name = "tpInput"
+        Me.tpInput.Padding = New System.Windows.Forms.Padding(3)
         Me.tpInput.Size = New System.Drawing.Size(516, 107)
         Me.tpInput.TabIndex = 2
         Me.tpInput.Text = "Input"
@@ -1276,7 +1281,7 @@ Partial Class frmEdit
         '
         Me.rbInputVideo.AutoSize = True
         Me.rbInputVideo.Checked = True
-        Me.rbInputVideo.Location = New System.Drawing.Point(5, 3)
+        Me.rbInputVideo.Location = New System.Drawing.Point(3, 3)
         Me.rbInputVideo.Name = "rbInputVideo"
         Me.rbInputVideo.Size = New System.Drawing.Size(52, 17)
         Me.rbInputVideo.TabIndex = 5
@@ -1287,7 +1292,7 @@ Partial Class frmEdit
         'rbInputRumble
         '
         Me.rbInputRumble.AutoSize = True
-        Me.rbInputRumble.Location = New System.Drawing.Point(5, 35)
+        Me.rbInputRumble.Location = New System.Drawing.Point(3, 35)
         Me.rbInputRumble.Name = "rbInputRumble"
         Me.rbInputRumble.Size = New System.Drawing.Size(61, 17)
         Me.rbInputRumble.TabIndex = 7
@@ -1297,7 +1302,7 @@ Partial Class frmEdit
         'rbInputAudio
         '
         Me.rbInputAudio.AutoSize = True
-        Me.rbInputAudio.Location = New System.Drawing.Point(5, 19)
+        Me.rbInputAudio.Location = New System.Drawing.Point(3, 19)
         Me.rbInputAudio.Name = "rbInputAudio"
         Me.rbInputAudio.Size = New System.Drawing.Size(52, 17)
         Me.rbInputAudio.TabIndex = 6
@@ -1490,6 +1495,48 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
+        'tpOutput
+        '
+        Me.tpOutput.Controls.Add(Me.btnOutputAudio)
+        Me.tpOutput.Controls.Add(Me.txtOuputAudio)
+        Me.tpOutput.Controls.Add(Me.rbOutputAudio)
+        Me.tpOutput.Location = New System.Drawing.Point(4, 22)
+        Me.tpOutput.Name = "tpOutput"
+        Me.tpOutput.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpOutput.Size = New System.Drawing.Size(516, 107)
+        Me.tpOutput.TabIndex = 3
+        Me.tpOutput.Text = "Output"
+        Me.tpOutput.UseVisualStyleBackColor = True
+        '
+        'rbOutputAudio
+        '
+        Me.rbOutputAudio.AutoSize = True
+        Me.rbOutputAudio.Checked = True
+        Me.rbOutputAudio.Location = New System.Drawing.Point(3, 3)
+        Me.rbOutputAudio.Name = "rbOutputAudio"
+        Me.rbOutputAudio.Size = New System.Drawing.Size(52, 17)
+        Me.rbOutputAudio.TabIndex = 7
+        Me.rbOutputAudio.TabStop = True
+        Me.rbOutputAudio.Text = "Audio"
+        Me.rbOutputAudio.UseVisualStyleBackColor = True
+        '
+        'txtOuputAudio
+        '
+        Me.txtOuputAudio.Location = New System.Drawing.Point(95, 3)
+        Me.txtOuputAudio.Name = "txtOuputAudio"
+        Me.txtOuputAudio.ReadOnly = True
+        Me.txtOuputAudio.Size = New System.Drawing.Size(391, 20)
+        Me.txtOuputAudio.TabIndex = 8
+        '
+        'btnOutputAudio
+        '
+        Me.btnOutputAudio.Location = New System.Drawing.Point(486, 3)
+        Me.btnOutputAudio.Name = "btnOutputAudio"
+        Me.btnOutputAudio.Size = New System.Drawing.Size(24, 20)
+        Me.btnOutputAudio.TabIndex = 9
+        Me.btnOutputAudio.Text = "..."
+        Me.btnOutputAudio.UseVisualStyleBackColor = True
+        '
         'lbActions
         '
         Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -1553,6 +1600,8 @@ Partial Class frmEdit
         Me.gbGroups.ResumeLayout(False)
         Me.gbControllers.ResumeLayout(False)
         Me.gbControllers.PerformLayout()
+        Me.tpOutput.ResumeLayout(False)
+        Me.tpOutput.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1687,4 +1736,8 @@ Partial Class frmEdit
     Friend WithEvents USBDeviceFinderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DJHero1ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MirroringToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tpOutput As TabPage
+    Friend WithEvents btnOutputAudio As Button
+    Friend WithEvents txtOuputAudio As TextBox
+    Friend WithEvents rbOutputAudio As RadioButton
 End Class

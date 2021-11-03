@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Games>
+  <Game Name="Default" Code="DEFAULT">
+    <Strum>UP</Strum>
+    <SoloStrum>L3</SoloStrum>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+    </Notes>
+    <Dilation>1</Dilation>
+    <LoadTime>4000</LoadTime>
+    <Truncation>100</Truncation>
+    <MinimumDuration>50</MinimumDuration>
+    <DrumNotes>02134</DrumNotes>
+  </Game>
+  <Game Name="Guitar Hero II" Code="GH2">
+    <Strum />
+    <SoloStrum />
+    <Notes>
+      <Green>LT</Green>
+      <Red>LB</Red>
+      <Blue>RT</Blue>
+      <Yellow>RB</Yellow>
+      <Orange>A</Orange>
+    </Notes>
+    <Dilation>1.0025</Dilation>
+    <LoadTime>2100</LoadTime>
+  </Game>
+  <Game Name="Guitar Hero III" Code="GH3">
+    <Strum />
+    <SoloStrum />
+    <Notes>
+      <Green>LT</Green>
+      <Red>LB</Red>
+      <Blue>RT</Blue>
+      <Yellow>RB</Yellow>
+      <Orange>A</Orange>
+    </Notes>
+    <Dilation>1.00008</Dilation>
+    <LoadTime>3600</LoadTime>
+    <MinimumDuration>25</MinimumDuration>
+  </Game>
+  <Game Name="Rock Band" Code="RB">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="Rock Band II" Code="RB2" />
+  <Game Name="Rock Band: Beatles" Code="RBB" />
+  <Game Name="Lego Rock Band" Code="LRB">
+    <MinimumDuration>35</MinimumDuration>
+  </Game>
+  <Game Name="RB Pack: Country 1" Code="RBTP_CTY1">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="RB Pack: Country 2" Code="RBTP_CTY2">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="RB Pack: AC/DC" Code="RBTP_ACDC" />
+  <Game Name="RB Pack: Classic Rock" Code="RBTP_CR" />
+  <Game Name="RB Pack: Metal" Code="RBTP_MTL" />
+  <Game Name="RB Pack: Pack 2" Code="RBTP_PK2" />
+  <Game Name="Rock Band: Green Day" Code="RBGD" />
+</Games>

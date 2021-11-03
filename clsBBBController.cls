@@ -54,7 +54,7 @@
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
-        Debug.Print("Sent (" & _IP & "): " & BitConverter.ToString(newReport))
+        'Debug.Print("Sent (" & _IP & "): " & BitConverter.ToString(newReport))
         sck.Send(newReport)
     End Sub
 

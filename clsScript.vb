@@ -8,6 +8,7 @@
     Private controllers As Generic.Dictionary(Of String, clsController)
     Private capture As clsSnapshot
     Private needsCapture As Boolean
+    Private outputActions As List(Of clsActionOutput)
 
     Enum scriptState
         ready
@@ -125,8 +126,10 @@
         Dim i As Integer = 0
         Dim timecode As Integer = 0
         Dim simpleActions As New List(Of clsSimpleAction)
+        outputActions = New List(Of clsActionOutput)
         controllers = New Generic.Dictionary(Of String, clsController)
         For Each action As clsAction In actions
+            If action.isOutput Then outputActions.Add(action)
             Select Case action.getActType
                 Case ActionType.actLoop
                     CType(action, clsActionLoop).repeatLeft = CType(action, clsActionLoop).repeat
@@ -200,6 +203,9 @@
                     simpleActions.Add(New clsSimpleAction(timecode, actions(i)))
                     timecode = timecode + 1
                     i = i + 1
+                Case ActionType.actOutputAudio
+                    simpleActions.Add(New clsSimpleAction(timecode, actions(i)))
+                    i = i + 1
             End Select
         End While
         simpleActions.Sort()
@@ -234,7 +240,11 @@
                 If action.button = clsSimpleAction.saButtons.btnRSY Then controllers(curController).setJoyRSY(action.value, False)
             End If
         Next
-        stateActions.Add(New clsStatelessAction(controllers(curController), controllers(curController).getReport(), curOffset, lastAction.parent))
+        If controllers.Count > 0 Then stateActions.Add(New clsStatelessAction(controllers(curController), controllers(curController).getReport(), curOffset, lastAction.parent))
+
+        For Each ao As clsActionOutput In outputActions
+            ao.init()
+        Next
     End Sub
 
     Private startTime As Date
@@ -306,15 +316,14 @@
                     If curAction.input Then
                         inputAction = CType(curAction.parent, clsActionInput)
                         inputAction.start()
-                    ElseIf curAction.wait Then
-                        i = i + 1
-                        If i > stateActions.Count - 1 Then Exit Do
-                        lastAction = curAction.parent
-                        curAction = stateActions(i)
-                        nextTime = curAction.timeoffset
                     Else
-                        curAction.controller.sendReport(curAction.report)
                         i = i + 1
+                        If curAction.wait Then
+                        ElseIf curAction.output Then
+                            CType(curAction.parent, clsActionOutput).activate()
+                        Else
+                            curAction.controller.sendReport(curAction.report)
+                        End If
                         If i > stateActions.Count - 1 Then Exit Do
                         lastAction = curAction.parent
                         curAction = stateActions(i)
@@ -368,6 +377,12 @@
     End Sub
 
     Public Sub dispose() Implements IDisposable.Dispose
+        If Not outputActions Is Nothing Then
+            For Each ao As clsActionOutput In outputActions
+                ao.cleanup()
+            Next
+            outputActions = Nothing
+        End If
         Finalize()
     End Sub
 

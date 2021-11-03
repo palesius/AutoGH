@@ -177,7 +177,34 @@
         Return New IO.FileInfo(mp3name)
     End Function
 
-    Function generateWAV(midipath As String) As List(Of IO.FileInfo)
+    Function generateMP3(midipath As String) As List(Of IO.FileInfo)
+        Dim offset As Integer = 0
+        Dim wavFiles As List(Of IO.FileInfo) = generateWAV(midipath, offset)
+        NAudio.MediaFoundation.MediaFoundationApi.Startup()
+        Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_MP3, New NAudio.Wave.WaveFormat(44100, 1), 0)
+        Dim enc As New NAudio.Wave.MediaFoundationEncoder(mt)
+        Dim mp3s As New List(Of IO.FileInfo)
+        For Each fi As IO.FileInfo In wavFiles
+            Dim wfr As New NAudio.Wave.WaveFileReader(fi.FullName)
+            Dim mp3Path As String = IO.Path.ChangeExtension(fi.FullName, "mp3")
+            enc.Encode(mp3Path, wfr)
+            wfr.Close()
+            wfr.Dispose()
+            If IO.File.Exists(mp3Path) Then
+                fi.Delete()
+                mp3s.Add(New IO.FileInfo(mp3Path))
+                Dim tf As TagLib.File = TagLib.File.Create(mp3Path)
+                tf.Tag.Comment = offset
+                tf.Save()
+            Else
+                Stop
+            End If
+        Next
+
+        Return mp3s
+    End Function
+
+    Function generateWAV(midipath As String, Optional ByRef offset As Integer = 0) As List(Of IO.FileInfo)
         Dim mf As New NAudio.Midi.MidiFile(midipath)
         Dim tracks As New List(Of trackInfo)
         Dim beat As trackInfo = Nothing
@@ -189,7 +216,7 @@
                         If CType(.Events(i)(j), NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.SequenceTrackName Then
                             Dim name As String = CType(.Events(i)(j), NAudio.Midi.TextEvent).Text
                             Select Case name
-                                Case "PART VOCALS" ', "PART HARM1", "PART HARM2", "PART HARM3"
+                                Case "PART VOCALS", "PART HARM1", "PART HARM2", "PART HARM3"
                                     tracks.Add(New trackInfo(i, name.Substring(5)))
                                     Exit For
                                 Case "BEAT"
@@ -200,15 +227,6 @@
                 Next j
             Next i
         End With
-
-        If tracks.Count > 1 Then
-            For Each t As trackInfo In tracks
-                If t.name = "VOCALS" Then
-                    tracks.Remove(t)
-                    Exit For
-                End If
-            Next
-        End If
 
         Dim tempos As New List(Of clsTempoEntry)
         Dim tpq As Integer = mf.DeltaTicksPerQuarterNote
@@ -245,6 +263,7 @@
             saveWav(track.samples.ToArray(), filename)
             files.Add(New IO.FileInfo(filename))
         Next
+        offset = startoffset
 
         Return files
     End Function

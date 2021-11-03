@@ -9,6 +9,7 @@ Public Enum ActionType
     actInputVideo
     actInputAudio
     actInputRumble
+    actOutputAudio
 End Enum
 
 Public Class clsActionGroup
@@ -76,6 +77,10 @@ Public MustInherit Class clsAction
         Return False
     End Function
 
+    Public Overridable Function isOutput() As Boolean
+        Return False
+    End Function
+
     Public Sub baseClone(orig As clsAction)
         index = orig.index
         referrers.Clear()
@@ -138,6 +143,8 @@ Public MustInherit Class clsAction
                 a = New clsActionAGroup(node, version, group)
             Case "VideoInput"
                 a = New clsActionInputVideo(node, version, group)
+            Case "AudioOutput"
+                a = New clsActionOutputAudio(node, version, group)
             Case Else
                 Return Nothing
                 Stop
@@ -179,6 +186,22 @@ Public MustInherit Class clsActionInput
     End Sub
 
     Public Overrides Function isInput() As Boolean
+        Return True
+    End Function
+End Class
+
+Public MustInherit Class clsActionOutput
+    Inherits clsAction
+
+    Public Overridable Sub init()
+    End Sub
+
+    Public MustOverride Sub activate()
+
+    Public Overridable Sub cleanup()
+    End Sub
+
+    Public Overrides Function isOutput() As Boolean
         Return True
     End Function
 End Class
@@ -884,6 +907,63 @@ Public Class clsActionInputVideo
     End Function
 End Class
 
+Public Class clsActionOutputAudio
+    Inherits clsActionOutput
+
+    Public path As String
+
+    Private spInput As NAudio.Wave.MediaFoundationReader
+    Private spOut As NAudio.Wave.WasapiOut
+
+    Public Sub New(_path As String, _group As clsActionGroup)
+        path = _path
+        group = _group
+    End Sub
+
+    Public Overrides Sub init()
+        spInput = New NAudio.Wave.MediaFoundationReader(path)
+        spOut = New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
+        spOut.Init(spInput)
+    End Sub
+
+    Public Overrides Sub activate()
+        spOut.Play()
+    End Sub
+
+    Public Overrides Sub cleanup()
+        spOut.Dispose()
+        spOut = Nothing
+        spInput.Close()
+        spInput.Dispose()
+    End Sub
+
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
+        group = _group
+        path = node.Attributes("Path").Value
+    End Sub
+
+    Public Overrides Function Clone() As clsAction
+        Dim tmp As New clsActionOutputAudio(path, group)
+        tmp.baseClone(Me)
+        Return tmp
+    End Function
+
+    Public Overrides Function getActType() As ActionType
+        Return ActionType.actOutputAudio
+    End Function
+
+    Public Overrides Function getDescription() As String
+        Return String.Format("Play [{0}]", path)
+    End Function
+
+    Public Overrides Function toXML(doc As System.Xml.XmlDocument) As System.Xml.XmlElement
+        Dim tmp As XmlElement = doc.CreateElement("AudioOutput")
+        tmp.SetAttribute("Path", path)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
+        Return tmp
+    End Function
+End Class
+
 Public Class clsSimpleAction
     Implements IComparable(Of clsSimpleAction)
 
@@ -954,13 +1034,15 @@ Public Class clsStatelessAction
     Public parent As clsAction
     Public controller As clsController
     Public wait As Boolean
-    Public input As Boolean
+    Public input As Boolean '
+    Public output As Boolean
 
     Public Sub New(_timeoffset As Integer, _parent As clsAction)
         timeoffset = _timeoffset
         parent = _parent
-        wait = True
         input = _parent.isInput
+        output = _parent.isOutput
+        wait = Not output
     End Sub
 
     Public Sub New(_controller As clsController, _report() As Byte, _timeoffset As Integer, _parent As clsAction)
@@ -971,6 +1053,7 @@ Public Class clsStatelessAction
         parent = _parent
         wait = False
         input = _parent.isInput
+        output = _parent.isOutput
     End Sub
 
     Public Overrides Function ToString() As String

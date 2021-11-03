@@ -508,6 +508,15 @@ Public Class frmEdit
             'If rbInputAudio.Checked Then action = New clsActionInputAudio(txtInputInterval.Text, txtInputDuration.Text, <source>,<minvol>,<maxvol>)
             'If rbInputRumble.Checked Then action = New clsActionInputRumble(txtInputInterval.Text, txtInputDuration.Text, <controller>,<rumbletype>,<minval>,<maxval>)
             'todo: create input actions
+        ElseIf tcActions.SelectedTab Is tpOutput Then
+            If rbOutputAudio.Checked Then
+                If txtOuputAudio.Text = vbNullString OrElse Not IO.File.Exists(txtOuputAudio.Text) Then
+                    MsgBox("You must select a valid audio file")
+                Else
+                    action = New clsActionOutputAudio(txtOuputAudio.Text, activeGroup)
+                    Dim ai As clsActionOutput = action
+                End If
+            End If
         End If
         Return action
     End Function
@@ -1387,7 +1396,10 @@ Public Class frmEdit
         fdOpen.Filter = "TrackListing.xml|TrackListing.xml"
         fdOpen.FileName = vbNullString
         fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH\DJH1"
-        fdOpen.ShowDialog()
+        If fdOpen.ShowDialog() = DialogResult.Cancel Then
+            fdOpen.Filter = "AutoXB Scripts|*.axb"
+            Exit Sub
+        End If
         fdOpen.Filter = "AutoXB Scripts|*.axb"
         If fdOpen.FileName = vbNullString Then Exit Sub
         createDJH1Scripts(fdOpen.FileName)
@@ -1401,5 +1413,18 @@ Public Class frmEdit
         If txtController4.Text <> vbNullString Then controllerIPS.Add(4, txtController4.Text)
         Dim frm As New frmMirror(controllerIPS)
         frm.ShowDialog()
+    End Sub
+
+    Private Sub btnOutputAudio_Click(sender As Object, e As EventArgs) Handles btnOutputAudio.Click
+        fdOpen.Filter = "Audio Files|*.mp3;*.wav"
+        fdOpen.FileName = vbNullString
+        fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH"
+        If fdOpen.ShowDialog() = DialogResult.Cancel Then
+            fdOpen.Filter = "AutoXB Scripts|*.axb"
+            Exit Sub
+        End If
+        fdOpen.Filter = "AutoXB Scripts|*.axb"
+        If fdOpen.FileName = vbNullString Then Exit Sub
+        txtOuputAudio.Text = fdOpen.FileName
     End Sub
 End Class

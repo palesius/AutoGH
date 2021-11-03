@@ -9,12 +9,12 @@ Public Class frmMusic
 
     Private basepath As String
 
-    Private arrGames(5) As clsGame
+    Private dictGames As SortedDictionary(Of String, clsRhythmGame)
     Private lstSongs As New List(Of clsSong)
     Private lstTracks As New List(Of clsTrack)
     Private arrLevel(3) As clsLevel
 
-    Private lastGame As clsGame
+    Private lastGame As clsRhythmGame
     Private lastSong As clsSong
 
     Private cbTrack(3) As ComboBox
@@ -68,6 +68,24 @@ Public Class frmMusic
         End If
     End Sub
 
+    Private Sub loadGames()
+        dictGames = New SortedDictionary(Of String, clsRhythmGame)
+        Dim xmlDoc As New Xml.XmlDocument
+        xmlDoc.Load("RhythmGames.xml")
+        Dim bn As Xml.XmlNode = xmlDoc.SelectSingleNode("/Games/Game[@Name='Default']")
+        If bn Is Nothing Then
+            MsgBox("Error loading game configurations.")
+            Exit Sub
+        End If
+        Dim base As New clsRhythmGame(bn, Nothing)
+        For Each n As Xml.XmlNode In xmlDoc.SelectNodes("/Games/Game")
+            If n.Attributes("Name").Value <> "Default" Then
+                Dim game As New clsRhythmGame(n, base)
+                dictGames.Add(game.code, game)
+            End If
+        Next
+    End Sub
+
     Private Sub frmMusic_Load(sender As Object, e As System.EventArgs) Handles Me.Load
         basepath = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH\"
         cbTrack(0) = cbTrack0
@@ -79,12 +97,7 @@ Public Class frmMusic
         cbLevel(2) = cbLevel2
         cbLevel(3) = cbLevel3
 
-        arrGames(0) = New clsGame("Guitar Hero II", "GH2", enumGame.gmGH2)
-        arrGames(1) = New clsGame("Guitar Hero III", "GH3", enumGame.gmGH3)
-        arrGames(2) = New clsGame("Rock Band", "RB", enumGame.gmRB)
-        arrGames(3) = New clsGame("Rock Band II", "RB2", enumGame.gmRB2)
-        arrGames(4) = New clsGame("Rock Band Beatles", "RBB", enumGame.gmRBB)
-        arrGames(5) = New clsGame("Lego Rock Band", "LRB", enumGame.gmLRB)
+        loadGames()
 
         For i As Integer = 0 To 3
             arrLevel(i) = New clsLevel(i)
@@ -95,7 +108,7 @@ Public Class frmMusic
         cbManual.Checked = GetSetting(Application.ProductName, "Settings", "Manual", "False") = "True"
 
         cbGame.Items.Clear()
-        For Each game As clsGame In arrGames
+        For Each game As clsRhythmGame In dictGames.Values
             cbGame.Items.Add(game)
         Next
         saved = GetSetting(Application.ProductName, "Settings", "Game", "")
@@ -131,13 +144,13 @@ Public Class frmMusic
         populateSongs(cbSong, lastGame)
     End Sub
 
-    Private Sub populateSongs(cb As ComboBox, game As clsGame)
+    Private Sub populateSongs(cb As ComboBox, game As clsRhythmGame)
         cb.Items.Clear()
         lstSongs.Clear()
-        Dim di As New IO.DirectoryInfo(basepath & game.path)
+        Dim di As New IO.DirectoryInfo(basepath & game.code)
         If Not di.Exists Then di.Create()
 
-        For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & game.path).GetFiles("*.mid")
+        For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & game.code).GetFiles("*.mid")
             Dim song As New clsSong(fi, game)
             lstSongs.Add(song)
             cb.Items.Add(song)
@@ -153,7 +166,7 @@ Public Class frmMusic
         Next i
     End Sub
 
-    Private Sub populateTracks(cb As ComboBox, game As clsGame, song As clsSong)
+    Private Sub populateTracks(cb As ComboBox, game As clsRhythmGame, song As clsSong)
         Dim oldPart As String = vbNullString
         If Not cb.SelectedItem Is Nothing AndAlso Not cb.SelectedItem.ToString = "" Then
             oldPart = CType(cb.SelectedItem, clsTrack).name
@@ -230,8 +243,6 @@ Public Class frmMusic
         End Function
     End Class
 
-
-
     Private Sub btnOk_Click(sender As System.Object, e As System.EventArgs) Handles btnOk.Click
         If cbSong.SelectedItem Is Nothing OrElse cbSong.SelectedItem.ToString() = "" Then
             MsgBox("You must select a song.")
@@ -241,10 +252,39 @@ Public Class frmMusic
 
         Dim trackCount As Integer = 0
         Dim allNotes As New List(Of clsNoteEntry)
+        Dim vocalPath() As String = New String() {vbNullString, vbNullString, vbNullString, vbNullString}
+        Dim vocalPart() As String = New String() {vbNullString, vbNullString, vbNullString, vbNullString}
+        Dim vocalStart() As Integer = New Integer() {0, 0, 0, 0}
+        Dim vocalDuration() As Integer = New Integer() {0, 0, 0, 0}
+        Dim vocalsStarted() As Boolean = New Boolean() {True, True, True, True}
         For i = 0 To 3
-            If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") AndAlso (Not cbLevel(i).SelectedItem Is Nothing) Then
-                allNotes.AddRange(getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem))
-                trackCount += 1
+            If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") Then
+                Dim trackName As String = cbTrack(i).SelectedItem.ToString()
+                Select Case trackName
+                    Case "VOCALS", "HARM1", "HARM2", "HARM3"
+                        Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
+                        If trackName = "VOCALS" Then
+                            vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & ".mp3"
+                        Else
+                            vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-" & trackName & ".mp3"
+                        End If
+                        If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath)
+                        If Not IO.File.Exists(vocalPath(i)) Then
+                            MsgBox("Couldn't generate vocal file.")
+                            Exit Sub
+                        End If
+                        Dim tf As TagLib.File = TagLib.File.Create(vocalPath(i))
+                        vocalPart(i) = trackName
+                        vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
+                        vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        vocalsStarted(i) = False
+                        trackCount += 1
+                    Case Else
+                        If (Not cbLevel(i).SelectedItem Is Nothing) Then
+                            allNotes.AddRange(getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem))
+                            trackCount += 1
+                        End If
+                End Select
             End If
         Next
         If trackCount = 0 Then
@@ -255,16 +295,18 @@ Public Class frmMusic
         allNotes.Sort()
 
         Dim mergedNotes As New List(Of clsNoteEntry)
-        Dim lastNote As clsNoteEntry = allNotes(0)
-        mergedNotes.Add(lastNote)
-        For i = 1 To allNotes.Count - 1
-            If allNotes(i).controller = lastNote.controller AndAlso allNotes(i).tickOffset = lastNote.tickOffset Then 'AndAlso allNotes(i).tickDuration = lastNote.tickDuration Then
-                lastNote.merge(allNotes(i))
-            Else
-                mergedNotes.Add(allNotes(i))
-                lastNote = allNotes(i)
-            End If
-        Next
+        If allNotes.Count > 0 Then
+            Dim lastNote As clsNoteEntry = allNotes(0)
+            mergedNotes.Add(lastNote)
+            For i = 1 To allNotes.Count - 1
+                If allNotes(i).controller = lastNote.controller AndAlso allNotes(i).tickOffset = lastNote.tickOffset Then 'AndAlso allNotes(i).tickDuration = lastNote.tickDuration Then
+                    lastNote.merge(allNotes(i))
+                Else
+                    mergedNotes.Add(allNotes(i))
+                    lastNote = allNotes(i)
+                End If
+            Next
+        End If
 
         'Dim manlines() As String = IO.File.ReadAllLines("g:\th\pony.hopoc")
         'For i = 0 To mergedNotes.Count - 1
@@ -301,53 +343,100 @@ Public Class frmMusic
         actions = New List(Of clsAction)
         Dim curOffset As Integer
         Dim a As clsAction
+
         If cbManual.Checked Then
-            curOffset = noteActions(0).msOffset
-            Dim endMS As DateTime = (New DateTime).AddMilliseconds(noteActions(noteActions.Count - 1).msOffset)
-            info = "[" & noteActions(0).controller & "] starts at " & ((noteActions(0).msOffset - CType(cbGame.SelectedItem, clsGame).loadTime) / 1000) & "s (of " & endMS.ToString("m:ss") & ")"
+            Dim startMS As Integer = Integer.MaxValue
+            Dim startController As String = vbNullString
+            Dim endMS As Integer = 0
+            If noteActions.Count > 0 Then
+                startMS = noteActions(0).msOffset
+                endMS = noteActions(noteActions.Count - 1).msOffset
+                startController = noteActions(0).controller
+            End If
+            For c As Integer = 0 To 3
+                If Not vocalsStarted(c) Then
+                    If vocalStart(c) < startMS Then
+                        startMS = vocalStart(c)
+                        startController = vocalPart(c)
+                    End If
+                    If vocalStart(c) + vocalDuration(c) > endMS Then endMS = vocalStart(c) + vocalDuration(c)
+                End If
+            Next
+            Dim endSpan As DateTime = (New DateTime).AddMilliseconds(endMS)
+            info = "[" & startController & "] starts at " & ((startMS - CType(cbGame.SelectedItem, clsRhythmGame).loadTime) / 1000) & "s (of " & endSpan.ToString("m:ss") & ")"
         Else
             curOffset = 100
-            a = New clsActionPress(1, clsController.XBButtons.btnA, -1, -1, New Point(-129, -129), New Point(-129, -129), 100, 100, 1, Nothing)
+            a = New clsActionPress(1, clsController.XBButtons.btnA, -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), 100, 100, 1, Nothing)
             a.index = actions.Count
             actions.Add(a)
         End If
         Dim curmask As Integer = 0
+        Dim vocalsToStart As List(Of Integer)
         For i As Integer = 0 To noteActions.Count - 1
+            vocalsToStart = New List(Of Integer)
+            For c As Integer = 0 To 3
+                If Not vocalsStarted(c) AndAlso vocalStart(c) > curOffset AndAlso vocalStart(c) <= noteActions(i).msOffset Then vocalsToStart.Add(c)
+            Next
+            While vocalsToStart.Count > 0
+                Dim firstStart As Integer = Integer.MaxValue
+                Dim firstIdx As Integer = -1
+                For Each vc As Integer In vocalsToStart
+                    If vocalStart(vc) < firstStart Then
+                        firstStart = vocalStart(vc)
+                        firstIdx = vc
+                    End If
+                Next
+                If firstStart > curOffset Then
+                    If curOffset > 0 Then
+                        a = New clsActionWait(firstStart - curOffset, Nothing)
+                        a.index = actions.Count
+                        actions.Add(a)
+                    End If
+                    curOffset = firstStart
+                End If
+                a = New clsActionOutputAudio(vocalPath(firstIdx), Nothing)
+                a.index = actions.Count
+                actions.Add(a)
+                vocalsStarted(firstIdx) = True
+                vocalsToStart.Remove(firstIdx)
+            End While
             With noteActions(i)
                 Dim notemask As Integer = .noteMask And &HFFFF
                 Dim LT As Integer = IIf(.noteMask And &H10000, 255, -1)
                 Dim RT As Integer = IIf(.noteMask And &H20000, 255, -1)
                 If .msOffset > curOffset Then
-                    a = New clsActionWait(.msOffset - curOffset, Nothing)
-                    a.index = actions.Count
-                    actions.Add(a)
+                    If curOffset > 0 Then
+                        a = New clsActionWait(.msOffset - curOffset, Nothing)
+                        a.index = actions.Count
+                        actions.Add(a)
+                    End If
                     curOffset = .msOffset
                 End If
-                'If .press AndAlso curmask = 0 AndAlso i < noteActions.Count - 1 Then
-                '    If (Not noteActions(i + 1).press) AndAlso noteActions(i + 1).noteMask = .noteMask Then
-                '        Dim holdTime As Integer = noteActions(i + 1).msOffset - .msOffset
-                '        Dim waitTime As Integer
-                '        If i < noteActions.Count - 2 AndAlso noteActions(i + 2).press Then
-                '            waitTime = noteActions(i + 2).msOffset - .msOffset
-                '        Else
-                '            waitTime = holdTime
-                '        End If
-                '        a = New clsActionPress(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), holdTime, waitTime, 1)
-                '        a.index = actions.Count
-                '        actions.Add(a)
-                '        i = i + 1
-                '        curOffset = curOffset + waitTime
-                '    End If
-                'Else
-                If .press Then
+                    'If .press AndAlso curmask = 0 AndAlso i < noteActions.Count - 1 Then
+                    '    If (Not noteActions(i + 1).press) AndAlso noteActions(i + 1).noteMask = .noteMask Then
+                    '        Dim holdTime As Integer = noteActions(i + 1).msOffset - .msOffset
+                    '        Dim waitTime As Integer
+                    '        If i < noteActions.Count - 2 AndAlso noteActions(i + 2).press Then
+                    '            waitTime = noteActions(i + 2).msOffset - .msOffset
+                    '        Else
+                    '            waitTime = holdTime
+                    '        End If
+                    '        a = New clsActionPress(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), holdTime, waitTime, 1)
+                    '        a.index = actions.Count
+                    '        actions.Add(a)
+                    '        i = i + 1
+                    '        curOffset = curOffset + waitTime
+                    '    End If
+                    'Else
+                    If .press Then
                     curmask = curmask Or .noteMask
-                    a = New clsActionHold(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), Nothing)
+                    a = New clsActionHold(.controller, notemask, LT, RT, New Point(-32768, -32768), New Point(-32768, -32768), Nothing)
                     a.comment = .comment
                     a.index = actions.Count
                     actions.Add(a)
                 Else
                     curmask = curmask And Not .noteMask
-                    a = New clsActionRelease(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), Nothing)
+                    a = New clsActionRelease(.controller, notemask, LT, RT, New Point(-32768, -32768), New Point(-32768, -32768), Nothing)
                     a.comment = .comment
                     a.index = actions.Count
                     actions.Add(a)
@@ -355,11 +444,50 @@ Public Class frmMusic
                 'End If
             End With
         Next
+
+        vocalsToStart = New List(Of Integer)
+        For c As Integer = 0 To 3
+            If Not vocalsStarted(c) AndAlso vocalStart(c) > curOffset Then vocalsToStart.Add(c)
+        Next
+        While vocalsToStart.Count > 0
+            Dim firstStart As Integer = Integer.MaxValue
+            Dim firstIdx As Integer = -1
+            For Each vc As Integer In vocalsToStart
+                If vocalStart(vc) < firstStart Then
+                    firstStart = vocalStart(vc)
+                    firstIdx = vc
+                End If
+            Next
+            If firstStart > curOffset Then
+                If curOffset > 0 Then
+                    a = New clsActionWait(firstStart - curOffset, Nothing)
+                    a.index = actions.Count
+                    actions.Add(a)
+                End If
+                curOffset = firstStart
+            End If
+            a = New clsActionOutputAudio(vocalPath(firstIdx), Nothing)
+            a.index = actions.Count
+            actions.Add(a)
+            vocalsStarted(firstIdx) = True
+            vocalsToStart.Remove(firstIdx)
+        End While
+        Dim maxVocal As Integer = 0
+        For c As Integer = 0 To 3
+            maxVocal = Math.Max(maxVocal, vocalStart(c) + vocalDuration(c))
+        Next
+
+        If curOffset < maxVocal Then
+            a = New clsActionWait(maxVocal - curOffset, Nothing)
+            a.index = actions.Count
+            actions.Add(a)
+        End If
+
         a = New clsActionWait(15000, Nothing)
         a.index = actions.Count
         actions.Add(a)
 
-        a = New clsActionPress(1, clsController.XBButtons.btnGuide, -1, -1, New Point(-129, -129), New Point(-129, -129), 500, 500, 1, Nothing)
+        a = New clsActionPress(1, clsController.XBButtons.btnGuide, -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), 500, 500, 1, Nothing)
         a.index = actions.Count
         actions.Add(a)
 
@@ -431,9 +559,10 @@ Public Class frmMusic
         Next
     End Sub
 
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        For Each fi As IO.FileInfo In (New IO.DirectoryInfo("G:\AutoGH\AutoGH\bin\Debug\GH\LRB").GetFiles("*.mid"))
-            If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".wav") Then modVocal.generateWAV(fi.FullName)
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles btnMakeVocals.Click
+        Dim rg As clsRhythmGame = CType(cbGame.SelectedItem, clsRhythmGame)
+        For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & rg.code).GetFiles("*.mid")
+            If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".mp3") Then modVocal.generateMP3(fi.FullName)
         Next
     End Sub
 End Class
