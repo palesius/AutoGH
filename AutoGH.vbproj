@@ -234,6 +234,17 @@
     <Folder Include="scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\add401.png" />
+    <None Include="Resources\arrowdown401.png" />
+    <None Include="Resources\arrowup401.png" />
+    <None Include="Resources\Checkmark401.png" />
+    <None Include="Resources\delete401.png" />
+    <None Include="Resources\edit401.png" />
+    <None Include="Resources\pause401.png" />
+    <None Include="Resources\play401.png" />
+    <None Include="Resources\rabbit401.png" />
+    <None Include="Resources\stop401.png" />
+    <None Include="Resources\turtle401.png" />
     <Content Include="RhythmGames.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

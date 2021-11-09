@@ -45,6 +45,20 @@
 
         Public Sub readnotes(mf As NAudio.Midi.MidiFile, tempos As List(Of clsTempoEntry))
             notes = New List(Of clsVoiceNoteEntry)
+            Dim talkies As New List(Of Long)
+            For i As Integer = mf.Events(number).Count - 1 To 0 Step -1
+                Dim mev As NAudio.Midi.MidiEvent = mf.Events(number)(i)
+                If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
+                    Dim tev As NAudio.Midi.TextEvent = mev
+                    Dim text As String = tev.Text
+                    Select Case text.Substring(text.Length - 1, 1)
+                        Case "#", "^", "*"
+                            talkies.Add(tev.AbsoluteTime)
+                    End Select
+                End If
+            Next
+            talkies.Sort()
+
             If name = "BEAT" Then
                 For i As Integer = mf.Events(number).Count - 1 To 0 Step -1
                     Dim mev As NAudio.Midi.MidiEvent = mf.Events(number)(i)
@@ -78,6 +92,8 @@
 
             Dim t As Integer = 0
             For Each ne As clsVoiceNoteEntry In notes
+                If talkies.BinarySearch(ne.tickOffset) > 0 Then ne.noteVal = -1
+
                 While ne.tickOffset >= tempos(t).tickEnd
                     t = t + 1
                 End While
@@ -87,10 +103,10 @@
                 Else
                     ne.msDuration = (tempos(t).tickEnd - ne.tickOffset) * tempos(t).rate / 1000 + (ne.tickDuration + ne.tickOffset - tempos(t + 1).tickStart) * tempos(t + 1).rate / 1000
                 End If
-                While ne.noteVal < 58
+                While ne.noteVal < 58 And ne.noteVal > 0
                     ne.noteVal = ne.noteVal + 12
                 End While
-                ne.frequency = 440 * 2 ^ ((ne.noteVal - 69) / 12)
+                If ne.noteVal > 0 Then ne.frequency = 440 * 2 ^ ((ne.noteVal - 69) / 12) Else ne.frequency = -1
                 Debug.Print(ne.msOffset & "(" & ne.msDuration & "):" & ne.frequency)
             Next
 
@@ -124,7 +140,13 @@
             For Each ne As clsVoiceNoteEntry In notes
                 silence = Math.Floor((ne.msOffset - startoffset) * 44.1) - samples.Count
                 If silence > 0 Then samples.AddRange(generateSilence(silence))
-                If ne.msDuration > 0 Then samples.AddRange(generateTone(ne.frequency, ne.msDuration * 44.1))
+                If ne.msDuration > 0 Then
+                    If ne.frequency > 0 Then
+                        samples.AddRange(generateTone(ne.frequency, ne.msDuration * 44.1))
+                    Else
+                        samples.AddRange(generateNoise(ne.msDuration * 44.1))
+                    End If
+                End If
             Next
             silence = Math.Floor((endoffset - startoffset) * 44.1) - samples.Count
             If silence > 0 Then samples.AddRange(generateSilence(silence))
@@ -240,6 +262,18 @@
             End If
         Next
 
+        Dim tb As New Text.StringBuilder
+        For j = 0 To mf.Events(4).Count - 1
+            If mf.Events(4)(j).CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent Then
+                Dim mev As NAudio.Midi.MetaEvent = mf.Events(4)(j)
+                If mev.MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
+                    Dim tev As NAudio.Midi.TextEvent = mev
+                    tb.AppendLine(tev.ToString)
+                End If
+            End If
+        Next
+        Clipboard.SetText(tb.ToString)
+
         Dim startoffset As Integer = Integer.MaxValue
         For Each track As trackInfo In tracks
             track.readnotes(mf, tempos)
@@ -275,6 +309,21 @@
             tmp(i) = Convert.ToInt16(26208 * Math.Sin(t * i))
         Next
         Return tmp
+    End Function
+
+    Function generateNoise(samples As Integer) As Short()
+        Dim tmp(samples - 1) As Short
+        Dim t As Decimal = (Math.PI * 2 * 400) / 44100
+        For i As Integer = 0 To samples - 1
+            tmp(i) = Convert.ToInt16(32767 * Math.Sin(t * i))
+        Next
+        Return tmp
+
+        'Dim tmp(samples - 1) As Short
+        'For i As Integer = 0 To samples - 1
+        '    If Rnd() > 0.5 Then tmp(i) = 32767 Else tmp(i) = -32767
+        'Next
+        'Return tmp
     End Function
 
     Private Function generateSilence(samples As Integer) As Short()

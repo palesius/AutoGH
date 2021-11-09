@@ -224,12 +224,12 @@ Module modMusicConverter
                     If Track.name = "GUITAR" AndAlso meta.MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
                         Dim tev As NAudio.Midi.TextEvent = meta
                         Select Case tev.Text.Trim
-                            Case "[play]", "[idle]", "[idle_realtime]", "[mellow]", "[intense]", "[idle_intense]"
+                            Case "[play]", "[idle]", "[idle_realtime]", "[mellow]", "[intense]", "[idle_intense]", "mellow]"
                                 inSolo = False
                             Case "[play_solo]"
                                 'inSolo = True
                             Case Else
-                                If Not tev.Text.StartsWith("[map ") Then Stop
+                                If Not tev.Text.Trim.StartsWith("[map ") Then Stop
                         End Select
                     End If
                 Case NAudio.Midi.MidiCommandCode.NoteOn

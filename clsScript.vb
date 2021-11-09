@@ -5,6 +5,10 @@
     Public lastAction As clsAction
     Public state As scriptState
     Public totalWait As Integer
+    Public currentTime As Integer
+
+    Public adjustQueue As New System.Collections.Concurrent.ConcurrentQueue(Of Integer)
+
     Private controllers As Generic.Dictionary(Of String, clsController)
     Private capture As clsSnapshot
     Private needsCapture As Boolean
@@ -247,7 +251,8 @@
         Next
     End Sub
 
-    Private startTime As Date
+    Public startTime As Date
+    Public lastTime As Integer
     Private pauseTime As Date
     Private pauseFlag As Boolean
     Private stopFlag As Boolean
@@ -280,6 +285,7 @@
             Next
         End If
 
+        lastTime = stateActions(stateActions.Count - 1).timeoffset
         Me.state = scriptState.running
         Dim i As Integer = 0
         Dim curAction As clsStatelessAction = stateActions(i)
@@ -293,6 +299,14 @@
         Do
             If pauseFlag Then waitforcontinue()
             If stopFlag Then Exit Do
+            While Not adjustQueue.IsEmpty
+                Dim amount As Integer = 0
+                If adjustQueue.TryDequeue(amount) Then
+                    startTime = startTime.AddMilliseconds(amount)
+                Else
+                    Exit While
+                End If
+            End While
             If Not inputAction Is Nothing Then
                 If Now >= inputAction.nextTest AndAlso inputAction.test Then
                     Debug.Print("Adding " & (Now - inputAction.startTime).TotalMilliseconds & " to clock.")

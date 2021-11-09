@@ -9,6 +9,7 @@ Public Class frmEdit
     Private loopTarget As clsAction
     Private groupTarget As clsActionGroup
     Private filename As String
+    Private asLastTime As Integer = 0
 
     Private Const mainGroup As String = "[Main]"
     Private activeScript As clsScript
@@ -1041,6 +1042,8 @@ Public Class frmEdit
             Next
             tmrScriptStatus.Enabled = True
             btnStop.Enabled = True
+            btnFaster.Enabled = True
+            btnSlower.Enabled = True
             Dim controllerIPS As New Dictionary(Of Byte, String)
             If txtController1.Text <> vbNullString Then controllerIPS.Add(1, txtController1.Text)
             If txtController2.Text <> vbNullString Then controllerIPS.Add(2, txtController2.Text)
@@ -1051,6 +1054,8 @@ Public Class frmEdit
                 activeScript = Nothing
                 tmrScriptStatus.Enabled = False
                 btnStop.Enabled = False
+                btnFaster.Enabled = False
+                btnSlower.Enabled = False
                 Exit Sub
             End If
             Dim totalms As Integer = activeScript.stateActions(activeScript.stateActions.Count - 1).timeoffset
@@ -1061,6 +1066,8 @@ Public Class frmEdit
                     activeScript = Nothing
                     tmrScriptStatus.Enabled = False
                     btnStop.Enabled = False
+                    btnFaster.Enabled = False
+                    btnSlower.Enabled = False
                     Exit Sub
                 End If
             End If
@@ -1083,17 +1090,20 @@ Public Class frmEdit
                 sck.Send(System.Text.Encoding.ASCII.GetBytes("AutoGH"))
                 sck.Close()
             End If
+            asLastTime = 0
             activeScript.startScript()
             setBtnPP(False)
         Else
             Select Case activeScript.state
                 Case clsScript.scriptState.finished
+                    asLastTime = 0
                     activeScript.startScript()
                     setBtnPP(False)
                 Case clsScript.scriptState.paused
                     activeScript.continueScript()
                     setBtnPP(False)
                 Case clsScript.scriptState.ready
+                    asLastTime = 0
                     activeScript.startScript()
                     setBtnPP(False)
                 Case clsScript.scriptState.running
@@ -1104,14 +1114,24 @@ Public Class frmEdit
     End Sub
 
     Private Sub setBtnPP(play As Boolean)
-        btnPlayPause.Text = IIf(play, "4", ";")
-        btnPlayPause.ForeColor = IIf(play, Color.Green, Color.Goldenrod)
+        If play Then
+            Me.btnPlayPause.Image = Global.AutoGH.My.Resources.Resources.play40
+            Me.btnPlayPause.ImageAlign = ContentAlignment.MiddleCenter
+        Else
+            Me.btnPlayPause.Image = Global.AutoGH.My.Resources.Resources.pause40
+            Me.btnPlayPause.ImageAlign = ContentAlignment.MiddleCenter
+        End If
     End Sub
 
     Private Sub btnStop_Click(sender As System.Object, e As System.EventArgs) Handles btnStop.Click
         btnStop.Enabled = False
+        btnFaster.Enabled = False
+        btnSlower.Enabled = False
         setBtnPP(True)
         lblWaitTime.Text = vbNullString
+        'lblWaitTime.Visible = False
+        lblTotalTime.Text = vbNullString
+        'lblTotalTime.Visible = False
         tmrScriptStatus.Enabled = False
         If Not activeScript Is Nothing Then activeScript.stopScript()
         activeScript = Nothing
@@ -1131,6 +1151,8 @@ Public Class frmEdit
                 If cbTrace.Checked Then
                     Dim asAction As clsAction = System.Threading.Thread.VolatileRead(activeScript.lastAction)
                     Dim asWait As Integer = System.Threading.Thread.VolatileRead(activeScript.totalWait)
+                    Dim asStartTime As Date = System.Threading.Thread.VolatileRead(activeScript.startTime)
+                    If asLastTime = 0 Then asLastTime = System.Threading.Thread.VolatileRead(activeScript.lastTime)
                     If Not asAction Is lastAction Then
                         lastAction = asAction
                         If Not lastAction Is Nothing Then
@@ -1151,10 +1173,21 @@ Public Class frmEdit
                         End If
                     End If
                     lblWaitTime.Text = formatMS(asWait)
+                    Dim curTime As TimeSpan = Now - asStartTime
+                    Dim endTime As New TimeSpan(0, 0, 0, 0, asLastTime)
+                    If endTime.Days > 0 Then
+                        lblTotalTime.Text = curTime.ToString("d\dhh\:mm\:ss") & " / " & endTime.ToString("d\dhh\:mm\:ss")
+                    ElseIf endTime.hours > 0 Then
+                        lblTotalTime.Text = curTime.ToString("h\:mm\:ss") & " / " & endTime.ToString("h\:mm\:ss")
+                    Else
+                        lblTotalTime.Text = curTime.ToString("m\:ss") & " / " & endTime.ToString("m\:ss")
+                    End If
                 End If
             Case clsScript.scriptState.finished
-                    btnStop.Enabled = False
-                    setBtnPP(True)
+                btnStop.Enabled = False
+                btnFaster.Enabled = False
+                btnSlower.Enabled = False
+                setBtnPP(True)
                     activeScript = Nothing
                     lblWaitTime.Text = vbNullString
                     tmrScriptStatus.Enabled = False
@@ -1304,6 +1337,8 @@ Public Class frmEdit
             Next
             tmrScriptStatus.Enabled = True
             btnStop.Enabled = True
+            btnFaster.Enabled = True
+            btnSlower.Enabled = True
             Dim controllerIPS As New Dictionary(Of Byte, String)
             If txtController1.Text <> vbNullString Then controllerIPS.Add(1, txtController1.Text)
             If txtController2.Text <> vbNullString Then controllerIPS.Add(2, txtController2.Text)
@@ -1426,5 +1461,13 @@ Public Class frmEdit
         fdOpen.Filter = "AutoXB Scripts|*.axb"
         If fdOpen.FileName = vbNullString Then Exit Sub
         txtOuputAudio.Text = fdOpen.FileName
+    End Sub
+
+    Private Sub btnFaster_Click(sender As Object, e As EventArgs) Handles btnFaster.Click
+        If Not activeScript Is Nothing Then activeScript.adjustQueue.Enqueue(-nudSpeed.Value)
+    End Sub
+
+    Private Sub btnSlower_Click(sender As Object, e As EventArgs) Handles btnSlower.Click
+        If Not activeScript Is Nothing Then activeScript.adjustQueue.Enqueue(nudSpeed.Value)
     End Sub
 End Class

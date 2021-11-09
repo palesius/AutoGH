@@ -57,9 +57,19 @@
   <Game Name="RB Pack: Country 2" Code="RBTP_CTY2">
     <DrumNotes>41230</DrumNotes>
   </Game>
-  <Game Name="RB Pack: AC/DC" Code="RBTP_ACDC" />
-  <Game Name="RB Pack: Classic Rock" Code="RBTP_CR" />
-  <Game Name="RB Pack: Metal" Code="RBTP_MTL" />
-  <Game Name="RB Pack: Pack 2" Code="RBTP_PK2" />
-  <Game Name="Rock Band: Green Day" Code="RBGD" />
+  <Game Name="RB Pack: AC/DC" Code="RBTP_ACDC">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="RB Pack: Classic Rock" Code="RBTP_CR">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="RB Pack: Metal" Code="RBTP_MTL">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="RB Pack: Pack 2" Code="RBTP_PK2">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
+  <Game Name="Rock Band: Green Day" Code="RBGD">
+    <DrumNotes>41230</DrumNotes>
+  </Game>
 </Games>
