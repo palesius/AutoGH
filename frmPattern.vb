@@ -141,7 +141,8 @@ Public Class frmPattern
             Else
                 delay = pressList(i + 1).time - pressList(i).time
             End If
-            actions.Add(New clsActionPress(1, pressList(i).mask, -1, -1, New Point(-128, -128), New Point(-128, -128), 100, delay, 1, Nothing))
+            actions.Add(New clsActionPress(1, pressList(i).mask, -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), 100, delay, 1, Nothing))
+            actions(i).index = i
         Next
 
 

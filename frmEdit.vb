@@ -621,6 +621,7 @@ Public Class frmEdit
         For Each action As clsAction In lbActions.SelectedItems
             lstRemove.Add(action)
         Next
+        lbActions.BeginUpdate()
         For Each action In lstRemove
             activeGroup.actions.Remove(action)
             lbActions.Items.Remove(action)
@@ -629,10 +630,17 @@ Public Class frmEdit
         For i = lstRemove(0).index To activeGroup.actions.Count - 1
             activeGroup.actions(i).index = i
         Next
-        For i = lstRemove(0).index To activeGroup.actions.Count - 1
-            lbActions.Items(i).refresh(lbActions)
-        Next
-
+        If activeGroup.actions.Count - lstRemove(0).index > 500 Then
+            lbActions.RefreshItems()
+            For i = lstRemove(0).index To activeGroup.actions.Count - 1
+                lbActions.Items(i).Refresh(lbActions, False)
+            Next
+        Else
+            For i = lstRemove(0).index To activeGroup.actions.Count - 1
+                lbActions.Items(i).Refresh(lbActions)
+            Next
+        End If
+        lbActions.EndUpdate()
     End Sub
 
     Private Sub btnMoveUp_Click(sender As System.Object, e As System.EventArgs) Handles btnMoveUp.Click
@@ -645,6 +653,7 @@ Public Class frmEdit
         For Each action As clsAction In lbActions.SelectedItems
             lstMove.Add(action)
         Next
+        lbActions.BeginUpdate()
         For Each action In lstMove
             activeGroup.actions.Remove(action)
             lbActions.Items.Remove(action)
@@ -660,6 +669,7 @@ Public Class frmEdit
         For Each action In lstMove
             lbActions.SelectedItems.Add(action)
         Next
+        lbActions.EndUpdate()
     End Sub
 
     Private Sub btnMoveDown_Click(sender As System.Object, e As System.EventArgs) Handles btnMoveDown.Click
@@ -671,6 +681,7 @@ Public Class frmEdit
         For Each action As clsAction In lbActions.SelectedItems
             lstMove.Add(action)
         Next
+        lbActions.BeginUpdate()
         For Each action In lstMove
             activeGroup.actions.Remove(action)
             lbActions.Items.Remove(action)
@@ -686,6 +697,7 @@ Public Class frmEdit
         For Each action In lstMove
             lbActions.SelectedItems.Add(action)
         Next
+        lbActions.EndUpdate()
     End Sub
 
     Private Sub lbActions_DoubleClick(sender As Object, e As System.EventArgs) Handles lbActions.DoubleClick
@@ -904,7 +916,12 @@ Public Class frmEdit
                 agNode.AppendChild(action.toXML(doc))
             Next
         Next
-        IO.File.WriteAllText(path, doc.OuterXml)
+        Dim ws As New Xml.XmlWriterSettings()
+        ws.Indent = True
+        Dim w As Xml.XmlWriter = Xml.XmlWriter.Create(path, ws)
+        doc.WriteTo(w)
+        w.Close()
+        w.Dispose()
     End Sub
 
     Private Sub loadScript(path As String)
@@ -940,9 +957,17 @@ Public Class frmEdit
         txtFlowTarget.Text = vbNullString
         groupTarget = Nothing
         loopTarget = Nothing
-        For Each a As clsAction In activeGroup.actions
-            lbActions.Items.Add(a)
-        Next
+        If activeGroup.actions.Count = 0 Then Exit Sub
+        'Dim oc As New ListBox.ObjectCollection(lbActions, activeGroup.actions.ToArray)
+        'Dim oc As New ListBox.ObjectCollection(lbActions)
+        lbActions.Items.AddRange(activeGroup.actions.ToArray)
+        'lbActions.BeginUpdate()
+
+        'For Each a As clsAction In activeGroup.actions
+        'lbActions.Items.Add(a)
+        'Next
+        'lbActions.EndUpdate()
+
     End Sub
 
     Private Sub loadScriptXML(path As String)

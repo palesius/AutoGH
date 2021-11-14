@@ -89,8 +89,8 @@ Public MustInherit Class clsAction
         original = orig
     End Sub
 
-    Public Sub refresh(lb As RefreshingListBox)
-        lb.RefreshItem(index)
+    Public Sub refresh(lb As RefreshingListBox, Optional updateLB As Boolean = True)
+        If updateLB Then lb.RefreshItem(index)
         For Each action In referrers
             action.refresh(lb)
         Next

@@ -2,7 +2,7 @@
 <Games>
   <Game Name="Default" Code="DEFAULT">
     <Strum>UP</Strum>
-    <SoloStrum>L3</SoloStrum>
+    <SoloStrum>LS</SoloStrum>
     <Notes>
       <Green>A</Green>
       <Red>B</Red>
@@ -71,5 +71,6 @@
   </Game>
   <Game Name="Rock Band: Green Day" Code="RBGD">
     <DrumNotes>41230</DrumNotes>
+    <MinimumDuration>25</MinimumDuration>
   </Game>
 </Games>

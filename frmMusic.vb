@@ -19,6 +19,8 @@ Public Class frmMusic
 
     Private cbTrack(3) As ComboBox
     Private cbLevel(3) As ComboBox
+    Private chkLF(3) As CheckBox
+    Private chkHOPO(3) As CheckBox
 
     Public actions As List(Of clsAction)
     Public info As String
@@ -33,6 +35,11 @@ Public Class frmMusic
         For i As Integer = 0 To 3
             If cbTrack(i).SelectedItem Is Nothing Then val = "" Else val = cbTrack(i).SelectedItem.ToString
             SaveSetting(Application.ProductName, "Settings" & i, "Track", val)
+            Select Case val
+                Case "GUITAR", "BASS"
+                    SaveSetting(Application.ProductName, "Settings" & i, "LF", IIf(chkLF(i).Checked, "T", ""))
+                    SaveSetting(Application.ProductName, "Settings" & i, "HOPO", IIf(chkHOPO(i).Checked, "T", ""))
+            End Select
             If cbLevel(i).SelectedItem Is Nothing Then val = "" Else val = cbLevel(i).SelectedItem.ToString
             SaveSetting(Application.ProductName, "Settings" & i, "Level", val)
         Next i
@@ -96,6 +103,14 @@ Public Class frmMusic
         cbLevel(1) = cbLevel1
         cbLevel(2) = cbLevel2
         cbLevel(3) = cbLevel3
+        chkLF(0) = chkLF0
+        chkLF(1) = chkLF1
+        chkLF(2) = chkLF2
+        chkLF(3) = chkLF3
+        chkHOPO(0) = chkHOPO0
+        chkHOPO(1) = chkHOPO1
+        chkHOPO(2) = chkHOPO2
+        chkHOPO(3) = chkHOPO3
 
         loadGames()
 
@@ -127,7 +142,24 @@ Public Class frmMusic
 
         For i As Integer = 0 To 3
             saved = GetSetting(Application.ProductName, "Settings" & i, "Track", "")
-            If saved <> "" Then selectByName(cbTrack(i), saved)
+            If saved <> "" Then
+                selectByName(cbTrack(i), saved)
+                cbTrack_SelectedIndexChanged(cbTrack(i), Nothing)
+            End If
+            AddHandler cbTrack(i).SelectedIndexChanged, AddressOf cbTrack_SelectedIndexChanged
+
+            Select Case saved
+                Case "GUITAR", "BASS"
+                    chkLF(i).Checked = GetSetting(Application.ProductName, "Settings" & i, "LF") = "T"
+                    chkHOPO(i).Checked = GetSetting(Application.ProductName, "Settings" & i, "HOPO") = "T"
+                    chkLF(i).Enabled = True
+                    chkHOPO(i).Enabled = True
+                Case Else
+                    chkLF(i).Checked = False
+                    chkHOPO(i).Checked = False
+                    chkLF(i).Enabled = False
+                    chkHOPO(i).Enabled = False
+            End Select
 
             For Each level As clsLevel In arrLevel
                 cbLevel(i).Items.Add(level)
@@ -139,8 +171,8 @@ Public Class frmMusic
     End Sub
 
     Private Sub cbGame_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
-        If cbGame.SelectedItem Is lastGame Then Exit Sub
-        lastGame = cbGame.SelectedItem
+        If CType(sender, ComboBox).SelectedItem Is lastGame Then Exit Sub
+        lastGame = CType(sender, ComboBox).SelectedItem
         populateSongs(cbSong, lastGame)
     End Sub
 
@@ -159,11 +191,34 @@ Public Class frmMusic
     End Sub
 
     Private Sub cbSong_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
-        If cbSong.SelectedItem Is lastSong Then Exit Sub
-        lastSong = cbSong.SelectedItem
+        If CType(sender, ComboBox).SelectedItem Is lastSong Then Exit Sub
+        lastSong = CType(sender, ComboBox).SelectedItem
         For i As Integer = 0 To 3
             populateTracks(cbTrack(i), lastGame, lastSong)
         Next i
+    End Sub
+
+    Private Sub cbTrack_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
+        Dim si As Object = CType(sender, ComboBox).SelectedItem
+        Dim i As Integer
+        For i = 0 To 3
+            If cbTrack(i) Is sender Then Exit For
+        Next
+        If TypeOf si Is clsTrack Then
+            Dim t As clsTrack = si
+
+            Select Case t.name
+                Case "GUITAR", "BASS"
+                    chkLF(i).Enabled = True
+                    chkHOPO(i).Enabled = True
+                Case Else
+                    chkLF(i).Enabled = False
+                    chkHOPO(i).Enabled = False
+            End Select
+        Else
+            chkLF(i).Enabled = False
+            chkHOPO(i).Enabled = False
+        End If
     End Sub
 
     Private Sub populateTracks(cb As ComboBox, game As clsRhythmGame, song As clsSong)
@@ -180,19 +235,11 @@ Public Class frmMusic
                     If .Events(i)(j).CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent Then
                         If CType(.Events(i)(j), NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.SequenceTrackName Then
                             Dim name As String = CType(.Events(i)(j), NAudio.Midi.TextEvent).Text
-                            Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(name, "^PART (?<part>.*)$")
+                            Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(name, "^(PART (?<part>.*))|(?<part>HARM1)$")
                             If match.Success Then
                                 Dim track As New clsTrack(song.mf, i, match.Groups("part").Value, song)
                                 lstTracks.Add(track)
                                 cb.Items.Add(track)
-                                Select Case match.Groups("part").Value
-                                    Case "GUITAR", "BASS", "RHYTHM", "GUITAR COOP"
-                                        track = New clsTrack(song.mf, i, match.Groups("part").Value & "[LH]", song)
-                                        track.lefty = True
-                                        lstTracks.Add(track)
-                                        cb.Items.Add(track)
-                                    Case Else
-                                End Select
                             End If
                             Exit For
                         End If
@@ -216,33 +263,6 @@ Public Class frmMusic
         Me.Close()
     End Sub
 
-    Private Class clsNoteAction
-        Implements IComparable(Of clsNoteAction)
-        Public controller As Byte
-        Public msOffset As Integer
-        Public noteMask As Integer
-        Public press As Boolean
-        Public comment As String
-
-        Public Sub New(_controller As Byte, _note As Integer, _msOffset As Integer, _press As Boolean, _comment As String)
-            controller = _controller
-            noteMask = _note
-            msOffset = _msOffset
-            press = _press
-            comment = _comment
-        End Sub
-
-        Public Function CompareTo(other As clsNoteAction) As Integer Implements System.IComparable(Of clsNoteAction).CompareTo
-            If msOffset < other.msOffset Then Return -1
-            If msOffset > other.msOffset Then Return 1
-            If controller.CompareTo(other.controller) <> 0 Then Return controller.CompareTo(other.controller)
-            If noteMask < other.noteMask Then Return -1
-            If noteMask > other.noteMask Then Return 1
-            If press <> other.press Then Return IIf(press, -1, 1)
-            Return 0
-        End Function
-    End Class
-
     Private Sub btnOk_Click(sender As System.Object, e As System.EventArgs) Handles btnOk.Click
         If cbSong.SelectedItem Is Nothing OrElse cbSong.SelectedItem.ToString() = "" Then
             MsgBox("You must select a song.")
@@ -260,15 +280,27 @@ Public Class frmMusic
         For i = 0 To 3
             If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") Then
                 Dim trackName As String = cbTrack(i).SelectedItem.ToString()
+                If chkHOPO(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).hopo = True
+                If chkLF(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).lefty = True
                 Select Case trackName
                     Case "VOCALS", "HARM1", "HARM2", "HARM3"
                         Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
-                        If trackName = "VOCALS" Then
-                            vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & ".mp3"
-                        Else
-                            vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-" & trackName & ".mp3"
-                        End If
+                        vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & ".mp3"
                         If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath)
+                        If Not IO.File.Exists(vocalPath(i)) Then
+                            MsgBox("Couldn't generate vocal file.")
+                            Exit Sub
+                        End If
+                        Dim tf As TagLib.File = TagLib.File.Create(vocalPath(i))
+                        vocalPart(i) = trackName
+                        vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
+                        vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        vocalsStarted(i) = False
+                        trackCount += 1
+                    Case "HARM1", "HARM2", "HARM3"
+                        Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
+                        vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM.aac"
+                        If Not IO.File.Exists(vocalPath(i)) Then generateAAC(midiPath)
                         If Not IO.File.Exists(vocalPath(i)) Then
                             MsgBox("Couldn't generate vocal file.")
                             Exit Sub
@@ -281,7 +313,9 @@ Public Class frmMusic
                         trackCount += 1
                     Case Else
                         If (Not cbLevel(i).SelectedItem Is Nothing) Then
-                            allNotes.AddRange(getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem))
+                            Dim trackNotes As List(Of clsNoteEntry) = getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem)
+                            If trackNotes Is Nothing Then Exit Sub
+                            allNotes.AddRange(trackNotes)
                             trackCount += 1
                         End If
                 End Select
@@ -412,23 +446,23 @@ Public Class frmMusic
                     End If
                     curOffset = .msOffset
                 End If
-                    'If .press AndAlso curmask = 0 AndAlso i < noteActions.Count - 1 Then
-                    '    If (Not noteActions(i + 1).press) AndAlso noteActions(i + 1).noteMask = .noteMask Then
-                    '        Dim holdTime As Integer = noteActions(i + 1).msOffset - .msOffset
-                    '        Dim waitTime As Integer
-                    '        If i < noteActions.Count - 2 AndAlso noteActions(i + 2).press Then
-                    '            waitTime = noteActions(i + 2).msOffset - .msOffset
-                    '        Else
-                    '            waitTime = holdTime
-                    '        End If
-                    '        a = New clsActionPress(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), holdTime, waitTime, 1)
-                    '        a.index = actions.Count
-                    '        actions.Add(a)
-                    '        i = i + 1
-                    '        curOffset = curOffset + waitTime
-                    '    End If
-                    'Else
-                    If .press Then
+                'If .press AndAlso curmask = 0 AndAlso i < noteActions.Count - 1 Then
+                '    If (Not noteActions(i + 1).press) AndAlso noteActions(i + 1).noteMask = .noteMask Then
+                '        Dim holdTime As Integer = noteActions(i + 1).msOffset - .msOffset
+                '        Dim waitTime As Integer
+                '        If i < noteActions.Count - 2 AndAlso noteActions(i + 2).press Then
+                '            waitTime = noteActions(i + 2).msOffset - .msOffset
+                '        Else
+                '            waitTime = holdTime
+                '        End If
+                '        a = New clsActionPress(.controller, notemask, LT, RT, New Point(-129, -129), New Point(-129, -129), holdTime, waitTime, 1)
+                '        a.index = actions.Count
+                '        actions.Add(a)
+                '        i = i + 1
+                '        curOffset = curOffset + waitTime
+                '    End If
+                'Else
+                If .press Then
                     curmask = curmask Or .noteMask
                     a = New clsActionHold(.controller, notemask, LT, RT, New Point(-32768, -32768), New Point(-32768, -32768), Nothing)
                     a.comment = .comment
@@ -499,65 +533,65 @@ Public Class frmMusic
     Private vocalProvider As NAudio.Wave.MultiplexingWaveProvider
     Private vocalOut As NAudio.Wave.WasapiOut
 
-    Private Sub btnVocal_Click(sender As System.Object, e As System.EventArgs) Handles btnVocal.Click
-        If Not vocalOut Is Nothing Then
-            Dim origState As NAudio.Wave.PlaybackState = vocalOut.PlaybackState
-            If vocalOut.PlaybackState = NAudio.Wave.PlaybackState.Playing Then vocalOut.Stop()
-            vocalOut.Dispose()
-            vocalOut = Nothing
-            vocalProvider = Nothing
-            For Each vi As NAudio.Wave.WaveFileReader In vocalInputs
-                vi.Close()
-                vi.Dispose()
-            Next
-            For Each vf As IO.FileInfo In vocalFiles
-                vf.Delete()
-            Next
-            vocalInputs = Nothing
-            If origState = NAudio.Wave.PlaybackState.Playing Then Exit Sub
-        End If
-        Dim song As clsSong = cbSong.SelectedItem
-        vocalFiles = modVocal.generateWAV(song.fi.FullName)
-        vocalInputs = New List(Of NAudio.Wave.WaveFileReader)
-        For Each vf As IO.FileInfo In vocalFiles
-            vocalInputs.Add(New NAudio.Wave.WaveFileReader(vf.FullName))
-        Next
-        vocalProvider = New NAudio.Wave.MultiplexingWaveProvider(vocalInputs, vocalInputs.Count)
-        For i As Integer = 0 To vocalInputs.Count - 1
-            vocalProvider.ConnectInputToOutput(i, i)
-        Next
-        Dim devs As New NAudio.CoreAudioApi.MMDeviceEnumerator()
-        Dim outdev As NAudio.CoreAudioApi.MMDevice = Nothing
-        outdev = devs.GetDefaultAudioEndpoint(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.Role.Multimedia)
-        vocalOut = New NAudio.Wave.WasapiOut(outdev, NAudio.CoreAudioApi.AudioClientShareMode.Shared, True, 0)
-        vocalOut.Init(vocalProvider)
-        MsgBox("Vocals ready to go." & vbCrLf & "Hit enter to start playing!")
-        vocalOut.Play()
-    End Sub
+    'Private Sub btnVocal_Click(sender As System.Object, e As System.EventArgs)
+    '    If Not vocalOut Is Nothing Then
+    '        Dim origState As NAudio.Wave.PlaybackState = vocalOut.PlaybackState
+    '        If vocalOut.PlaybackState = NAudio.Wave.PlaybackState.Playing Then vocalOut.Stop()
+    '        vocalOut.Dispose()
+    '        vocalOut = Nothing
+    '        vocalProvider = Nothing
+    '        For Each vi As NAudio.Wave.WaveFileReader In vocalInputs
+    '            vi.Close()
+    '            vi.Dispose()
+    '        Next
+    '        For Each vf As IO.FileInfo In vocalFiles
+    '            vf.Delete()
+    '        Next
+    '        vocalInputs = Nothing
+    '        If origState = NAudio.Wave.PlaybackState.Playing Then Exit Sub
+    '    End If
+    '    Dim song As clsSong = cbSong.SelectedItem
+    '    vocalFiles = modVocal.generateWAV(song.fi.FullName)
+    '    vocalInputs = New List(Of NAudio.Wave.WaveFileReader)
+    '    For Each vf As IO.FileInfo In vocalFiles
+    '        vocalInputs.Add(New NAudio.Wave.WaveFileReader(vf.FullName))
+    '    Next
+    '    vocalProvider = New NAudio.Wave.MultiplexingWaveProvider(vocalInputs, vocalInputs.Count)
+    '    For i As Integer = 0 To vocalInputs.Count - 1
+    '        vocalProvider.ConnectInputToOutput(i, i)
+    '    Next
+    '    Dim devs As New NAudio.CoreAudioApi.MMDeviceEnumerator()
+    '    Dim outdev As NAudio.CoreAudioApi.MMDevice = Nothing
+    '    outdev = devs.GetDefaultAudioEndpoint(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.Role.Multimedia)
+    '    vocalOut = New NAudio.Wave.WasapiOut(outdev, NAudio.CoreAudioApi.AudioClientShareMode.Shared, True, 0)
+    '    vocalOut.Init(vocalProvider)
+    '    MsgBox("Vocals ready to go." & vbCrLf & "Hit enter to start playing!")
+    '    vocalOut.Play()
+    'End Sub
 
-    Private Sub btnStar_Click(sender As System.Object, e As System.EventArgs) Handles btnStar.Click
-        Dim spInput(2) As NAudio.Wave.WaveFileReader
-        For i As Integer = 0 To 2
-            spInput(i) = New NAudio.Wave.WaveFileReader("g:\gh\noise.wav")
-        Next
-        Dim spProvider As New NAudio.Wave.MultiplexingWaveProvider(spInput, spInput.Length)
-        For i As Integer = 0 To spInput.Length - 1
-            spProvider.ConnectInputToOutput(i, i)
-        Next
-        Dim spOut As New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
-        spOut.Init(spProvider)
-        spOut.Play()
-        While spOut.PlaybackState = NAudio.Wave.PlaybackState.Playing
-            System.Threading.Thread.Sleep(50)
-        End While
-        spOut.Dispose()
-        spOut = Nothing
-        spProvider = Nothing
-        For i As Integer = 0 To 2
-            spInput(i).Close()
-            spInput(i).Dispose()
-        Next
-    End Sub
+    'Private Sub btnStar_Click(sender As System.Object, e As System.EventArgs)
+    '    Dim spInput(2) As NAudio.Wave.WaveFileReader
+    '    For i As Integer = 0 To 2
+    '        spInput(i) = New NAudio.Wave.WaveFileReader("g:\gh\noise.wav")
+    '    Next
+    '    Dim spProvider As New NAudio.Wave.MultiplexingWaveProvider(spInput, spInput.Length)
+    '    For i As Integer = 0 To spInput.Length - 1
+    '        spProvider.ConnectInputToOutput(i, i)
+    '    Next
+    '    Dim spOut As New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
+    '    spOut.Init(spProvider)
+    '    spOut.Play()
+    '    While spOut.PlaybackState = NAudio.Wave.PlaybackState.Playing
+    '        System.Threading.Thread.Sleep(50)
+    '    End While
+    '    spOut.Dispose()
+    '    spOut = Nothing
+    '    spProvider = Nothing
+    '    For i As Integer = 0 To 2
+    '        spInput(i).Close()
+    '        spInput(i).Dispose()
+    '    Next
+    'End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles btnMakeVocals.Click
         Dim rg As clsRhythmGame = CType(cbGame.SelectedItem, clsRhythmGame)

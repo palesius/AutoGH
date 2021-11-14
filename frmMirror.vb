@@ -30,8 +30,7 @@
         ' Add any initialization after the InitializeComponent() call.
         Dim uniqueControllers As New List(Of String)
 
-        IPList = New List(Of String)
-        IPList.Add(Nothing)
+        IPList = New List(Of String) From {Nothing}
         For i As Integer = 1 To 4
             Dim cb As CheckBox = Nothing
             Select Case i

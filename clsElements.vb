@@ -225,6 +225,7 @@ Friend Class clsTrack
     Friend mfPath As String
     Friend index As Integer
     Friend lefty As Boolean
+    Friend hopo As Boolean
 
     Friend ReadOnly Property strumButton(Optional solo As Boolean = False) As Integer
         Get
