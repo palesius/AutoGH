@@ -5,12 +5,8 @@
 Module modMain
     Private controller As clsController
 
-    Sub test()
-        generateAAC("G:\AutoGH\AutoGH\bin\Debug\GH\rbgd\thestaticage.mid")
-    End Sub
-
     Sub main()
-        'test()
+        test()
         'makeTone()
         'generateAllXMLMP3("G:\4F4707D4\out\Media\Songs\")
         'Dim x As New Melanchall.DryWetMidi.Core.MidiFile()

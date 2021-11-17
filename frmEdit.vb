@@ -817,6 +817,10 @@ Public Class frmEdit
             Case ActionType.actInputRumble
                 tcActions.SelectedTab = tpInput
                 'todo: populate control
+            Case ActionType.actOutputAudio
+                Dim aOutputAudio As clsActionOutputAudio = action
+                tcActions.SelectedTab = tpOutput
+                txtOuputAudio.Text = Join(aOutputAudio.paths.ToArray, "|")
         End Select
     End Sub
 
@@ -1083,43 +1087,44 @@ Public Class frmEdit
                 btnSlower.Enabled = False
                 Exit Sub
             End If
-            Dim totalms As Integer = activeScript.stateActions(activeScript.stateActions.Count - 1).timeoffset
+            Dim totalms As Integer = 0
+            If activeScript.stateActions.Count > 0 Then totalms = activeScript.stateActions(activeScript.stateActions.Count - 1).timeoffset
             Dim timeString As String = formatMS(totalms)
-            If cbPrecompile.Checked Then
-                If MsgBox("Ready to Start." & vbCrLf & "Runtime: " & timeString, vbOKCancel) = MsgBoxResult.Cancel Then
-                    activeScript.dispose()
-                    activeScript = Nothing
-                    tmrScriptStatus.Enabled = False
-                    btnStop.Enabled = False
-                    btnFaster.Enabled = False
-                    btnSlower.Enabled = False
-                    Exit Sub
+                If cbPrecompile.Checked Then
+                    If MsgBox("Ready to Start." & vbCrLf & "Runtime: " & timeString, vbOKCancel) = MsgBoxResult.Cancel Then
+                        activeScript.dispose()
+                        activeScript = Nothing
+                        tmrScriptStatus.Enabled = False
+                        btnStop.Enabled = False
+                        btnFaster.Enabled = False
+                        btnSlower.Enabled = False
+                        Exit Sub
+                    End If
                 End If
-            End If
-            If cbSyncWait.Checked Then
-                Dim receivingUdpClient As New System.Net.Sockets.UdpClient(12345)
-                Dim RemoteIpEndPoint As New System.Net.IPEndPoint(System.Net.IPAddress.Any, 0)
-                Dim SyncStart As Boolean = False
-                Do Until SyncStart
-                    Dim receiveBytes As [Byte]() = receivingUdpClient.Receive(RemoteIpEndPoint)
-                    If System.Text.Encoding.ASCII.GetString(receiveBytes) = "AutoGH" Then SyncStart = True
-                Loop
-                RemoteIpEndPoint = Nothing
-                receivingUdpClient.Close()
-                receivingUdpClient = Nothing
-            End If
-            If cbSync.Checked Then
-                Dim sck As Net.Sockets.Socket
-                sck = New Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, Net.Sockets.SocketType.Dgram, Net.Sockets.ProtocolType.Udp)
-                sck.Connect(txtSync.Text, 12345)
-                sck.Send(System.Text.Encoding.ASCII.GetBytes("AutoGH"))
-                sck.Close()
-            End If
-            asLastTime = 0
-            activeScript.startScript()
-            setBtnPP(False)
-        Else
-            Select Case activeScript.state
+                If cbSyncWait.Checked Then
+                    Dim receivingUdpClient As New System.Net.Sockets.UdpClient(12345)
+                    Dim RemoteIpEndPoint As New System.Net.IPEndPoint(System.Net.IPAddress.Any, 0)
+                    Dim SyncStart As Boolean = False
+                    Do Until SyncStart
+                        Dim receiveBytes As [Byte]() = receivingUdpClient.Receive(RemoteIpEndPoint)
+                        If System.Text.Encoding.ASCII.GetString(receiveBytes) = "AutoGH" Then SyncStart = True
+                    Loop
+                    RemoteIpEndPoint = Nothing
+                    receivingUdpClient.Close()
+                    receivingUdpClient = Nothing
+                End If
+                If cbSync.Checked Then
+                    Dim sck As Net.Sockets.Socket
+                    sck = New Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, Net.Sockets.SocketType.Dgram, Net.Sockets.ProtocolType.Udp)
+                    sck.Connect(txtSync.Text, 12345)
+                    sck.Send(System.Text.Encoding.ASCII.GetBytes("AutoGH"))
+                    sck.Close()
+                End If
+                asLastTime = 0
+                activeScript.startScript()
+                setBtnPP(False)
+            Else
+                Select Case activeScript.state
                 Case clsScript.scriptState.finished
                     asLastTime = 0
                     activeScript.startScript()
@@ -1477,15 +1482,12 @@ Public Class frmEdit
 
     Private Sub btnOutputAudio_Click(sender As Object, e As EventArgs) Handles btnOutputAudio.Click
         fdOpen.Filter = "Audio Files|*.mp3;*.wav"
+        fdOpen.Multiselect = True
         fdOpen.FileName = vbNullString
         fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH"
-        If fdOpen.ShowDialog() = DialogResult.Cancel Then
-            fdOpen.Filter = "AutoXB Scripts|*.axb"
-            Exit Sub
-        End If
+        If fdOpen.ShowDialog() <> DialogResult.Cancel Then txtOuputAudio.Text = Join(fdOpen.FileNames, "|")
         fdOpen.Filter = "AutoXB Scripts|*.axb"
-        If fdOpen.FileName = vbNullString Then Exit Sub
-        txtOuputAudio.Text = fdOpen.FileName
+        fdOpen.Multiselect = False
     End Sub
 
     Private Sub btnFaster_Click(sender As Object, e As EventArgs) Handles btnFaster.Click
@@ -1494,5 +1496,10 @@ Public Class frmEdit
 
     Private Sub btnSlower_Click(sender As Object, e As EventArgs) Handles btnSlower.Click
         If Not activeScript Is Nothing Then activeScript.adjustQueue.Enqueue(nudSpeed.Value)
+    End Sub
+
+    Private Sub AudioSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AudioSettingsToolStripMenuItem.Click
+        Dim frmA As New frmAudio
+        frmA.ShowDialog()
     End Sub
 End Class

@@ -1,5 +1,5 @@
 ﻿Imports NAudio
-
+'https://github.com/TheBoxyBear/ChartTools/blob/stable/docs/FileFormats/midi.md
 Friend Class clsNoteAction
     Implements IComparable(Of clsNoteAction)
     Public controller As Byte

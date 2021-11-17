@@ -41,6 +41,25 @@ Partial Class frmEdit
         Me.lblLT = New System.Windows.Forms.Label()
         Me.txtRT = New System.Windows.Forms.TextBox()
         Me.lblRT = New System.Windows.Forms.Label()
+        Me.pbRS = New System.Windows.Forms.PictureBox()
+        Me.btnA = New System.Windows.Forms.Button()
+        Me.btnB = New System.Windows.Forms.Button()
+        Me.btnY = New System.Windows.Forms.Button()
+        Me.btnX = New System.Windows.Forms.Button()
+        Me.btnDD = New System.Windows.Forms.Button()
+        Me.btnBack = New System.Windows.Forms.Button()
+        Me.btnLS = New System.Windows.Forms.Button()
+        Me.btnDL = New System.Windows.Forms.Button()
+        Me.btnLB = New System.Windows.Forms.Button()
+        Me.btnRB = New System.Windows.Forms.Button()
+        Me.btnDR = New System.Windows.Forms.Button()
+        Me.btnLT = New System.Windows.Forms.Button()
+        Me.btnRS = New System.Windows.Forms.Button()
+        Me.btnStart = New System.Windows.Forms.Button()
+        Me.btnRT = New System.Windows.Forms.Button()
+        Me.btnDU = New System.Windows.Forms.Button()
+        Me.btnGuide = New System.Windows.Forms.Button()
+        Me.pbLS = New System.Windows.Forms.PictureBox()
         Me.rbHold = New System.Windows.Forms.RadioButton()
         Me.rbGroup = New System.Windows.Forms.RadioButton()
         Me.cmbAdd = New System.Windows.Forms.ComboBox()
@@ -71,7 +90,15 @@ Partial Class frmEdit
         Me.tmrScriptStatus = New System.Windows.Forms.Timer(Me.components)
         Me.cbPrecompile = New System.Windows.Forms.CheckBox()
         Me.scMain = New System.Windows.Forms.SplitContainer()
+        Me.lblTotalTime = New System.Windows.Forms.Label()
         Me.lblWaitTime = New System.Windows.Forms.Label()
+        Me.btnAdd = New System.Windows.Forms.Button()
+        Me.btnStop = New System.Windows.Forms.Button()
+        Me.btnApply = New System.Windows.Forms.Button()
+        Me.btnPlayPause = New System.Windows.Forms.Button()
+        Me.btnDelete = New System.Windows.Forms.Button()
+        Me.btnMoveUp = New System.Windows.Forms.Button()
+        Me.btnMoveDown = New System.Windows.Forms.Button()
         Me.tcActions = New System.Windows.Forms.TabControl()
         Me.tpController = New System.Windows.Forms.TabPage()
         Me.lblControllerIP = New System.Windows.Forms.Label()
@@ -112,11 +139,18 @@ Partial Class frmEdit
         Me.btnOutputAudio = New System.Windows.Forms.Button()
         Me.txtOuputAudio = New System.Windows.Forms.TextBox()
         Me.rbOutputAudio = New System.Windows.Forms.RadioButton()
+        Me.gbSpeed = New System.Windows.Forms.GroupBox()
+        Me.nudSpeed = New System.Windows.Forms.NumericUpDown()
+        Me.btnFaster = New System.Windows.Forms.Button()
+        Me.btnSlower = New System.Windows.Forms.Button()
         Me.txtSync = New System.Windows.Forms.TextBox()
         Me.cbSync = New System.Windows.Forms.CheckBox()
         Me.cbSyncWait = New System.Windows.Forms.CheckBox()
         Me.cbTrace = New System.Windows.Forms.CheckBox()
         Me.gbGroups = New System.Windows.Forms.GroupBox()
+        Me.btnRenameGroup = New System.Windows.Forms.Button()
+        Me.btnAddGroup = New System.Windows.Forms.Button()
+        Me.btnDeleteGroup = New System.Windows.Forms.Button()
         Me.gbControllers = New System.Windows.Forms.GroupBox()
         Me.txtController4 = New System.Windows.Forms.TextBox()
         Me.lblController4 = New System.Windows.Forms.Label()
@@ -127,43 +161,12 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
-        Me.gbSpeed = New System.Windows.Forms.GroupBox()
-        Me.nudSpeed = New System.Windows.Forms.NumericUpDown()
-        Me.lblTotalTime = New System.Windows.Forms.Label()
-        Me.btnAdd = New System.Windows.Forms.Button()
-        Me.btnStop = New System.Windows.Forms.Button()
-        Me.btnApply = New System.Windows.Forms.Button()
-        Me.btnPlayPause = New System.Windows.Forms.Button()
-        Me.btnDelete = New System.Windows.Forms.Button()
-        Me.btnMoveUp = New System.Windows.Forms.Button()
-        Me.btnMoveDown = New System.Windows.Forms.Button()
-        Me.pbRS = New System.Windows.Forms.PictureBox()
-        Me.btnA = New System.Windows.Forms.Button()
-        Me.btnB = New System.Windows.Forms.Button()
-        Me.btnY = New System.Windows.Forms.Button()
-        Me.btnX = New System.Windows.Forms.Button()
-        Me.btnDD = New System.Windows.Forms.Button()
-        Me.btnBack = New System.Windows.Forms.Button()
-        Me.btnLS = New System.Windows.Forms.Button()
-        Me.btnDL = New System.Windows.Forms.Button()
-        Me.btnLB = New System.Windows.Forms.Button()
-        Me.btnRB = New System.Windows.Forms.Button()
-        Me.btnDR = New System.Windows.Forms.Button()
-        Me.btnLT = New System.Windows.Forms.Button()
-        Me.btnRS = New System.Windows.Forms.Button()
-        Me.btnStart = New System.Windows.Forms.Button()
-        Me.btnRT = New System.Windows.Forms.Button()
-        Me.btnDU = New System.Windows.Forms.Button()
-        Me.btnGuide = New System.Windows.Forms.Button()
-        Me.pbLS = New System.Windows.Forms.PictureBox()
-        Me.btnFaster = New System.Windows.Forms.Button()
-        Me.btnSlower = New System.Windows.Forms.Button()
-        Me.btnRenameGroup = New System.Windows.Forms.Button()
-        Me.btnAddGroup = New System.Windows.Forms.Button()
-        Me.btnDeleteGroup = New System.Windows.Forms.Button()
         Me.lbActions = New AutoGH.RefreshingListBox()
         Me.lbGroups = New AutoGH.RefreshingListBox()
+        Me.AudioSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlControls.SuspendLayout()
+        CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.scMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.scMain.Panel1.SuspendLayout()
@@ -176,12 +179,10 @@ Partial Class frmEdit
         Me.gbVideo.SuspendLayout()
         Me.gbTest.SuspendLayout()
         Me.tpOutput.SuspendLayout()
-        Me.gbGroups.SuspendLayout()
-        Me.gbControllers.SuspendLayout()
         Me.gbSpeed.SuspendLayout()
         CType(Me.nudSpeed, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbGroups.SuspendLayout()
+        Me.gbControllers.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtRSY
@@ -368,6 +369,234 @@ Partial Class frmEdit
         Me.lblRT.TabIndex = 32
         Me.lblRT.Text = "RT:"
         '
+        'pbRS
+        '
+        Me.pbRS.BackColor = System.Drawing.Color.Silver
+        Me.pbRS.BackgroundImage = CType(resources.GetObject("pbRS.BackgroundImage"), System.Drawing.Image)
+        Me.pbRS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.pbRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pbRS.Location = New System.Drawing.Point(308, 3)
+        Me.pbRS.Name = "pbRS"
+        Me.pbRS.Size = New System.Drawing.Size(63, 63)
+        Me.pbRS.TabIndex = 22
+        Me.pbRS.TabStop = False
+        '
+        'btnA
+        '
+        Me.btnA.FlatAppearance.BorderSize = 0
+        Me.btnA.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnA.Image = CType(resources.GetObject("btnA.Image"), System.Drawing.Image)
+        Me.btnA.Location = New System.Drawing.Point(247, 45)
+        Me.btnA.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnA.Name = "btnA"
+        Me.btnA.Size = New System.Drawing.Size(21, 21)
+        Me.btnA.TabIndex = 25
+        Me.btnA.UseVisualStyleBackColor = True
+        '
+        'btnB
+        '
+        Me.btnB.FlatAppearance.BorderSize = 0
+        Me.btnB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnB.Image = CType(resources.GetObject("btnB.Image"), System.Drawing.Image)
+        Me.btnB.Location = New System.Drawing.Point(258, 24)
+        Me.btnB.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnB.Name = "btnB"
+        Me.btnB.Size = New System.Drawing.Size(21, 21)
+        Me.btnB.TabIndex = 24
+        Me.btnB.UseVisualStyleBackColor = True
+        '
+        'btnY
+        '
+        Me.btnY.FlatAppearance.BorderSize = 0
+        Me.btnY.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnY.Image = CType(resources.GetObject("btnY.Image"), System.Drawing.Image)
+        Me.btnY.Location = New System.Drawing.Point(247, 3)
+        Me.btnY.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnY.Name = "btnY"
+        Me.btnY.Size = New System.Drawing.Size(21, 21)
+        Me.btnY.TabIndex = 22
+        Me.btnY.UseVisualStyleBackColor = True
+        '
+        'btnX
+        '
+        Me.btnX.FlatAppearance.BorderSize = 0
+        Me.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnX.Image = CType(resources.GetObject("btnX.Image"), System.Drawing.Image)
+        Me.btnX.Location = New System.Drawing.Point(236, 24)
+        Me.btnX.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnX.Name = "btnX"
+        Me.btnX.Size = New System.Drawing.Size(21, 21)
+        Me.btnX.TabIndex = 23
+        Me.btnX.UseVisualStyleBackColor = True
+        '
+        'btnDD
+        '
+        Me.btnDD.FlatAppearance.BorderSize = 0
+        Me.btnDD.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDD.Image = CType(resources.GetObject("btnDD.Image"), System.Drawing.Image)
+        Me.btnDD.Location = New System.Drawing.Point(169, 45)
+        Me.btnDD.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnDD.Name = "btnDD"
+        Me.btnDD.Size = New System.Drawing.Size(21, 21)
+        Me.btnDD.TabIndex = 18
+        Me.btnDD.UseVisualStyleBackColor = True
+        '
+        'btnBack
+        '
+        Me.btnBack.FlatAppearance.BorderSize = 0
+        Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnBack.Image = CType(resources.GetObject("btnBack.Image"), System.Drawing.Image)
+        Me.btnBack.Location = New System.Drawing.Point(199, 3)
+        Me.btnBack.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnBack.Name = "btnBack"
+        Me.btnBack.Size = New System.Drawing.Size(21, 21)
+        Me.btnBack.TabIndex = 19
+        Me.btnBack.UseVisualStyleBackColor = True
+        '
+        'btnLS
+        '
+        Me.btnLS.FlatAppearance.BorderSize = 0
+        Me.btnLS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLS.Image = CType(resources.GetObject("btnLS.Image"), System.Drawing.Image)
+        Me.btnLS.Location = New System.Drawing.Point(132, 45)
+        Me.btnLS.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnLS.Name = "btnLS"
+        Me.btnLS.Size = New System.Drawing.Size(21, 21)
+        Me.btnLS.TabIndex = 14
+        Me.btnLS.UseVisualStyleBackColor = True
+        '
+        'btnDL
+        '
+        Me.btnDL.FlatAppearance.BorderSize = 0
+        Me.btnDL.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDL.Image = CType(resources.GetObject("btnDL.Image"), System.Drawing.Image)
+        Me.btnDL.Location = New System.Drawing.Point(158, 24)
+        Me.btnDL.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnDL.Name = "btnDL"
+        Me.btnDL.Size = New System.Drawing.Size(21, 21)
+        Me.btnDL.TabIndex = 16
+        Me.btnDL.UseVisualStyleBackColor = True
+        '
+        'btnLB
+        '
+        Me.btnLB.FlatAppearance.BorderSize = 0
+        Me.btnLB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLB.Image = CType(resources.GetObject("btnLB.Image"), System.Drawing.Image)
+        Me.btnLB.Location = New System.Drawing.Point(132, 24)
+        Me.btnLB.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnLB.Name = "btnLB"
+        Me.btnLB.Size = New System.Drawing.Size(21, 21)
+        Me.btnLB.TabIndex = 13
+        Me.btnLB.UseVisualStyleBackColor = True
+        '
+        'btnRB
+        '
+        Me.btnRB.FlatAppearance.BorderSize = 0
+        Me.btnRB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRB.Image = CType(resources.GetObject("btnRB.Image"), System.Drawing.Image)
+        Me.btnRB.Location = New System.Drawing.Point(284, 24)
+        Me.btnRB.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnRB.Name = "btnRB"
+        Me.btnRB.Size = New System.Drawing.Size(21, 21)
+        Me.btnRB.TabIndex = 27
+        Me.btnRB.UseVisualStyleBackColor = True
+        '
+        'btnDR
+        '
+        Me.btnDR.FlatAppearance.BorderSize = 0
+        Me.btnDR.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDR.Image = CType(resources.GetObject("btnDR.Image"), System.Drawing.Image)
+        Me.btnDR.Location = New System.Drawing.Point(180, 24)
+        Me.btnDR.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnDR.Name = "btnDR"
+        Me.btnDR.Size = New System.Drawing.Size(21, 21)
+        Me.btnDR.TabIndex = 17
+        Me.btnDR.UseVisualStyleBackColor = True
+        '
+        'btnLT
+        '
+        Me.btnLT.FlatAppearance.BorderSize = 0
+        Me.btnLT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLT.Image = CType(resources.GetObject("btnLT.Image"), System.Drawing.Image)
+        Me.btnLT.Location = New System.Drawing.Point(132, 3)
+        Me.btnLT.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnLT.Name = "btnLT"
+        Me.btnLT.Size = New System.Drawing.Size(21, 21)
+        Me.btnLT.TabIndex = 12
+        Me.btnLT.UseVisualStyleBackColor = True
+        '
+        'btnRS
+        '
+        Me.btnRS.FlatAppearance.BorderSize = 0
+        Me.btnRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRS.Image = CType(resources.GetObject("btnRS.Image"), System.Drawing.Image)
+        Me.btnRS.Location = New System.Drawing.Point(284, 45)
+        Me.btnRS.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnRS.Name = "btnRS"
+        Me.btnRS.Size = New System.Drawing.Size(21, 21)
+        Me.btnRS.TabIndex = 28
+        Me.btnRS.UseVisualStyleBackColor = True
+        '
+        'btnStart
+        '
+        Me.btnStart.FlatAppearance.BorderSize = 0
+        Me.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnStart.Image = CType(resources.GetObject("btnStart.Image"), System.Drawing.Image)
+        Me.btnStart.Location = New System.Drawing.Point(221, 3)
+        Me.btnStart.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnStart.Name = "btnStart"
+        Me.btnStart.Size = New System.Drawing.Size(21, 21)
+        Me.btnStart.TabIndex = 20
+        Me.btnStart.UseVisualStyleBackColor = True
+        '
+        'btnRT
+        '
+        Me.btnRT.FlatAppearance.BorderSize = 0
+        Me.btnRT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRT.Image = CType(resources.GetObject("btnRT.Image"), System.Drawing.Image)
+        Me.btnRT.Location = New System.Drawing.Point(284, 3)
+        Me.btnRT.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnRT.Name = "btnRT"
+        Me.btnRT.Size = New System.Drawing.Size(21, 21)
+        Me.btnRT.TabIndex = 26
+        Me.btnRT.UseVisualStyleBackColor = True
+        '
+        'btnDU
+        '
+        Me.btnDU.FlatAppearance.BorderSize = 0
+        Me.btnDU.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDU.Image = CType(resources.GetObject("btnDU.Image"), System.Drawing.Image)
+        Me.btnDU.Location = New System.Drawing.Point(169, 3)
+        Me.btnDU.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnDU.Name = "btnDU"
+        Me.btnDU.Size = New System.Drawing.Size(21, 21)
+        Me.btnDU.TabIndex = 15
+        Me.btnDU.UseVisualStyleBackColor = True
+        '
+        'btnGuide
+        '
+        Me.btnGuide.FlatAppearance.BorderSize = 0
+        Me.btnGuide.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnGuide.Image = CType(resources.GetObject("btnGuide.Image"), System.Drawing.Image)
+        Me.btnGuide.Location = New System.Drawing.Point(210, 24)
+        Me.btnGuide.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnGuide.Name = "btnGuide"
+        Me.btnGuide.Size = New System.Drawing.Size(21, 21)
+        Me.btnGuide.TabIndex = 21
+        Me.btnGuide.UseVisualStyleBackColor = True
+        '
+        'pbLS
+        '
+        Me.pbLS.BackColor = System.Drawing.Color.Silver
+        Me.pbLS.BackgroundImage = CType(resources.GetObject("pbLS.BackgroundImage"), System.Drawing.Image)
+        Me.pbLS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.pbLS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pbLS.Location = New System.Drawing.Point(66, 3)
+        Me.pbLS.Name = "pbLS"
+        Me.pbLS.Size = New System.Drawing.Size(63, 63)
+        Me.pbLS.TabIndex = 21
+        Me.pbLS.TabStop = False
+        '
         'rbHold
         '
         Me.rbHold.AutoSize = True
@@ -448,7 +677,7 @@ Partial Class frmEdit
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem, Me.DJHero1ToolStripMenuItem, Me.MirroringToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem, Me.DJHero1ToolStripMenuItem, Me.MirroringToolStripMenuItem, Me.AudioSettingsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -628,6 +857,15 @@ Partial Class frmEdit
         Me.scMain.SplitterDistance = 531
         Me.scMain.TabIndex = 65
         '
+        'lblTotalTime
+        '
+        Me.lblTotalTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblTotalTime.Location = New System.Drawing.Point(305, 265)
+        Me.lblTotalTime.Name = "lblTotalTime"
+        Me.lblTotalTime.Size = New System.Drawing.Size(125, 16)
+        Me.lblTotalTime.TabIndex = 65
+        Me.lblTotalTime.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'lblWaitTime
         '
         Me.lblWaitTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -636,6 +874,86 @@ Partial Class frmEdit
         Me.lblWaitTime.Size = New System.Drawing.Size(125, 16)
         Me.lblWaitTime.TabIndex = 63
         Me.lblWaitTime.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'btnAdd
+        '
+        Me.btnAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnAdd.Image = Global.AutoGH.My.Resources.Resources.add40
+        Me.btnAdd.Location = New System.Drawing.Point(3, 265)
+        Me.btnAdd.Name = "btnAdd"
+        Me.btnAdd.Padding = New System.Windows.Forms.Padding(0, 0, 1, 1)
+        Me.btnAdd.Size = New System.Drawing.Size(44, 44)
+        Me.btnAdd.TabIndex = 36
+        Me.btnAdd.UseVisualStyleBackColor = True
+        '
+        'btnStop
+        '
+        Me.btnStop.Enabled = False
+        Me.btnStop.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnStop.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnStop.Image = Global.AutoGH.My.Resources.Resources.stop40
+        Me.btnStop.Location = New System.Drawing.Point(483, 265)
+        Me.btnStop.Name = "btnStop"
+        Me.btnStop.Size = New System.Drawing.Size(44, 44)
+        Me.btnStop.TabIndex = 44
+        Me.btnStop.UseVisualStyleBackColor = True
+        '
+        'btnApply
+        '
+        Me.btnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnApply.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnApply.Image = Global.AutoGH.My.Resources.Resources.Checkmark40
+        Me.btnApply.Location = New System.Drawing.Point(255, 265)
+        Me.btnApply.Name = "btnApply"
+        Me.btnApply.Size = New System.Drawing.Size(44, 44)
+        Me.btnApply.TabIndex = 41
+        Me.btnApply.UseVisualStyleBackColor = True
+        '
+        'btnPlayPause
+        '
+        Me.btnPlayPause.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPlayPause.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnPlayPause.Image = Global.AutoGH.My.Resources.Resources.play40
+        Me.btnPlayPause.Location = New System.Drawing.Point(436, 265)
+        Me.btnPlayPause.Name = "btnPlayPause"
+        Me.btnPlayPause.Size = New System.Drawing.Size(44, 44)
+        Me.btnPlayPause.TabIndex = 43
+        Me.btnPlayPause.UseVisualStyleBackColor = True
+        '
+        'btnDelete
+        '
+        Me.btnDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDelete.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnDelete.Image = Global.AutoGH.My.Resources.Resources.delete40
+        Me.btnDelete.Location = New System.Drawing.Point(114, 265)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.btnDelete.Size = New System.Drawing.Size(44, 44)
+        Me.btnDelete.TabIndex = 38
+        Me.btnDelete.UseVisualStyleBackColor = True
+        '
+        'btnMoveUp
+        '
+        Me.btnMoveUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnMoveUp.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnMoveUp.Image = Global.AutoGH.My.Resources.Resources.arrowup40
+        Me.btnMoveUp.Location = New System.Drawing.Point(161, 265)
+        Me.btnMoveUp.Name = "btnMoveUp"
+        Me.btnMoveUp.Size = New System.Drawing.Size(44, 44)
+        Me.btnMoveUp.TabIndex = 39
+        Me.btnMoveUp.UseVisualStyleBackColor = True
+        '
+        'btnMoveDown
+        '
+        Me.btnMoveDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnMoveDown.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnMoveDown.Image = Global.AutoGH.My.Resources.Resources.arrowdown40
+        Me.btnMoveDown.Location = New System.Drawing.Point(208, 265)
+        Me.btnMoveDown.Name = "btnMoveDown"
+        Me.btnMoveDown.Size = New System.Drawing.Size(44, 44)
+        Me.btnMoveDown.TabIndex = 40
+        Me.btnMoveDown.UseVisualStyleBackColor = True
         '
         'tcActions
         '
@@ -1057,6 +1375,55 @@ Partial Class frmEdit
         Me.rbOutputAudio.Text = "Audio"
         Me.rbOutputAudio.UseVisualStyleBackColor = True
         '
+        'gbSpeed
+        '
+        Me.gbSpeed.Controls.Add(Me.nudSpeed)
+        Me.gbSpeed.Controls.Add(Me.btnFaster)
+        Me.gbSpeed.Controls.Add(Me.btnSlower)
+        Me.gbSpeed.Location = New System.Drawing.Point(4, 182)
+        Me.gbSpeed.Name = "gbSpeed"
+        Me.gbSpeed.Size = New System.Drawing.Size(159, 95)
+        Me.gbSpeed.TabIndex = 67
+        Me.gbSpeed.TabStop = False
+        Me.gbSpeed.Text = "Adjust Timing"
+        '
+        'nudSpeed
+        '
+        Me.nudSpeed.Increment = New Decimal(New Integer() {10, 0, 0, 0})
+        Me.nudSpeed.Location = New System.Drawing.Point(7, 19)
+        Me.nudSpeed.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
+        Me.nudSpeed.Name = "nudSpeed"
+        Me.nudSpeed.Size = New System.Drawing.Size(142, 20)
+        Me.nudSpeed.TabIndex = 44
+        Me.nudSpeed.Value = New Decimal(New Integer() {100, 0, 0, 0})
+        '
+        'btnFaster
+        '
+        Me.btnFaster.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnFaster.Enabled = False
+        Me.btnFaster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFaster.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnFaster.Image = Global.AutoGH.My.Resources.Resources.rabbit40
+        Me.btnFaster.Location = New System.Drawing.Point(105, 45)
+        Me.btnFaster.Name = "btnFaster"
+        Me.btnFaster.Size = New System.Drawing.Size(44, 44)
+        Me.btnFaster.TabIndex = 43
+        Me.btnFaster.UseVisualStyleBackColor = True
+        '
+        'btnSlower
+        '
+        Me.btnSlower.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnSlower.Enabled = False
+        Me.btnSlower.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSlower.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnSlower.Image = Global.AutoGH.My.Resources.Resources.turtle40
+        Me.btnSlower.Location = New System.Drawing.Point(7, 45)
+        Me.btnSlower.Name = "btnSlower"
+        Me.btnSlower.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.btnSlower.Size = New System.Drawing.Size(44, 44)
+        Me.btnSlower.TabIndex = 42
+        Me.btnSlower.UseVisualStyleBackColor = True
+        '
         'txtSync
         '
         Me.txtSync.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -1110,6 +1477,43 @@ Partial Class frmEdit
         Me.gbGroups.TabIndex = 1
         Me.gbGroups.TabStop = False
         Me.gbGroups.Text = "Action Groups"
+        '
+        'btnRenameGroup
+        '
+        Me.btnRenameGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnRenameGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRenameGroup.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnRenameGroup.Image = Global.AutoGH.My.Resources.Resources.edit40
+        Me.btnRenameGroup.Location = New System.Drawing.Point(56, 93)
+        Me.btnRenameGroup.Name = "btnRenameGroup"
+        Me.btnRenameGroup.Size = New System.Drawing.Size(44, 44)
+        Me.btnRenameGroup.TabIndex = 41
+        Me.btnRenameGroup.UseVisualStyleBackColor = True
+        '
+        'btnAddGroup
+        '
+        Me.btnAddGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnAddGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAddGroup.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnAddGroup.Image = Global.AutoGH.My.Resources.Resources.add40
+        Me.btnAddGroup.Location = New System.Drawing.Point(7, 93)
+        Me.btnAddGroup.Name = "btnAddGroup"
+        Me.btnAddGroup.Size = New System.Drawing.Size(44, 44)
+        Me.btnAddGroup.TabIndex = 39
+        Me.btnAddGroup.UseVisualStyleBackColor = True
+        '
+        'btnDeleteGroup
+        '
+        Me.btnDeleteGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnDeleteGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDeleteGroup.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.btnDeleteGroup.Image = Global.AutoGH.My.Resources.Resources.delete40
+        Me.btnDeleteGroup.Location = New System.Drawing.Point(105, 93)
+        Me.btnDeleteGroup.Name = "btnDeleteGroup"
+        Me.btnDeleteGroup.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.btnDeleteGroup.Size = New System.Drawing.Size(44, 44)
+        Me.btnDeleteGroup.TabIndex = 40
+        Me.btnDeleteGroup.UseVisualStyleBackColor = True
         '
         'gbControllers
         '
@@ -1207,409 +1611,6 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
-        'gbSpeed
-        '
-        Me.gbSpeed.Controls.Add(Me.nudSpeed)
-        Me.gbSpeed.Controls.Add(Me.btnFaster)
-        Me.gbSpeed.Controls.Add(Me.btnSlower)
-        Me.gbSpeed.Location = New System.Drawing.Point(4, 182)
-        Me.gbSpeed.Name = "gbSpeed"
-        Me.gbSpeed.Size = New System.Drawing.Size(159, 95)
-        Me.gbSpeed.TabIndex = 67
-        Me.gbSpeed.TabStop = False
-        Me.gbSpeed.Text = "Adjust Timing"
-        '
-        'nudSpeed
-        '
-        Me.nudSpeed.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        Me.nudSpeed.Location = New System.Drawing.Point(7, 19)
-        Me.nudSpeed.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
-        Me.nudSpeed.Name = "nudSpeed"
-        Me.nudSpeed.Size = New System.Drawing.Size(142, 20)
-        Me.nudSpeed.TabIndex = 44
-        Me.nudSpeed.Value = New Decimal(New Integer() {100, 0, 0, 0})
-        '
-        'lblTotalTime
-        '
-        Me.lblTotalTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblTotalTime.Location = New System.Drawing.Point(305, 265)
-        Me.lblTotalTime.Name = "lblTotalTime"
-        Me.lblTotalTime.Size = New System.Drawing.Size(125, 16)
-        Me.lblTotalTime.TabIndex = 65
-        Me.lblTotalTime.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'btnAdd
-        '
-        Me.btnAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAdd.Image = Global.AutoGH.My.Resources.Resources.add40
-        Me.btnAdd.Location = New System.Drawing.Point(3, 265)
-        Me.btnAdd.Name = "btnAdd"
-        Me.btnAdd.Padding = New System.Windows.Forms.Padding(0, 0, 1, 1)
-        Me.btnAdd.Size = New System.Drawing.Size(44, 44)
-        Me.btnAdd.TabIndex = 36
-        Me.btnAdd.UseVisualStyleBackColor = True
-        '
-        'btnStop
-        '
-        Me.btnStop.Enabled = False
-        Me.btnStop.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnStop.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnStop.Image = Global.AutoGH.My.Resources.Resources.stop40
-        Me.btnStop.Location = New System.Drawing.Point(483, 265)
-        Me.btnStop.Name = "btnStop"
-        Me.btnStop.Size = New System.Drawing.Size(44, 44)
-        Me.btnStop.TabIndex = 44
-        Me.btnStop.UseVisualStyleBackColor = True
-        '
-        'btnApply
-        '
-        Me.btnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnApply.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnApply.Image = Global.AutoGH.My.Resources.Resources.Checkmark40
-        Me.btnApply.Location = New System.Drawing.Point(255, 265)
-        Me.btnApply.Name = "btnApply"
-        Me.btnApply.Size = New System.Drawing.Size(44, 44)
-        Me.btnApply.TabIndex = 41
-        Me.btnApply.UseVisualStyleBackColor = True
-        '
-        'btnPlayPause
-        '
-        Me.btnPlayPause.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPlayPause.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnPlayPause.Image = Global.AutoGH.My.Resources.Resources.play40
-        Me.btnPlayPause.Location = New System.Drawing.Point(436, 265)
-        Me.btnPlayPause.Name = "btnPlayPause"
-        Me.btnPlayPause.Size = New System.Drawing.Size(44, 44)
-        Me.btnPlayPause.TabIndex = 43
-        Me.btnPlayPause.UseVisualStyleBackColor = True
-        '
-        'btnDelete
-        '
-        Me.btnDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnDelete.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDelete.Image = Global.AutoGH.My.Resources.Resources.delete40
-        Me.btnDelete.Location = New System.Drawing.Point(114, 265)
-        Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.btnDelete.Size = New System.Drawing.Size(44, 44)
-        Me.btnDelete.TabIndex = 38
-        Me.btnDelete.UseVisualStyleBackColor = True
-        '
-        'btnMoveUp
-        '
-        Me.btnMoveUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMoveUp.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnMoveUp.Image = Global.AutoGH.My.Resources.Resources.arrowup40
-        Me.btnMoveUp.Location = New System.Drawing.Point(161, 265)
-        Me.btnMoveUp.Name = "btnMoveUp"
-        Me.btnMoveUp.Size = New System.Drawing.Size(44, 44)
-        Me.btnMoveUp.TabIndex = 39
-        Me.btnMoveUp.UseVisualStyleBackColor = True
-        '
-        'btnMoveDown
-        '
-        Me.btnMoveDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMoveDown.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnMoveDown.Image = Global.AutoGH.My.Resources.Resources.arrowdown40
-        Me.btnMoveDown.Location = New System.Drawing.Point(208, 265)
-        Me.btnMoveDown.Name = "btnMoveDown"
-        Me.btnMoveDown.Size = New System.Drawing.Size(44, 44)
-        Me.btnMoveDown.TabIndex = 40
-        Me.btnMoveDown.UseVisualStyleBackColor = True
-        '
-        'pbRS
-        '
-        Me.pbRS.BackColor = System.Drawing.Color.Silver
-        Me.pbRS.BackgroundImage = CType(resources.GetObject("pbRS.BackgroundImage"), System.Drawing.Image)
-        Me.pbRS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.pbRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pbRS.Location = New System.Drawing.Point(308, 3)
-        Me.pbRS.Name = "pbRS"
-        Me.pbRS.Size = New System.Drawing.Size(63, 63)
-        Me.pbRS.TabIndex = 22
-        Me.pbRS.TabStop = False
-        '
-        'btnA
-        '
-        Me.btnA.FlatAppearance.BorderSize = 0
-        Me.btnA.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnA.Image = CType(resources.GetObject("btnA.Image"), System.Drawing.Image)
-        Me.btnA.Location = New System.Drawing.Point(247, 45)
-        Me.btnA.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnA.Name = "btnA"
-        Me.btnA.Size = New System.Drawing.Size(21, 21)
-        Me.btnA.TabIndex = 25
-        Me.btnA.UseVisualStyleBackColor = True
-        '
-        'btnB
-        '
-        Me.btnB.FlatAppearance.BorderSize = 0
-        Me.btnB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnB.Image = CType(resources.GetObject("btnB.Image"), System.Drawing.Image)
-        Me.btnB.Location = New System.Drawing.Point(258, 24)
-        Me.btnB.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnB.Name = "btnB"
-        Me.btnB.Size = New System.Drawing.Size(21, 21)
-        Me.btnB.TabIndex = 24
-        Me.btnB.UseVisualStyleBackColor = True
-        '
-        'btnY
-        '
-        Me.btnY.FlatAppearance.BorderSize = 0
-        Me.btnY.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnY.Image = CType(resources.GetObject("btnY.Image"), System.Drawing.Image)
-        Me.btnY.Location = New System.Drawing.Point(247, 3)
-        Me.btnY.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnY.Name = "btnY"
-        Me.btnY.Size = New System.Drawing.Size(21, 21)
-        Me.btnY.TabIndex = 22
-        Me.btnY.UseVisualStyleBackColor = True
-        '
-        'btnX
-        '
-        Me.btnX.FlatAppearance.BorderSize = 0
-        Me.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnX.Image = CType(resources.GetObject("btnX.Image"), System.Drawing.Image)
-        Me.btnX.Location = New System.Drawing.Point(236, 24)
-        Me.btnX.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnX.Name = "btnX"
-        Me.btnX.Size = New System.Drawing.Size(21, 21)
-        Me.btnX.TabIndex = 23
-        Me.btnX.UseVisualStyleBackColor = True
-        '
-        'btnDD
-        '
-        Me.btnDD.FlatAppearance.BorderSize = 0
-        Me.btnDD.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDD.Image = CType(resources.GetObject("btnDD.Image"), System.Drawing.Image)
-        Me.btnDD.Location = New System.Drawing.Point(169, 45)
-        Me.btnDD.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnDD.Name = "btnDD"
-        Me.btnDD.Size = New System.Drawing.Size(21, 21)
-        Me.btnDD.TabIndex = 18
-        Me.btnDD.UseVisualStyleBackColor = True
-        '
-        'btnBack
-        '
-        Me.btnBack.FlatAppearance.BorderSize = 0
-        Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnBack.Image = CType(resources.GetObject("btnBack.Image"), System.Drawing.Image)
-        Me.btnBack.Location = New System.Drawing.Point(199, 3)
-        Me.btnBack.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnBack.Name = "btnBack"
-        Me.btnBack.Size = New System.Drawing.Size(21, 21)
-        Me.btnBack.TabIndex = 19
-        Me.btnBack.UseVisualStyleBackColor = True
-        '
-        'btnLS
-        '
-        Me.btnLS.FlatAppearance.BorderSize = 0
-        Me.btnLS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLS.Image = CType(resources.GetObject("btnLS.Image"), System.Drawing.Image)
-        Me.btnLS.Location = New System.Drawing.Point(132, 45)
-        Me.btnLS.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnLS.Name = "btnLS"
-        Me.btnLS.Size = New System.Drawing.Size(21, 21)
-        Me.btnLS.TabIndex = 14
-        Me.btnLS.UseVisualStyleBackColor = True
-        '
-        'btnDL
-        '
-        Me.btnDL.FlatAppearance.BorderSize = 0
-        Me.btnDL.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDL.Image = CType(resources.GetObject("btnDL.Image"), System.Drawing.Image)
-        Me.btnDL.Location = New System.Drawing.Point(158, 24)
-        Me.btnDL.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnDL.Name = "btnDL"
-        Me.btnDL.Size = New System.Drawing.Size(21, 21)
-        Me.btnDL.TabIndex = 16
-        Me.btnDL.UseVisualStyleBackColor = True
-        '
-        'btnLB
-        '
-        Me.btnLB.FlatAppearance.BorderSize = 0
-        Me.btnLB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLB.Image = CType(resources.GetObject("btnLB.Image"), System.Drawing.Image)
-        Me.btnLB.Location = New System.Drawing.Point(132, 24)
-        Me.btnLB.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnLB.Name = "btnLB"
-        Me.btnLB.Size = New System.Drawing.Size(21, 21)
-        Me.btnLB.TabIndex = 13
-        Me.btnLB.UseVisualStyleBackColor = True
-        '
-        'btnRB
-        '
-        Me.btnRB.FlatAppearance.BorderSize = 0
-        Me.btnRB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRB.Image = CType(resources.GetObject("btnRB.Image"), System.Drawing.Image)
-        Me.btnRB.Location = New System.Drawing.Point(284, 24)
-        Me.btnRB.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnRB.Name = "btnRB"
-        Me.btnRB.Size = New System.Drawing.Size(21, 21)
-        Me.btnRB.TabIndex = 27
-        Me.btnRB.UseVisualStyleBackColor = True
-        '
-        'btnDR
-        '
-        Me.btnDR.FlatAppearance.BorderSize = 0
-        Me.btnDR.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDR.Image = CType(resources.GetObject("btnDR.Image"), System.Drawing.Image)
-        Me.btnDR.Location = New System.Drawing.Point(180, 24)
-        Me.btnDR.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnDR.Name = "btnDR"
-        Me.btnDR.Size = New System.Drawing.Size(21, 21)
-        Me.btnDR.TabIndex = 17
-        Me.btnDR.UseVisualStyleBackColor = True
-        '
-        'btnLT
-        '
-        Me.btnLT.FlatAppearance.BorderSize = 0
-        Me.btnLT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLT.Image = CType(resources.GetObject("btnLT.Image"), System.Drawing.Image)
-        Me.btnLT.Location = New System.Drawing.Point(132, 3)
-        Me.btnLT.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnLT.Name = "btnLT"
-        Me.btnLT.Size = New System.Drawing.Size(21, 21)
-        Me.btnLT.TabIndex = 12
-        Me.btnLT.UseVisualStyleBackColor = True
-        '
-        'btnRS
-        '
-        Me.btnRS.FlatAppearance.BorderSize = 0
-        Me.btnRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRS.Image = CType(resources.GetObject("btnRS.Image"), System.Drawing.Image)
-        Me.btnRS.Location = New System.Drawing.Point(284, 45)
-        Me.btnRS.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnRS.Name = "btnRS"
-        Me.btnRS.Size = New System.Drawing.Size(21, 21)
-        Me.btnRS.TabIndex = 28
-        Me.btnRS.UseVisualStyleBackColor = True
-        '
-        'btnStart
-        '
-        Me.btnStart.FlatAppearance.BorderSize = 0
-        Me.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnStart.Image = CType(resources.GetObject("btnStart.Image"), System.Drawing.Image)
-        Me.btnStart.Location = New System.Drawing.Point(221, 3)
-        Me.btnStart.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnStart.Name = "btnStart"
-        Me.btnStart.Size = New System.Drawing.Size(21, 21)
-        Me.btnStart.TabIndex = 20
-        Me.btnStart.UseVisualStyleBackColor = True
-        '
-        'btnRT
-        '
-        Me.btnRT.FlatAppearance.BorderSize = 0
-        Me.btnRT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRT.Image = CType(resources.GetObject("btnRT.Image"), System.Drawing.Image)
-        Me.btnRT.Location = New System.Drawing.Point(284, 3)
-        Me.btnRT.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnRT.Name = "btnRT"
-        Me.btnRT.Size = New System.Drawing.Size(21, 21)
-        Me.btnRT.TabIndex = 26
-        Me.btnRT.UseVisualStyleBackColor = True
-        '
-        'btnDU
-        '
-        Me.btnDU.FlatAppearance.BorderSize = 0
-        Me.btnDU.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDU.Image = CType(resources.GetObject("btnDU.Image"), System.Drawing.Image)
-        Me.btnDU.Location = New System.Drawing.Point(169, 3)
-        Me.btnDU.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnDU.Name = "btnDU"
-        Me.btnDU.Size = New System.Drawing.Size(21, 21)
-        Me.btnDU.TabIndex = 15
-        Me.btnDU.UseVisualStyleBackColor = True
-        '
-        'btnGuide
-        '
-        Me.btnGuide.FlatAppearance.BorderSize = 0
-        Me.btnGuide.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnGuide.Image = CType(resources.GetObject("btnGuide.Image"), System.Drawing.Image)
-        Me.btnGuide.Location = New System.Drawing.Point(210, 24)
-        Me.btnGuide.Margin = New System.Windows.Forms.Padding(0)
-        Me.btnGuide.Name = "btnGuide"
-        Me.btnGuide.Size = New System.Drawing.Size(21, 21)
-        Me.btnGuide.TabIndex = 21
-        Me.btnGuide.UseVisualStyleBackColor = True
-        '
-        'pbLS
-        '
-        Me.pbLS.BackColor = System.Drawing.Color.Silver
-        Me.pbLS.BackgroundImage = CType(resources.GetObject("pbLS.BackgroundImage"), System.Drawing.Image)
-        Me.pbLS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.pbLS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pbLS.Location = New System.Drawing.Point(66, 3)
-        Me.pbLS.Name = "pbLS"
-        Me.pbLS.Size = New System.Drawing.Size(63, 63)
-        Me.pbLS.TabIndex = 21
-        Me.pbLS.TabStop = False
-        '
-        'btnFaster
-        '
-        Me.btnFaster.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnFaster.Enabled = False
-        Me.btnFaster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFaster.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnFaster.Image = Global.AutoGH.My.Resources.Resources.rabbit40
-        Me.btnFaster.Location = New System.Drawing.Point(105, 45)
-        Me.btnFaster.Name = "btnFaster"
-        Me.btnFaster.Size = New System.Drawing.Size(44, 44)
-        Me.btnFaster.TabIndex = 43
-        Me.btnFaster.UseVisualStyleBackColor = True
-        '
-        'btnSlower
-        '
-        Me.btnSlower.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnSlower.Enabled = False
-        Me.btnSlower.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSlower.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnSlower.Image = Global.AutoGH.My.Resources.Resources.turtle40
-        Me.btnSlower.Location = New System.Drawing.Point(7, 45)
-        Me.btnSlower.Name = "btnSlower"
-        Me.btnSlower.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.btnSlower.Size = New System.Drawing.Size(44, 44)
-        Me.btnSlower.TabIndex = 42
-        Me.btnSlower.UseVisualStyleBackColor = True
-        '
-        'btnRenameGroup
-        '
-        Me.btnRenameGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnRenameGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRenameGroup.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnRenameGroup.Image = Global.AutoGH.My.Resources.Resources.edit40
-        Me.btnRenameGroup.Location = New System.Drawing.Point(56, 93)
-        Me.btnRenameGroup.Name = "btnRenameGroup"
-        Me.btnRenameGroup.Size = New System.Drawing.Size(44, 44)
-        Me.btnRenameGroup.TabIndex = 41
-        Me.btnRenameGroup.UseVisualStyleBackColor = True
-        '
-        'btnAddGroup
-        '
-        Me.btnAddGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnAddGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddGroup.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnAddGroup.Image = Global.AutoGH.My.Resources.Resources.add40
-        Me.btnAddGroup.Location = New System.Drawing.Point(7, 93)
-        Me.btnAddGroup.Name = "btnAddGroup"
-        Me.btnAddGroup.Size = New System.Drawing.Size(44, 44)
-        Me.btnAddGroup.TabIndex = 39
-        Me.btnAddGroup.UseVisualStyleBackColor = True
-        '
-        'btnDeleteGroup
-        '
-        Me.btnDeleteGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnDeleteGroup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnDeleteGroup.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.btnDeleteGroup.Image = Global.AutoGH.My.Resources.Resources.delete40
-        Me.btnDeleteGroup.Location = New System.Drawing.Point(105, 93)
-        Me.btnDeleteGroup.Name = "btnDeleteGroup"
-        Me.btnDeleteGroup.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.btnDeleteGroup.Size = New System.Drawing.Size(44, 44)
-        Me.btnDeleteGroup.TabIndex = 40
-        Me.btnDeleteGroup.UseVisualStyleBackColor = True
-        '
         'lbActions
         '
         Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -1635,6 +1636,12 @@ Partial Class frmEdit
         Me.lbGroups.Size = New System.Drawing.Size(142, 59)
         Me.lbGroups.TabIndex = 0
         '
+        'AudioSettingsToolStripMenuItem
+        '
+        Me.AudioSettingsToolStripMenuItem.Name = "AudioSettingsToolStripMenuItem"
+        Me.AudioSettingsToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.AudioSettingsToolStripMenuItem.Text = "Audio Settings..."
+        '
         'frmEdit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1649,6 +1656,8 @@ Partial Class frmEdit
         Me.Text = "Script Editor"
         Me.pnlControls.ResumeLayout(False)
         Me.pnlControls.PerformLayout()
+        CType(Me.pbRS, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbLS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.scMain.Panel1.ResumeLayout(False)
@@ -1670,13 +1679,11 @@ Partial Class frmEdit
         Me.gbTest.PerformLayout()
         Me.tpOutput.ResumeLayout(False)
         Me.tpOutput.PerformLayout()
+        Me.gbSpeed.ResumeLayout(False)
+        CType(Me.nudSpeed, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbGroups.ResumeLayout(False)
         Me.gbControllers.ResumeLayout(False)
         Me.gbControllers.PerformLayout()
-        Me.gbSpeed.ResumeLayout(False)
-        CType(Me.nudSpeed, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbRS, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbLS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1820,4 +1827,5 @@ Partial Class frmEdit
     Friend WithEvents btnSlower As Button
     Friend WithEvents nudSpeed As NumericUpDown
     Friend WithEvents lblTotalTime As Label
+    Friend WithEvents AudioSettingsToolStripMenuItem As ToolStripMenuItem
 End Class

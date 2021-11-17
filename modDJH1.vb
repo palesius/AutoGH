@@ -177,7 +177,7 @@ Module modDJH1
                     End If
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnB, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnB, 0, 2))
-                Case 3, 7 'scratch up/any green
+                Case 3 'scratch up green
                     duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
@@ -197,7 +197,17 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnA, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnA, 0, 2))
-                Case 4, 8 'scratch up/any blue
+                Case 7 'scratch any green
+                    duration = 24
+                    Dim sign As Integer = 1
+                    For ts As Integer = toBegin + 50 To toEnd - 50 Step 200
+                        DJHActions.Add(New clsDJHAction(ts - duration \ 2, ts - duration, ts, clsSimpleAction.saButtons.btnLSY, sign * 12, 1))
+                        DJHActions.Add(New clsDJHAction(ts - duration \ 2, ts - duration, ts, clsSimpleAction.saButtons.btnA, 1, 1))
+                        DJHActions.Add(New clsDJHAction(ts + duration \ 2, ts, ts + duration, clsSimpleAction.saButtons.btnLSY, 0, 2))
+                        DJHActions.Add(New clsDJHAction(ts + duration \ 2, ts, ts + duration, clsSimpleAction.saButtons.btnA, 0, 2))
+                        sign = -sign
+                    Next
+                Case 4 'scratch up blue
                     duration = 24
                     If (toEnd - toBegin) < duration Then
                         toBegin = toMid - duration \ 2
@@ -217,6 +227,16 @@ Module modDJH1
                     DJHActions.Add(New clsDJHAction(toMid - duration \ 2, toBegin, toEnd - duration, clsSimpleAction.saButtons.btnX, 1, 1))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnLSY, 0, 2))
                     DJHActions.Add(New clsDJHAction(toMid + duration \ 2, toBegin + duration, toEnd, clsSimpleAction.saButtons.btnX, 0, 2))
+                Case 8 'scratch any blue
+                    duration = 24
+                    Dim sign As Integer = 1
+                    For ts As Integer = toBegin + 50 To toEnd - 50 Step 200
+                        DJHActions.Add(New clsDJHAction(ts - duration \ 2, ts - duration, ts, clsSimpleAction.saButtons.btnLSY, sign * 12, 1))
+                        DJHActions.Add(New clsDJHAction(ts - duration \ 2, ts - duration, ts, clsSimpleAction.saButtons.btnX, 1, 1))
+                        DJHActions.Add(New clsDJHAction(ts + duration \ 2, ts, ts + duration, clsSimpleAction.saButtons.btnLSY, 0, 2))
+                        DJHActions.Add(New clsDJHAction(ts + duration \ 2, ts, ts + duration, clsSimpleAction.saButtons.btnX, 0, 2))
+                        sign = -sign
+                    Next
                 Case 9 'XF Right
                     DJHActions.Add(New clsDJHAction(toBegin, toBegin, toBegin + 25, clsSimpleAction.saButtons.btnRSY, -32767, 1))
                 Case 10 'XF Center
@@ -281,7 +301,6 @@ Module modDJH1
             sb.AppendLine(note.measure & "," & note.length & "," & note.type)
         Next
         DJHActions.Sort()
-
         'merge dupes
 
         Dim remove As New List(Of clsDJHAction)

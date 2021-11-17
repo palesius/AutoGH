@@ -283,7 +283,7 @@ Public Class frmMusic
                 If chkHOPO(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).hopo = True
                 If chkLF(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).lefty = True
                 Select Case trackName
-                    Case "VOCALS", "HARM1", "HARM2", "HARM3"
+                    Case "VOCALS"
                         Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
                         vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & ".mp3"
                         If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath)
@@ -299,16 +299,30 @@ Public Class frmMusic
                         trackCount += 1
                     Case "HARM1", "HARM2", "HARM3"
                         Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
-                        vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM.aac"
-                        If Not IO.File.Exists(vocalPath(i)) Then generateAAC(midiPath)
+                        Dim harmonyPaths(2) As String
+                        harmonyPaths(0) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM1.mp3"
+                        harmonyPaths(1) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM2.mp3"
+                        harmonyPaths(2) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM3.mp3"
+
+                        vocalPath(i) = harmonyPaths(0)
+                        If Not IO.File.Exists(vocalPath(i)) Then generateHarmMP3(midiPath)
                         If Not IO.File.Exists(vocalPath(i)) Then
                             MsgBox("Couldn't generate vocal file.")
                             Exit Sub
                         End If
-                        Dim tf As TagLib.File = TagLib.File.Create(vocalPath(i))
-                        vocalPart(i) = trackName
-                        vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
-                        vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        vocalPart(i) = "HARM1"
+                        vocalDuration(i) = 0
+                        vocalPath(i) = vbNullString
+                        For Each harmonyPath As String In harmonyPaths
+                            If IO.File.Exists(harmonyPath) Then
+                                Dim tf As TagLib.File = TagLib.File.Create(harmonyPath)
+                                vocalDuration(i) = Math.Max(vocalDuration(i), tf.Properties.Duration.TotalMilliseconds)
+                                vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                                If vocalPath(i) <> vbNullString Then vocalPath(i) &= "|"
+                                vocalPath(i) &= harmonyPath
+                            End If
+                        Next
+
                         vocalsStarted(i) = False
                         trackCount += 1
                     Case Else
@@ -428,7 +442,7 @@ Public Class frmMusic
                     End If
                     curOffset = firstStart
                 End If
-                a = New clsActionOutputAudio(vocalPath(firstIdx), Nothing)
+                a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), Nothing)
                 a.index = actions.Count
                 actions.Add(a)
                 vocalsStarted(firstIdx) = True
@@ -500,7 +514,7 @@ Public Class frmMusic
                 End If
                 curOffset = firstStart
             End If
-            a = New clsActionOutputAudio(vocalPath(firstIdx), Nothing)
+            a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), Nothing)
             a.index = actions.Count
             actions.Add(a)
             vocalsStarted(firstIdx) = True

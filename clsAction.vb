@@ -910,40 +910,85 @@ End Class
 Public Class clsActionOutputAudio
     Inherits clsActionOutput
 
-    Public path As String
+    Public paths As New List(Of String)
 
-    Private spInput As NAudio.Wave.MediaFoundationReader
-    Private spOut As NAudio.Wave.WasapiOut
+    Private spInputs As List(Of NAudio.Wave.IWaveProvider)
+    Private wOut As NAudio.Wave.WasapiOut
+    Private aOut As NAudio.Wave.AsioOut
 
     Public Sub New(_path As String, _group As clsActionGroup)
-        path = _path
+        paths.Add(_path)
+        group = _group
+    End Sub
+
+    Public Sub New(_paths As List(Of String), _group As clsActionGroup)
+        paths.AddRange(_paths)
         group = _group
     End Sub
 
     Public Overrides Sub init()
-        spInput = New NAudio.Wave.MediaFoundationReader(path)
-        spOut = New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
-        spOut.Init(spInput)
+        spInputs = New List(Of NAudio.Wave.IWaveProvider)
+        For Each path In paths
+            spInputs.Add(New NAudio.Wave.MediaFoundationReader(path))
+        Next
+        If paths.Count = 1 Then
+            wOut = New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
+            wOut.Init(spInputs(0))
+        Else
+            spInputs.Insert(0, New NAudio.Wave.SilenceProvider(spInputs(0).WaveFormat))
+            Dim curDriver As String = GetSetting(Application.ProductName, "AudioSettings", "Driver")
+            Dim parts As New List(Of Integer)
+            aOut = New NAudio.Wave.AsioOut(curDriver)
+            Dim channels As Integer = aOut.DriverOutputChannelCount
+            For i As Integer = 0 To channels - 1
+                Dim strPart As String = GetSetting(Application.ProductName, "AudioSettings", "Part" & (i + 1))
+                If strPart = vbNullString Or strPart = "None" Then parts.Add(0) Else parts.Add(strPart)
+                If parts(i) >= spInputs.Count Then parts(i) = 0
+            Next
+            Dim mwp As New NAudio.Wave.MultiplexingWaveProvider(spInputs, channels)
+            For i As Integer = 0 To channels - 1
+                mwp.ConnectInputToOutput(parts(i), i)
+            Next
+            aOut.Init(mwp)
+        End If
     End Sub
 
     Public Overrides Sub activate()
-        spOut.Play()
+        If paths.Count = 1 Then
+            wOut.Play()
+        Else
+            aOut.Play()
+        End If
     End Sub
 
     Public Overrides Sub cleanup()
-        spOut.Dispose()
-        spOut = Nothing
-        spInput.Close()
-        spInput.Dispose()
+        If paths.Count = 1 Then
+            If wOut.PlaybackState <> NAudio.Wave.PlaybackState.Stopped Then wOut.Stop()
+            wOut.Dispose()
+            wOut = Nothing
+        Else
+            If aOut.PlaybackState <> NAudio.Wave.PlaybackState.Stopped Then aOut.Stop()
+            aOut.Dispose()
+            aOut = Nothing
+        End If
+        For Each wp As NAudio.Wave.IWaveProvider In spInputs
+            If wp.GetType.Name = "MediaFoundationReader" Then
+                Dim mfr As NAudio.Wave.MediaFoundationReader = wp
+                mfr.Close()
+                mfr.Dispose()
+            End If
+        Next
+        spInputs.Clear()
+        spInputs = Nothing
     End Sub
 
     Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
-        path = node.Attributes("Path").Value
+        paths.AddRange(node.Attributes("Path").Value.Split("|"))
     End Sub
 
     Public Overrides Function Clone() As clsAction
-        Dim tmp As New clsActionOutputAudio(path, group)
+        Dim tmp As New clsActionOutputAudio(paths, group)
         tmp.baseClone(Me)
         Return tmp
     End Function
@@ -953,12 +998,16 @@ Public Class clsActionOutputAudio
     End Function
 
     Public Overrides Function getDescription() As String
-        Return String.Format("Play [{0}]", path)
+        If paths.Count = 1 Then
+            Return String.Format("Play [{0}]", paths(0))
+        Else
+            Return String.Format("Play [{0}] +{1}", paths(0), paths.Count - 1)
+        End If
     End Function
 
     Public Overrides Function toXML(doc As System.Xml.XmlDocument) As System.Xml.XmlElement
         Dim tmp As XmlElement = doc.CreateElement("AudioOutput")
-        tmp.SetAttribute("Path", path)
+        tmp.SetAttribute("Path", Join(paths.ToArray, "|"))
         If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function

@@ -199,43 +199,32 @@
         Return New IO.FileInfo(mp3name)
     End Function
 
-    Function generateAAC(midipath As String) As IO.FileInfo
+    Function generateHarmMP3(midipath As String) As List(Of IO.FileInfo)
         Dim offset As Integer = 0
         Dim fiList As List(Of IO.FileInfo) = generateHarmWAV(midipath, offset)
         Dim inputs As New List(Of NAudio.Wave.WaveFileReader)
-
-        For Each fi As IO.FileInfo In fiList
-            inputs.Add(New NAudio.Wave.WaveFileReader(fi.FullName))
-        Next
-
-        Dim mxWP As New NAudio.Wave.MultiplexingWaveProvider(inputs, inputs.Count * 2)
-        For i As Integer = 0 To inputs.Count - 1
-            mxWP.ConnectInputToOutput(i, 2 * i)
-            mxWP.ConnectInputToOutput(i, 2 * i + 1)
-        Next
-
         NAudio.MediaFoundation.MediaFoundationApi.Startup()
-        Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_AAC, New NAudio.Wave.WaveFormat(44100, 6), 0)
+        Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_MP3, New NAudio.Wave.WaveFormat(44100, 1), 0)
         Dim enc As New NAudio.Wave.MediaFoundationEncoder(mt)
-        Dim aacPath As String = IO.Path.ChangeExtension(fiList(0).FullName, "aac")
-        enc.Encode(aacPath, mxWP)
 
-        For Each input As NAudio.Wave.WaveFileReader In inputs
-            input.Close()
-            input.Dispose()
+        Dim results As New List(Of IO.FileInfo)
+        For Each fi As IO.FileInfo In fiList
+            Dim wfr As New NAudio.Wave.WaveFileReader(fi.FullName)
+            Dim mp3Path As String = IO.Path.ChangeExtension(fi.FullName, "mp3")
+            enc.Encode(mp3Path, wfr)
+            wfr.Close()
+            wfr.Dispose()
+            If IO.File.Exists(mp3Path) Then
+                fi.Delete()
+                Dim mp3 As IO.FileInfo = New IO.FileInfo(mp3Path)
+                Dim tf As TagLib.File = TagLib.File.Create(mp3Path)
+                tf.Tag.Comment = offset
+                tf.Save()
+                results.Add(mp3)
+            End If
         Next
 
-        'If IO.File.Exists(mp3Path) Then
-        '    fi.Delete()
-        '    Dim mp3 As IO.FileInfo = New IO.FileInfo(mp3Path)
-        '    Dim tf As TagLib.File = TagLib.File.Create(mp3Path)
-        '    tf.Tag.Comment = offset
-        '    tf.Save()
-        '    Return mp3
-        'Else
-        '    Stop
-        '    Return Nothing
-        'End If
+        Return results
     End Function
 
     Function generateMP3(midipath As String) As IO.FileInfo
@@ -311,18 +300,14 @@
         Next
         Clipboard.SetText(tb.ToString)
 
-        Dim startoffset As Integer = Integer.MaxValue
         vocalTrack.readnotes(mf, tempos)
         beatTrack.readnotes(mf, tempos)
-
-        'startoffset = 0
-        Dim endoffset As Integer = beatTrack.endTime
-
         Dim files As New List(Of IO.FileInfo)
         Dim filename As String = vbNullString
         vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime)
         filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
         saveWav(vocalTrack.samples.ToArray(), filename)
+        offset = vocalTrack.startTime
         Return New IO.FileInfo(filename)
     End Function
 

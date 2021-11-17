@@ -33,7 +33,15 @@ Partial Class frmMusic
         Me.btnOk = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.gbSong = New System.Windows.Forms.GroupBox()
-        Me.dbParts = New System.Windows.Forms.GroupBox()
+        Me.gbParts = New System.Windows.Forms.GroupBox()
+        Me.chkHOPO3 = New System.Windows.Forms.CheckBox()
+        Me.chkLF3 = New System.Windows.Forms.CheckBox()
+        Me.chkHOPO2 = New System.Windows.Forms.CheckBox()
+        Me.chkLF2 = New System.Windows.Forms.CheckBox()
+        Me.chkHOPO1 = New System.Windows.Forms.CheckBox()
+        Me.chkLF1 = New System.Windows.Forms.CheckBox()
+        Me.chkHOPO0 = New System.Windows.Forms.CheckBox()
+        Me.chkLF0 = New System.Windows.Forms.CheckBox()
         Me.cbTrack3 = New System.Windows.Forms.ComboBox()
         Me.cbLevel3 = New System.Windows.Forms.ComboBox()
         Me.cbTrack2 = New System.Windows.Forms.ComboBox()
@@ -42,16 +50,8 @@ Partial Class frmMusic
         Me.cbLevel1 = New System.Windows.Forms.ComboBox()
         Me.cbManual = New System.Windows.Forms.CheckBox()
         Me.btnMakeVocals = New System.Windows.Forms.Button()
-        Me.chkLF0 = New System.Windows.Forms.CheckBox()
-        Me.chkHOPO0 = New System.Windows.Forms.CheckBox()
-        Me.chkHOPO1 = New System.Windows.Forms.CheckBox()
-        Me.chkLF1 = New System.Windows.Forms.CheckBox()
-        Me.chkHOPO2 = New System.Windows.Forms.CheckBox()
-        Me.chkLF2 = New System.Windows.Forms.CheckBox()
-        Me.chkHOPO3 = New System.Windows.Forms.CheckBox()
-        Me.chkLF3 = New System.Windows.Forms.CheckBox()
         Me.gbSong.SuspendLayout()
-        Me.dbParts.SuspendLayout()
+        Me.gbParts.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblSong
@@ -164,34 +164,114 @@ Partial Class frmMusic
         Me.gbSong.TabStop = False
         Me.gbSong.Text = "Song"
         '
-        'dbParts
+        'gbParts
         '
-        Me.dbParts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.gbParts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dbParts.Controls.Add(Me.chkHOPO3)
-        Me.dbParts.Controls.Add(Me.chkLF3)
-        Me.dbParts.Controls.Add(Me.chkHOPO2)
-        Me.dbParts.Controls.Add(Me.chkLF2)
-        Me.dbParts.Controls.Add(Me.chkHOPO1)
-        Me.dbParts.Controls.Add(Me.chkLF1)
-        Me.dbParts.Controls.Add(Me.chkHOPO0)
-        Me.dbParts.Controls.Add(Me.chkLF0)
-        Me.dbParts.Controls.Add(Me.cbTrack3)
-        Me.dbParts.Controls.Add(Me.cbLevel3)
-        Me.dbParts.Controls.Add(Me.cbTrack2)
-        Me.dbParts.Controls.Add(Me.cbLevel2)
-        Me.dbParts.Controls.Add(Me.cbTrack1)
-        Me.dbParts.Controls.Add(Me.cbLevel1)
-        Me.dbParts.Controls.Add(Me.lblTrack)
-        Me.dbParts.Controls.Add(Me.lblLevel)
-        Me.dbParts.Controls.Add(Me.cbTrack0)
-        Me.dbParts.Controls.Add(Me.cbLevel0)
-        Me.dbParts.Location = New System.Drawing.Point(12, 68)
-        Me.dbParts.Name = "dbParts"
-        Me.dbParts.Size = New System.Drawing.Size(575, 96)
-        Me.dbParts.TabIndex = 29
-        Me.dbParts.TabStop = False
-        Me.dbParts.Text = "Parts"
+        Me.gbParts.Controls.Add(Me.chkHOPO3)
+        Me.gbParts.Controls.Add(Me.chkLF3)
+        Me.gbParts.Controls.Add(Me.chkHOPO2)
+        Me.gbParts.Controls.Add(Me.chkLF2)
+        Me.gbParts.Controls.Add(Me.chkHOPO1)
+        Me.gbParts.Controls.Add(Me.chkLF1)
+        Me.gbParts.Controls.Add(Me.chkHOPO0)
+        Me.gbParts.Controls.Add(Me.chkLF0)
+        Me.gbParts.Controls.Add(Me.cbTrack3)
+        Me.gbParts.Controls.Add(Me.cbLevel3)
+        Me.gbParts.Controls.Add(Me.cbTrack2)
+        Me.gbParts.Controls.Add(Me.cbLevel2)
+        Me.gbParts.Controls.Add(Me.cbTrack1)
+        Me.gbParts.Controls.Add(Me.cbLevel1)
+        Me.gbParts.Controls.Add(Me.lblTrack)
+        Me.gbParts.Controls.Add(Me.lblLevel)
+        Me.gbParts.Controls.Add(Me.cbTrack0)
+        Me.gbParts.Controls.Add(Me.cbLevel0)
+        Me.gbParts.Location = New System.Drawing.Point(12, 68)
+        Me.gbParts.Name = "gbParts"
+        Me.gbParts.Size = New System.Drawing.Size(575, 96)
+        Me.gbParts.TabIndex = 29
+        Me.gbParts.TabStop = False
+        Me.gbParts.Text = "Parts"
+        '
+        'chkHOPO3
+        '
+        Me.chkHOPO3.AutoSize = True
+        Me.chkHOPO3.Location = New System.Drawing.Point(508, 73)
+        Me.chkHOPO3.Name = "chkHOPO3"
+        Me.chkHOPO3.Size = New System.Drawing.Size(57, 17)
+        Me.chkHOPO3.TabIndex = 40
+        Me.chkHOPO3.Text = "HOPO"
+        Me.chkHOPO3.UseVisualStyleBackColor = True
+        '
+        'chkLF3
+        '
+        Me.chkLF3.AutoSize = True
+        Me.chkLF3.Location = New System.Drawing.Point(440, 73)
+        Me.chkLF3.Name = "chkLF3"
+        Me.chkLF3.Size = New System.Drawing.Size(38, 17)
+        Me.chkLF3.TabIndex = 39
+        Me.chkLF3.Text = "LF"
+        Me.chkLF3.UseVisualStyleBackColor = True
+        '
+        'chkHOPO2
+        '
+        Me.chkHOPO2.AutoSize = True
+        Me.chkHOPO2.Location = New System.Drawing.Point(377, 73)
+        Me.chkHOPO2.Name = "chkHOPO2"
+        Me.chkHOPO2.Size = New System.Drawing.Size(57, 17)
+        Me.chkHOPO2.TabIndex = 38
+        Me.chkHOPO2.Text = "HOPO"
+        Me.chkHOPO2.UseVisualStyleBackColor = True
+        '
+        'chkLF2
+        '
+        Me.chkLF2.AutoSize = True
+        Me.chkLF2.Location = New System.Drawing.Point(309, 73)
+        Me.chkLF2.Name = "chkLF2"
+        Me.chkLF2.Size = New System.Drawing.Size(38, 17)
+        Me.chkLF2.TabIndex = 37
+        Me.chkLF2.Text = "LF"
+        Me.chkLF2.UseVisualStyleBackColor = True
+        '
+        'chkHOPO1
+        '
+        Me.chkHOPO1.AutoSize = True
+        Me.chkHOPO1.Location = New System.Drawing.Point(246, 73)
+        Me.chkHOPO1.Name = "chkHOPO1"
+        Me.chkHOPO1.Size = New System.Drawing.Size(57, 17)
+        Me.chkHOPO1.TabIndex = 36
+        Me.chkHOPO1.Text = "HOPO"
+        Me.chkHOPO1.UseVisualStyleBackColor = True
+        '
+        'chkLF1
+        '
+        Me.chkLF1.AutoSize = True
+        Me.chkLF1.Location = New System.Drawing.Point(178, 73)
+        Me.chkLF1.Name = "chkLF1"
+        Me.chkLF1.Size = New System.Drawing.Size(38, 17)
+        Me.chkLF1.TabIndex = 35
+        Me.chkLF1.Text = "LF"
+        Me.chkLF1.UseVisualStyleBackColor = True
+        '
+        'chkHOPO0
+        '
+        Me.chkHOPO0.AutoSize = True
+        Me.chkHOPO0.Location = New System.Drawing.Point(115, 73)
+        Me.chkHOPO0.Name = "chkHOPO0"
+        Me.chkHOPO0.Size = New System.Drawing.Size(57, 17)
+        Me.chkHOPO0.TabIndex = 34
+        Me.chkHOPO0.Text = "HOPO"
+        Me.chkHOPO0.UseVisualStyleBackColor = True
+        '
+        'chkLF0
+        '
+        Me.chkLF0.AutoSize = True
+        Me.chkLF0.Location = New System.Drawing.Point(47, 73)
+        Me.chkLF0.Name = "chkLF0"
+        Me.chkLF0.Size = New System.Drawing.Size(38, 17)
+        Me.chkLF0.TabIndex = 33
+        Me.chkLF0.Text = "LF"
+        Me.chkLF0.UseVisualStyleBackColor = True
         '
         'cbTrack3
         '
@@ -268,86 +348,6 @@ Partial Class frmMusic
         Me.btnMakeVocals.Text = "Make Vocals"
         Me.btnMakeVocals.UseVisualStyleBackColor = True
         '
-        'chkLF0
-        '
-        Me.chkLF0.AutoSize = True
-        Me.chkLF0.Location = New System.Drawing.Point(47, 73)
-        Me.chkLF0.Name = "chkLF0"
-        Me.chkLF0.Size = New System.Drawing.Size(38, 17)
-        Me.chkLF0.TabIndex = 33
-        Me.chkLF0.Text = "LF"
-        Me.chkLF0.UseVisualStyleBackColor = True
-        '
-        'chkHOPO0
-        '
-        Me.chkHOPO0.AutoSize = True
-        Me.chkHOPO0.Location = New System.Drawing.Point(115, 73)
-        Me.chkHOPO0.Name = "chkHOPO0"
-        Me.chkHOPO0.Size = New System.Drawing.Size(57, 17)
-        Me.chkHOPO0.TabIndex = 34
-        Me.chkHOPO0.Text = "HOPO"
-        Me.chkHOPO0.UseVisualStyleBackColor = True
-        '
-        'chkHOPO1
-        '
-        Me.chkHOPO1.AutoSize = True
-        Me.chkHOPO1.Location = New System.Drawing.Point(246, 73)
-        Me.chkHOPO1.Name = "chkHOPO1"
-        Me.chkHOPO1.Size = New System.Drawing.Size(57, 17)
-        Me.chkHOPO1.TabIndex = 36
-        Me.chkHOPO1.Text = "HOPO"
-        Me.chkHOPO1.UseVisualStyleBackColor = True
-        '
-        'chkLF1
-        '
-        Me.chkLF1.AutoSize = True
-        Me.chkLF1.Location = New System.Drawing.Point(178, 73)
-        Me.chkLF1.Name = "chkLF1"
-        Me.chkLF1.Size = New System.Drawing.Size(38, 17)
-        Me.chkLF1.TabIndex = 35
-        Me.chkLF1.Text = "LF"
-        Me.chkLF1.UseVisualStyleBackColor = True
-        '
-        'chkHOPO2
-        '
-        Me.chkHOPO2.AutoSize = True
-        Me.chkHOPO2.Location = New System.Drawing.Point(377, 73)
-        Me.chkHOPO2.Name = "chkHOPO2"
-        Me.chkHOPO2.Size = New System.Drawing.Size(57, 17)
-        Me.chkHOPO2.TabIndex = 38
-        Me.chkHOPO2.Text = "HOPO"
-        Me.chkHOPO2.UseVisualStyleBackColor = True
-        '
-        'chkLF2
-        '
-        Me.chkLF2.AutoSize = True
-        Me.chkLF2.Location = New System.Drawing.Point(309, 73)
-        Me.chkLF2.Name = "chkLF2"
-        Me.chkLF2.Size = New System.Drawing.Size(38, 17)
-        Me.chkLF2.TabIndex = 37
-        Me.chkLF2.Text = "LF"
-        Me.chkLF2.UseVisualStyleBackColor = True
-        '
-        'chkHOPO3
-        '
-        Me.chkHOPO3.AutoSize = True
-        Me.chkHOPO3.Location = New System.Drawing.Point(508, 73)
-        Me.chkHOPO3.Name = "chkHOPO3"
-        Me.chkHOPO3.Size = New System.Drawing.Size(57, 17)
-        Me.chkHOPO3.TabIndex = 40
-        Me.chkHOPO3.Text = "HOPO"
-        Me.chkHOPO3.UseVisualStyleBackColor = True
-        '
-        'chkLF3
-        '
-        Me.chkLF3.AutoSize = True
-        Me.chkLF3.Location = New System.Drawing.Point(440, 73)
-        Me.chkLF3.Name = "chkLF3"
-        Me.chkLF3.Size = New System.Drawing.Size(38, 17)
-        Me.chkLF3.TabIndex = 39
-        Me.chkLF3.Text = "LF"
-        Me.chkLF3.UseVisualStyleBackColor = True
-        '
         'frmMusic
         '
         Me.AcceptButton = Me.btnOk
@@ -361,14 +361,14 @@ Partial Class frmMusic
         Me.Controls.Add(Me.gbSong)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnOk)
-        Me.Controls.Add(Me.dbParts)
+        Me.Controls.Add(Me.gbParts)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "frmMusic"
         Me.Text = "Song Selection"
         Me.gbSong.ResumeLayout(False)
         Me.gbSong.PerformLayout()
-        Me.dbParts.ResumeLayout(False)
-        Me.dbParts.PerformLayout()
+        Me.gbParts.ResumeLayout(False)
+        Me.gbParts.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -384,7 +384,7 @@ Partial Class frmMusic
     Friend WithEvents btnOk As System.Windows.Forms.Button
     Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents gbSong As System.Windows.Forms.GroupBox
-    Friend WithEvents dbParts As System.Windows.Forms.GroupBox
+    Friend WithEvents gbParts As System.Windows.Forms.GroupBox
     Friend WithEvents cbTrack3 As System.Windows.Forms.ComboBox
     Friend WithEvents cbLevel3 As System.Windows.Forms.ComboBox
     Friend WithEvents cbTrack2 As System.Windows.Forms.ComboBox
