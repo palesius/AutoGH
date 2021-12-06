@@ -466,14 +466,16 @@ Module modMusicConverter
                     Dim mev As Midi.MidiEvent = mf.Events(Track.index)(i)
                     If mev.CommandCode = Midi.MidiCommandCode.NoteOn Then
                         Dim nev As Midi.NoteOnEvent = mev
-                        Select Case nev.NoteNumber
-                            Case 103
-                                soloQ.Enqueue(nev)
-                            Case baseNote + 5
-                                forceHOPOQ.Enqueue(nev)
-                            Case baseNote + 6
-                                forceStrumQ.Enqueue(nev)
-                        End Select
+                        If nev.Velocity > 0 Then
+                            Select Case nev.NoteNumber
+                                Case 103
+                                    soloQ.Enqueue(nev)
+                                Case baseNote + 5
+                                    forceHOPOQ.Enqueue(nev)
+                                Case baseNote + 6
+                                    forceStrumQ.Enqueue(nev)
+                            End Select
+                        End If
                     End If
                 Next
         End Select
