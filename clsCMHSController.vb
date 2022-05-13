@@ -8,6 +8,7 @@ Public Class clsCMHSController
     Dim devStream As DeviceStream
     Private apiLoaded As Boolean = False
     Private ready As Boolean = False
+    Private dummy As Boolean = False
 
     Public Overrides Function isReady() As Boolean
         Return ready
@@ -22,6 +23,13 @@ Public Class clsCMHSController
     Public Sub New(ip As String)
         Dim idx As Integer
         If ip = "CM" Then idx = 1 Else idx = CInt(ip.Substring(2))
+        If idx = 0 Then
+            dummy = True
+            ready = True
+            reportData = baseReport()
+            update()
+            Exit Sub
+        End If
         idx -= 1
         Dim devicePaths As New List(Of String)
         Dim deviceDict As New Dictionary(Of String, HidDevice)
@@ -59,6 +67,7 @@ Public Class clsCMHSController
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
+        If dummy Then Exit Sub
         'Debug.Print(System.BitConverter.ToString(newReport))
         Try
             devStream.Write(newReport, 0, newReport.Length)
@@ -114,8 +123,8 @@ Public Class clsCMHSController
     End Function
 
     Private Function CMSInt(src As Int16) As Byte
-        Dim tmp As Integer = src \ 327
-        If tmp < 0 Then tmp = tmp + 256
+        Dim tmp As Integer = Math.Ceiling(CDec(Math.Abs(src)) / 327.67)
+        If src < 0 Then tmp = 256 - tmp
         Return CByte(tmp)
     End Function
 
@@ -142,6 +151,26 @@ Public Class clsCMHSController
         A = 24
         X = 25
     End Enum
+
+    Public Function exportReport(report() As Byte) As String
+        Dim sbExport As New Text.StringBuilder
+        Dim names() As String = New String() {"", "", "", "", "", "XB1_XBOX", "XB1_VIEW", "XB1_MENU", "XB1_RB", "XB1_RT", "XB1_RS", "XB1_LB", "XB1_LT", "XB1_LS", "XB1_RX", "XB1_RY", "XB1_LX", "XB1_LY", "XB1_UP", "XB1_DOWN", "XB1_LEFT", "XB1_RIGHT", "XB1_Y", "XB1_B", "XB1_A", "XB1_X"}
+        For i As Integer = 5 To 25
+            If report(i) > 0 Then
+                Select Case i
+                    Case 14 To 18
+                        If report(i) > 127 Then
+                            sbExport.Append("set_val(" & names(i) & "," & (report(i) - 256) & ");")
+                        Else
+                            sbExport.Append("set_val(" & names(i) & "," & report(i) & ");")
+                        End If
+                    Case Else
+                        sbExport.Append("set_val(" & names(i) & "," & report(i) & ");")
+                End Select
+            End If
+        Next
+        Return sbExport.ToString()
+    End Function
 
     Protected Overrides Sub update(Optional force As Boolean = False)
         Dim button As UInt16 = buttonHi * 256 Or buttonLo

@@ -1348,7 +1348,7 @@ Public Class frmEdit
     End Sub
 
     Private Sub ExportToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ExportToolStripMenuItem.Click
-        fdSave.Filter = "AutoXB Net Scripts|*.axn"
+        fdSave.Filter = "GPC Script|*.gpc"
         fdSave.ShowDialog()
         If fdSave.FileName <> vbNullString Then
             If Not activeGroup Is groups(mainGroup) Then
@@ -1374,15 +1374,81 @@ Public Class frmEdit
             If txtController2.Text <> vbNullString Then controllerIPS.Add(2, txtController2.Text)
             If txtController3.Text <> vbNullString Then controllerIPS.Add(3, txtController3.Text)
             If txtController4.Text <> vbNullString Then controllerIPS.Add(4, txtController4.Text)
-            Dim expScript As New clsScript(actions, controllerIPS)
+            Dim expScript As New clsScript(actions, controllerIPS, True)
             Dim sb As New System.Text.StringBuilder
-            For Each sa As clsStatelessAction In expScript.stateActions
-                sb.AppendLine(sa.ToString)
+            sb.AppendLine("/* Exported from AutoGH")
+            sb.AppendLine("Game:     " & txtGame.Text)
+            sb.AppendLine("Script:   " & txtTitle.Text)
+            sb.AppendLine("Exported: " & Now.ToString("yyyy/MM/dd HH:mm:ss"))
+            sb.AppendLine("Press both LS and RS to stop or start the combo")
+            sb.AppendLine(txtDesc.Text)
+            sb.AppendLine("*/")
+            sb.AppendLine("int ON;")
+            sb.AppendLine("main {")
+            sb.AppendLine("	if (event_press(XB360_LS)) {if (get_val(XB360_RS)) {ON=!ON;}}")
+            sb.AppendLine("	if (event_press(XB360_RS)) {if (get_val(XB360_LS)) {ON=!ON;}}")
+            sb.AppendLine("	if (ON) {combo_run(autogh);}")
+            sb.AppendLine("	if (!ON){if (combo_running(autogh)) {combo_stop(autogh);}}")
+            sb.AppendLine(" }")
+            sb.AppendLine()
+            sb.AppendLine("combo autogh {")
+            Dim groupName As String = vbNullString
+            For i As Integer = 0 To expScript.stateActions.Count - 2
+                Dim action As clsStatelessAction = expScript.stateActions(i)
+                If action.parent.group.name <> "[Main]" AndAlso action.parent.group.name <> groupName Then
+                    groupName = action.parent.group.name
+                    sb.AppendLine("// " & groupName)
+                End If
+                Dim delta As Integer = expScript.stateActions(i + 1).timeoffset - expScript.stateActions(i).timeoffset
+                Dim vals As String = vbNullString
+                If Not action.controller Is Nothing Then vals = CType(action.controller, clsCMHSController).exportReport(action.report)
+                While delta > 32000
+                    sb.AppendLine(vals & "wait(32000);")
+                    delta -= 32000
+                End While
+                sb.AppendLine(vals & "wait(" & delta & ");")
             Next
-            Stop
+            sb.AppendLine("}")
+            IO.File.WriteAllText(fdSave.FileName, sb.ToString)
         End If
         fdSave.Filter = "AutoXB Scripts|*.axb"
     End Sub
+    'Private Sub ExportToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ExportToolStripMenuItem.Click
+    '    fdSave.Filter = "AutoXB Net Scripts|*.axn"
+    '    fdSave.ShowDialog()
+    '    If fdSave.FileName <> vbNullString Then
+    '        If Not activeGroup Is groups(mainGroup) Then
+    '            activeGroup = groups(mainGroup)
+    '            refreshGroup()
+    '        End If
+    '        Dim actions As New Generic.List(Of clsAction)
+    '        For Each action As clsAction In activeGroup.actions
+    '            actions.Add(action)
+    '            If action.getActType = ActionType.actGroup Then
+    '                Dim agAction As clsActionAGroup = Action
+    '                For i As Integer = 1 To agAction.repeat
+    '                    actions.AddRange(agAction.target.getActions())
+    '                Next
+    '            End If
+    '        Next
+    '        tmrScriptStatus.Enabled = True
+    '        btnStop.Enabled = True
+    '        btnFaster.Enabled = True
+    '        btnSlower.Enabled = True
+    '        Dim controllerIPS As New Dictionary(Of Byte, String)
+    '        If txtController1.Text <> vbNullString Then controllerIPS.Add(1, txtController1.Text)
+    '        If txtController2.Text <> vbNullString Then controllerIPS.Add(2, txtController2.Text)
+    '        If txtController3.Text <> vbNullString Then controllerIPS.Add(3, txtController3.Text)
+    '        If txtController4.Text <> vbNullString Then controllerIPS.Add(4, txtController4.Text)
+    '        Dim expScript As New clsScript(actions, controllerIPS, True)
+    '        Dim sb As New System.Text.StringBuilder
+    '        For Each sa As clsStatelessAction In expScript.stateActions
+    '            sb.AppendLine(sa.ToString)
+    '        Next
+    '        IO.File.WriteAllText(fdSave.FileName, sb.ToString)
+    '    End If
+    '    fdSave.Filter = "AutoXB Scripts|*.axb"
+    'End Sub
 
     Private Sub CaptureCardToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CaptureCardToolStripMenuItem.Click
         Dim frmCC As New frmCaptureCard

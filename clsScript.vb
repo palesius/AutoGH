@@ -125,7 +125,7 @@
         End Try
     End Function
 
-    Public Sub New(_actions As List(Of clsAction), controllerIPS As Dictionary(Of Byte, String))
+    Public Sub New(_actions As List(Of clsAction), controllerIPS As Dictionary(Of Byte, String), Optional export As Boolean = False)
         actions = _actions
         Dim i As Integer = 0
         Dim timecode As Integer = 0
@@ -143,7 +143,9 @@
             If action.controllerNumber AndAlso Not controllers.ContainsKey(action.controllerNumber) Then
                 If Not controllerIPS.ContainsKey(action.controllerNumber) Then Stop
                 Dim ip As String = controllerIPS(action.controllerNumber)
-                If System.Text.RegularExpressions.Regex.IsMatch(ip, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") Then
+                If export Then
+                    controllers.Add(action.controllerNumber, New clsCMHSController("CM0"))
+                ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") Then
                     controllers.Add(action.controllerNumber, New clsBBBController(ip))
                 ElseIf System.Text.RegularExpressions.Regex.IsMatch(ip, "^P(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") Then
                     controllers.Add(action.controllerNumber, New clsPS3Controller(ip))
