@@ -1349,6 +1349,26 @@ Public Class frmEdit
 
     Private Sub ExportToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ExportToolStripMenuItem.Click
         fdSave.Filter = "GPC Script|*.gpc"
+        Dim gpcFilename As String = vbNullString
+        If filename <> vbNullString Then
+            gpcFilename = filename
+        Else
+            If txtGame.Text = vbNullString Then
+                If txtTitle.Text = vbNullString Then
+                    gpcFilename = vbNullString
+                Else
+                    gpcFilename = fdSave.InitialDirectory & "\" & txtTitle.Text & ".axb"
+                End If
+            Else
+                If txtTitle.Text = vbNullString Then
+                    gpcFilename = fdSave.InitialDirectory & "\" & txtGame.Text & ".axb"
+                Else
+                    gpcFilename = fdSave.InitialDirectory & "\" & txtGame.Text & " - " & txtTitle.Text & ".axb"
+                End If
+            End If
+        End If
+        If gpcFilename.EndsWith(".axb") Then gpcFilename = gpcFilename.Substring(0, gpcFilename.Length - 4) & ".gpc"
+        fdSave.FileName = gpcFilename
         fdSave.ShowDialog()
         If fdSave.FileName <> vbNullString Then
             If Not activeGroup Is groups(mainGroup) Then
