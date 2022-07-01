@@ -5,6 +5,8 @@
 'goto <lineX>[,<repeatY>]
 'ability to pause,stop,start from a certain line
 
+Imports System.IO
+
 Public Class frmMusic
 
     Private basepath As String
@@ -78,7 +80,7 @@ Public Class frmMusic
     Private Sub loadGames()
         dictGames = New SortedDictionary(Of String, clsRhythmGame)
         Dim xmlDoc As New Xml.XmlDocument
-        xmlDoc.Load("RhythmGames.xml")
+        xmlDoc.Load(Path.Combine(AppContext.BaseDirectory, "RhythmGames.xml"))
         Dim bn As Xml.XmlNode = xmlDoc.SelectSingleNode("/Games/Game[@Name='Default']")
         If bn Is Nothing Then
             MsgBox("Error loading game configurations.")
