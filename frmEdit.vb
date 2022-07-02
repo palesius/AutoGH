@@ -1238,7 +1238,7 @@ Public Class frmEdit
             Next
             refreshGroup()
             Dim sb As New System.Text.StringBuilder
-            sb.AppendLine("Song: " & ss.cbSong.SelectedItem.ToString() & " (" & ss.cbGame.SelectedItem.ToString() & ")" & IIf(ss.info <> vbNullString, " - #" & ss.info, ""))
+            sb.AppendLine("Song: " & CType(ss.cbSong.SelectedItem, clsSong).title & " (" & ss.cbGame.SelectedItem.ToString() & ")" & IIf(ss.info <> vbNullString, " - #" & ss.info, ""))
             Dim players As New List(Of String)
             If Not ss.cbTrack0.SelectedItem Is Nothing Then players.Add("#1 " & ss.cbTrack0.SelectedItem.ToString() & " [" & ss.cbLevel0.SelectedItem.ToString() & "]")
             If Not ss.cbTrack1.SelectedItem Is Nothing Then players.Add("#2 " & ss.cbTrack1.SelectedItem.ToString() & " [" & ss.cbLevel1.SelectedItem.ToString() & "]")

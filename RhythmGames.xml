@@ -15,6 +15,9 @@
     <Truncation>100</Truncation>
     <MinimumDuration>50</MinimumDuration>
     <DrumNotes>02134</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="Guitar Hero II" Code="GH2">
     <Strum />
@@ -44,33 +47,95 @@
     <MinimumDuration>25</MinimumDuration>
   </Game>
   <Game Name="Rock Band" Code="RB">
+    <LoadTime>3500</LoadTime>
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+      <Song Title="areyougonnabemygirl">250</Song>
+      <Song Title="ballroomblitz">250</Song>
+      <Song Title="blackholesun">95</Song>
+      <Song Title="brainpower">250</Song>
+      <Song Title="daylatedollarshort">250</Song>
+      <Song Title="deadonarrival">250</Song>
+      <Song Title="gowiththeflow">250</Song>
+      <Song Title="greengrass">250</Song>
+      <Song Title="highwaystar">250</Song>
+      <Song Title="igetby">250</Song>
+      <Song Title="imsosick">92</Song>
+      <Song Title="paranoid">250</Song>
+      <Song Title="welcomehome">95</Song>
+      <Song Title="alabamagetaway">250</Song>
+      <Song Title="bodhisattva">250</Song>
+      <Song Title="ramblinman">250</Song>
+      <Song Title="action">250</Song>
+    </Hopo>
   </Game>
-  <Game Name="Rock Band II" Code="RB2" />
-  <Game Name="Rock Band: Beatles" Code="RBB" />
+  <Game Name="Rock Band II" Code="RB2">
+    <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
+  </Game>
+  <Game Name="Rock Band: Beatles" Code="RBB">
+    <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+      <Song Title="somebodytolove">90</Song>
+    </Hopo>
+  </Game>
   <Game Name="Lego Rock Band" Code="LRB">
+    <DrumNotes>41230</DrumNotes>
     <MinimumDuration>35</MinimumDuration>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+      <Song Title="dig">90</Song>
+      <Song Title="dreamingofyou">250</Song>
+      <Song Title="thunder">90</Song>
+      <Song Title="valerie">90</Song>
+      <Song Title="wearethechampions">90</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: Country 1" Code="RBTP_CTY1">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: Country 2" Code="RBTP_CTY2">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: AC/DC" Code="RBTP_ACDC">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: Classic Rock" Code="RBTP_CR">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: Metal" Code="RBTP_MTL">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="RB Pack: Pack 2" Code="RBTP_PK2">
     <DrumNotes>41230</DrumNotes>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
   <Game Name="Rock Band: Green Day" Code="RBGD">
     <DrumNotes>41230</DrumNotes>
     <MinimumDuration>25</MinimumDuration>
+    <Hopo>
+      <Song Title="_Default">170</Song>
+    </Hopo>
   </Game>
 </Games>
