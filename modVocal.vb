@@ -48,7 +48,7 @@
             Dim talkies As New List(Of Long)
             For i As Integer = mf.Events(number).Count - 1 To 0 Step -1
                 Dim mev As NAudio.Midi.MidiEvent = mf.Events(number)(i)
-                If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
+                If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.Lyric Then
                     Dim tev As NAudio.Midi.TextEvent = mev
                     Dim text As String = tev.Text
                     Select Case text.Substring(text.Length - 1, 1)
