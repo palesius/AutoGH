@@ -52,7 +52,7 @@ Public Class clsCMHSController
         devStream.WriteTimeout = 5000
         Try
             devStream.Write(New Byte() {0, 7, 0, 0, 1}, 0, 5)
-            System.Threading.Thread.Sleep(5)
+            'System.Threading.Thread.Sleep(200)
         Catch e As TimeoutException
             devStream.Close()
             devStream.Dispose()
@@ -65,6 +65,9 @@ Public Class clsCMHSController
 
         reportData = baseReport()
         update()
+        System.Threading.Thread.Sleep(25)
+        update()
+        System.Threading.Thread.Sleep(25)
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
