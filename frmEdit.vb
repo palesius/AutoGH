@@ -30,6 +30,7 @@ Public Class frmEdit
         SaveSetting(Application.ProductName, "Settings", "SyncWait", IIf(cbSyncWait.Checked, "True", "False"))
         SaveSetting(Application.ProductName, "Settings", "Sync", IIf(cbSync.Checked, "True", "False"))
         SaveSetting(Application.ProductName, "Settings", "SyncIP", txtSync.Text)
+        SaveSetting(Application.ProductName, "Settings", "SpeedNudge", nudSpeed.Value.ToString())
     End Sub
 
     Private Sub frmEdit_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -86,6 +87,7 @@ Public Class frmEdit
         cbSync.Checked = (GetSetting(Application.ProductName, "Settings", "Sync", "False") = "True")
         cbSyncWait.Checked = (GetSetting(Application.ProductName, "Settings", "SyncWait", "False") = "True")
         txtSync.Text = GetSetting(Application.ProductName, "Settings", "SyncIP", "97.82.214.2")
+        nudSpeed.Value = CInt(GetSetting(Application.ProductName, "Settings", "SpeedNudge", "100"))
     End Sub
 
     Private Sub clearScript()
