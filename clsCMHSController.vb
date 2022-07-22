@@ -52,6 +52,7 @@ Public Class clsCMHSController
         devStream.WriteTimeout = 5000
         Try
             devStream.Write(New Byte() {0, 7, 0, 0, 1}, 0, 5)
+            System.Threading.Thread.Sleep(5)
         Catch e As TimeoutException
             devStream.Close()
             devStream.Dispose()
