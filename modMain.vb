@@ -8,7 +8,7 @@ Module modMain
     Sub main()
         test()
         'makeTone()
-        'generateAllXMLMP3("G:\4F4707D4\out\Media\Songs\")
+        'generateAllXMLMP3("\\winterfell\g$\grease\")
         'Dim x As New Melanchall.DryWetMidi.Core.MidiFile()
         'x = Melanchall.DryWetMidi.Core.MidiFile.Read("c:\users\pales\Downloads\arterialblack.mid")
         'Stop

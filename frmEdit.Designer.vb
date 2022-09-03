@@ -79,6 +79,7 @@ Partial Class frmEdit
         Me.USBDeviceFinderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DJHero1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MirroringToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AudioSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblGame = New System.Windows.Forms.Label()
         Me.txtGame = New System.Windows.Forms.TextBox()
         Me.lblTitle = New System.Windows.Forms.Label()
@@ -161,9 +162,9 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
+        Me.btnComment = New System.Windows.Forms.Button()
         Me.lbActions = New AutoGH.RefreshingListBox()
         Me.lbGroups = New AutoGH.RefreshingListBox()
-        Me.AudioSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlControls.SuspendLayout()
         CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -187,7 +188,7 @@ Partial Class frmEdit
         '
         'txtRSY
         '
-        Me.txtRSY.Location = New System.Drawing.Point(397, 25)
+        Me.txtRSY.Location = New System.Drawing.Point(442, 25)
         Me.txtRSY.Name = "txtRSY"
         Me.txtRSY.Size = New System.Drawing.Size(40, 20)
         Me.txtRSY.TabIndex = 30
@@ -196,7 +197,7 @@ Partial Class frmEdit
         'lblRSX
         '
         Me.lblRSX.AutoSize = True
-        Me.lblRSX.Location = New System.Drawing.Point(375, 5)
+        Me.lblRSX.Location = New System.Drawing.Point(420, 5)
         Me.lblRSX.Name = "lblRSX"
         Me.lblRSX.Size = New System.Drawing.Size(17, 13)
         Me.lblRSX.TabIndex = 24
@@ -205,7 +206,7 @@ Partial Class frmEdit
         'lblRSY
         '
         Me.lblRSY.AutoSize = True
-        Me.lblRSY.Location = New System.Drawing.Point(375, 28)
+        Me.lblRSY.Location = New System.Drawing.Point(420, 28)
         Me.lblRSY.Name = "lblRSY"
         Me.lblRSY.Size = New System.Drawing.Size(17, 13)
         Me.lblRSY.TabIndex = 25
@@ -213,7 +214,7 @@ Partial Class frmEdit
         '
         'txtRSX
         '
-        Me.txtRSX.Location = New System.Drawing.Point(397, 2)
+        Me.txtRSX.Location = New System.Drawing.Point(442, 2)
         Me.txtRSX.Name = "txtRSX"
         Me.txtRSX.Size = New System.Drawing.Size(40, 20)
         Me.txtRSX.TabIndex = 29
@@ -221,7 +222,7 @@ Partial Class frmEdit
         '
         'txtLSX
         '
-        Me.txtLSX.Location = New System.Drawing.Point(22, 2)
+        Me.txtLSX.Location = New System.Drawing.Point(27, 2)
         Me.txtLSX.Name = "txtLSX"
         Me.txtLSX.Size = New System.Drawing.Size(40, 20)
         Me.txtLSX.TabIndex = 9
@@ -230,7 +231,7 @@ Partial Class frmEdit
         'lblLSY
         '
         Me.lblLSY.AutoSize = True
-        Me.lblLSY.Location = New System.Drawing.Point(0, 28)
+        Me.lblLSY.Location = New System.Drawing.Point(5, 28)
         Me.lblLSY.Name = "lblLSY"
         Me.lblLSY.Size = New System.Drawing.Size(17, 13)
         Me.lblLSY.TabIndex = 29
@@ -239,7 +240,7 @@ Partial Class frmEdit
         'lblLSX
         '
         Me.lblLSX.AutoSize = True
-        Me.lblLSX.Location = New System.Drawing.Point(0, 5)
+        Me.lblLSX.Location = New System.Drawing.Point(5, 5)
         Me.lblLSX.Name = "lblLSX"
         Me.lblLSX.Size = New System.Drawing.Size(17, 13)
         Me.lblLSX.TabIndex = 28
@@ -247,7 +248,7 @@ Partial Class frmEdit
         '
         'txtLSY
         '
-        Me.txtLSY.Location = New System.Drawing.Point(22, 25)
+        Me.txtLSY.Location = New System.Drawing.Point(27, 25)
         Me.txtLSY.Name = "txtLSY"
         Me.txtLSY.Size = New System.Drawing.Size(40, 20)
         Me.txtLSY.TabIndex = 10
@@ -330,14 +331,14 @@ Partial Class frmEdit
         Me.pnlControls.Controls.Add(Me.txtRSY)
         Me.pnlControls.Controls.Add(Me.lblRSY)
         Me.pnlControls.Controls.Add(Me.lblRSX)
-        Me.pnlControls.Location = New System.Drawing.Point(74, 3)
+        Me.pnlControls.Location = New System.Drawing.Point(75, 3)
         Me.pnlControls.Name = "pnlControls"
-        Me.pnlControls.Size = New System.Drawing.Size(439, 69)
+        Me.pnlControls.Size = New System.Drawing.Size(485, 69)
         Me.pnlControls.TabIndex = 46
         '
         'txtLT
         '
-        Me.txtLT.Location = New System.Drawing.Point(22, 48)
+        Me.txtLT.Location = New System.Drawing.Point(27, 48)
         Me.txtLT.Name = "txtLT"
         Me.txtLT.Size = New System.Drawing.Size(40, 20)
         Me.txtLT.TabIndex = 11
@@ -346,7 +347,7 @@ Partial Class frmEdit
         'lblLT
         '
         Me.lblLT.AutoSize = True
-        Me.lblLT.Location = New System.Drawing.Point(0, 51)
+        Me.lblLT.Location = New System.Drawing.Point(5, 51)
         Me.lblLT.Name = "lblLT"
         Me.lblLT.Size = New System.Drawing.Size(23, 13)
         Me.lblLT.TabIndex = 34
@@ -354,7 +355,7 @@ Partial Class frmEdit
         '
         'txtRT
         '
-        Me.txtRT.Location = New System.Drawing.Point(397, 48)
+        Me.txtRT.Location = New System.Drawing.Point(442, 48)
         Me.txtRT.Name = "txtRT"
         Me.txtRT.Size = New System.Drawing.Size(40, 20)
         Me.txtRT.TabIndex = 31
@@ -363,7 +364,7 @@ Partial Class frmEdit
         'lblRT
         '
         Me.lblRT.AutoSize = True
-        Me.lblRT.Location = New System.Drawing.Point(375, 51)
+        Me.lblRT.Location = New System.Drawing.Point(420, 51)
         Me.lblRT.Name = "lblRT"
         Me.lblRT.Size = New System.Drawing.Size(25, 13)
         Me.lblRT.TabIndex = 32
@@ -375,7 +376,7 @@ Partial Class frmEdit
         Me.pbRS.BackgroundImage = CType(resources.GetObject("pbRS.BackgroundImage"), System.Drawing.Image)
         Me.pbRS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.pbRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pbRS.Location = New System.Drawing.Point(308, 3)
+        Me.pbRS.Location = New System.Drawing.Point(350, 3)
         Me.pbRS.Name = "pbRS"
         Me.pbRS.Size = New System.Drawing.Size(63, 63)
         Me.pbRS.TabIndex = 22
@@ -386,7 +387,7 @@ Partial Class frmEdit
         Me.btnA.FlatAppearance.BorderSize = 0
         Me.btnA.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnA.Image = CType(resources.GetObject("btnA.Image"), System.Drawing.Image)
-        Me.btnA.Location = New System.Drawing.Point(247, 45)
+        Me.btnA.Location = New System.Drawing.Point(280, 45)
         Me.btnA.Margin = New System.Windows.Forms.Padding(0)
         Me.btnA.Name = "btnA"
         Me.btnA.Size = New System.Drawing.Size(21, 21)
@@ -398,7 +399,7 @@ Partial Class frmEdit
         Me.btnB.FlatAppearance.BorderSize = 0
         Me.btnB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnB.Image = CType(resources.GetObject("btnB.Image"), System.Drawing.Image)
-        Me.btnB.Location = New System.Drawing.Point(258, 24)
+        Me.btnB.Location = New System.Drawing.Point(294, 24)
         Me.btnB.Margin = New System.Windows.Forms.Padding(0)
         Me.btnB.Name = "btnB"
         Me.btnB.Size = New System.Drawing.Size(21, 21)
@@ -410,7 +411,7 @@ Partial Class frmEdit
         Me.btnY.FlatAppearance.BorderSize = 0
         Me.btnY.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnY.Image = CType(resources.GetObject("btnY.Image"), System.Drawing.Image)
-        Me.btnY.Location = New System.Drawing.Point(247, 3)
+        Me.btnY.Location = New System.Drawing.Point(280, 3)
         Me.btnY.Margin = New System.Windows.Forms.Padding(0)
         Me.btnY.Name = "btnY"
         Me.btnY.Size = New System.Drawing.Size(21, 21)
@@ -422,7 +423,7 @@ Partial Class frmEdit
         Me.btnX.FlatAppearance.BorderSize = 0
         Me.btnX.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnX.Image = CType(resources.GetObject("btnX.Image"), System.Drawing.Image)
-        Me.btnX.Location = New System.Drawing.Point(236, 24)
+        Me.btnX.Location = New System.Drawing.Point(266, 24)
         Me.btnX.Margin = New System.Windows.Forms.Padding(0)
         Me.btnX.Name = "btnX"
         Me.btnX.Size = New System.Drawing.Size(21, 21)
@@ -434,7 +435,7 @@ Partial Class frmEdit
         Me.btnDD.FlatAppearance.BorderSize = 0
         Me.btnDD.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDD.Image = CType(resources.GetObject("btnDD.Image"), System.Drawing.Image)
-        Me.btnDD.Location = New System.Drawing.Point(169, 45)
+        Me.btnDD.Location = New System.Drawing.Point(186, 45)
         Me.btnDD.Margin = New System.Windows.Forms.Padding(0)
         Me.btnDD.Name = "btnDD"
         Me.btnDD.Size = New System.Drawing.Size(21, 21)
@@ -446,7 +447,7 @@ Partial Class frmEdit
         Me.btnBack.FlatAppearance.BorderSize = 0
         Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnBack.Image = CType(resources.GetObject("btnBack.Image"), System.Drawing.Image)
-        Me.btnBack.Location = New System.Drawing.Point(199, 3)
+        Me.btnBack.Location = New System.Drawing.Point(222, 3)
         Me.btnBack.Margin = New System.Windows.Forms.Padding(0)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(21, 21)
@@ -458,7 +459,7 @@ Partial Class frmEdit
         Me.btnLS.FlatAppearance.BorderSize = 0
         Me.btnLS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLS.Image = CType(resources.GetObject("btnLS.Image"), System.Drawing.Image)
-        Me.btnLS.Location = New System.Drawing.Point(132, 45)
+        Me.btnLS.Location = New System.Drawing.Point(143, 45)
         Me.btnLS.Margin = New System.Windows.Forms.Padding(0)
         Me.btnLS.Name = "btnLS"
         Me.btnLS.Size = New System.Drawing.Size(21, 21)
@@ -470,7 +471,7 @@ Partial Class frmEdit
         Me.btnDL.FlatAppearance.BorderSize = 0
         Me.btnDL.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDL.Image = CType(resources.GetObject("btnDL.Image"), System.Drawing.Image)
-        Me.btnDL.Location = New System.Drawing.Point(158, 24)
+        Me.btnDL.Location = New System.Drawing.Point(172, 24)
         Me.btnDL.Margin = New System.Windows.Forms.Padding(0)
         Me.btnDL.Name = "btnDL"
         Me.btnDL.Size = New System.Drawing.Size(21, 21)
@@ -482,7 +483,7 @@ Partial Class frmEdit
         Me.btnLB.FlatAppearance.BorderSize = 0
         Me.btnLB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLB.Image = CType(resources.GetObject("btnLB.Image"), System.Drawing.Image)
-        Me.btnLB.Location = New System.Drawing.Point(132, 24)
+        Me.btnLB.Location = New System.Drawing.Point(143, 24)
         Me.btnLB.Margin = New System.Windows.Forms.Padding(0)
         Me.btnLB.Name = "btnLB"
         Me.btnLB.Size = New System.Drawing.Size(21, 21)
@@ -494,7 +495,7 @@ Partial Class frmEdit
         Me.btnRB.FlatAppearance.BorderSize = 0
         Me.btnRB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRB.Image = CType(resources.GetObject("btnRB.Image"), System.Drawing.Image)
-        Me.btnRB.Location = New System.Drawing.Point(284, 24)
+        Me.btnRB.Location = New System.Drawing.Point(323, 24)
         Me.btnRB.Margin = New System.Windows.Forms.Padding(0)
         Me.btnRB.Name = "btnRB"
         Me.btnRB.Size = New System.Drawing.Size(21, 21)
@@ -506,7 +507,7 @@ Partial Class frmEdit
         Me.btnDR.FlatAppearance.BorderSize = 0
         Me.btnDR.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDR.Image = CType(resources.GetObject("btnDR.Image"), System.Drawing.Image)
-        Me.btnDR.Location = New System.Drawing.Point(180, 24)
+        Me.btnDR.Location = New System.Drawing.Point(200, 24)
         Me.btnDR.Margin = New System.Windows.Forms.Padding(0)
         Me.btnDR.Name = "btnDR"
         Me.btnDR.Size = New System.Drawing.Size(21, 21)
@@ -518,7 +519,7 @@ Partial Class frmEdit
         Me.btnLT.FlatAppearance.BorderSize = 0
         Me.btnLT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnLT.Image = CType(resources.GetObject("btnLT.Image"), System.Drawing.Image)
-        Me.btnLT.Location = New System.Drawing.Point(132, 3)
+        Me.btnLT.Location = New System.Drawing.Point(143, 3)
         Me.btnLT.Margin = New System.Windows.Forms.Padding(0)
         Me.btnLT.Name = "btnLT"
         Me.btnLT.Size = New System.Drawing.Size(21, 21)
@@ -530,7 +531,7 @@ Partial Class frmEdit
         Me.btnRS.FlatAppearance.BorderSize = 0
         Me.btnRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRS.Image = CType(resources.GetObject("btnRS.Image"), System.Drawing.Image)
-        Me.btnRS.Location = New System.Drawing.Point(284, 45)
+        Me.btnRS.Location = New System.Drawing.Point(323, 45)
         Me.btnRS.Margin = New System.Windows.Forms.Padding(0)
         Me.btnRS.Name = "btnRS"
         Me.btnRS.Size = New System.Drawing.Size(21, 21)
@@ -542,7 +543,7 @@ Partial Class frmEdit
         Me.btnStart.FlatAppearance.BorderSize = 0
         Me.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnStart.Image = CType(resources.GetObject("btnStart.Image"), System.Drawing.Image)
-        Me.btnStart.Location = New System.Drawing.Point(221, 3)
+        Me.btnStart.Location = New System.Drawing.Point(248, 3)
         Me.btnStart.Margin = New System.Windows.Forms.Padding(0)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(21, 21)
@@ -554,7 +555,7 @@ Partial Class frmEdit
         Me.btnRT.FlatAppearance.BorderSize = 0
         Me.btnRT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRT.Image = CType(resources.GetObject("btnRT.Image"), System.Drawing.Image)
-        Me.btnRT.Location = New System.Drawing.Point(284, 3)
+        Me.btnRT.Location = New System.Drawing.Point(323, 3)
         Me.btnRT.Margin = New System.Windows.Forms.Padding(0)
         Me.btnRT.Name = "btnRT"
         Me.btnRT.Size = New System.Drawing.Size(21, 21)
@@ -566,7 +567,7 @@ Partial Class frmEdit
         Me.btnDU.FlatAppearance.BorderSize = 0
         Me.btnDU.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDU.Image = CType(resources.GetObject("btnDU.Image"), System.Drawing.Image)
-        Me.btnDU.Location = New System.Drawing.Point(169, 3)
+        Me.btnDU.Location = New System.Drawing.Point(186, 3)
         Me.btnDU.Margin = New System.Windows.Forms.Padding(0)
         Me.btnDU.Name = "btnDU"
         Me.btnDU.Size = New System.Drawing.Size(21, 21)
@@ -578,7 +579,7 @@ Partial Class frmEdit
         Me.btnGuide.FlatAppearance.BorderSize = 0
         Me.btnGuide.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnGuide.Image = CType(resources.GetObject("btnGuide.Image"), System.Drawing.Image)
-        Me.btnGuide.Location = New System.Drawing.Point(210, 24)
+        Me.btnGuide.Location = New System.Drawing.Point(235, 24)
         Me.btnGuide.Margin = New System.Windows.Forms.Padding(0)
         Me.btnGuide.Name = "btnGuide"
         Me.btnGuide.Size = New System.Drawing.Size(21, 21)
@@ -591,7 +592,7 @@ Partial Class frmEdit
         Me.pbLS.BackgroundImage = CType(resources.GetObject("pbLS.BackgroundImage"), System.Drawing.Image)
         Me.pbLS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.pbLS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pbLS.Location = New System.Drawing.Point(66, 3)
+        Me.pbLS.Location = New System.Drawing.Point(74, 3)
         Me.pbLS.Name = "pbLS"
         Me.pbLS.Size = New System.Drawing.Size(63, 63)
         Me.pbLS.TabIndex = 21
@@ -621,7 +622,7 @@ Partial Class frmEdit
         '
         Me.cmbAdd.FormattingEnabled = True
         Me.cmbAdd.Items.AddRange(New Object() {"Last", "After", "Before", "First"})
-        Me.cmbAdd.Location = New System.Drawing.Point(53, 279)
+        Me.cmbAdd.Location = New System.Drawing.Point(53, 265)
         Me.cmbAdd.Name = "cmbAdd"
         Me.cmbAdd.Size = New System.Drawing.Size(55, 21)
         Me.cmbAdd.TabIndex = 37
@@ -631,7 +632,7 @@ Partial Class frmEdit
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(705, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(752, 24)
         Me.MenuStrip1.TabIndex = 59
         Me.MenuStrip1.Text = "mnu"
         '
@@ -734,6 +735,12 @@ Partial Class frmEdit
         Me.MirroringToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
         Me.MirroringToolStripMenuItem.Text = "Mirroring..."
         '
+        'AudioSettingsToolStripMenuItem
+        '
+        Me.AudioSettingsToolStripMenuItem.Name = "AudioSettingsToolStripMenuItem"
+        Me.AudioSettingsToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.AudioSettingsToolStripMenuItem.Text = "Audio Settings..."
+        '
         'lblGame
         '
         Me.lblGame.AutoSize = True
@@ -749,7 +756,7 @@ Partial Class frmEdit
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtGame.Location = New System.Drawing.Point(44, 4)
         Me.txtGame.Name = "txtGame"
-        Me.txtGame.Size = New System.Drawing.Size(483, 20)
+        Me.txtGame.Size = New System.Drawing.Size(530, 20)
         Me.txtGame.TabIndex = 1
         '
         'lblTitle
@@ -767,7 +774,7 @@ Partial Class frmEdit
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTitle.Location = New System.Drawing.Point(44, 30)
         Me.txtTitle.Name = "txtTitle"
-        Me.txtTitle.Size = New System.Drawing.Size(483, 20)
+        Me.txtTitle.Size = New System.Drawing.Size(530, 20)
         Me.txtTitle.TabIndex = 2
         '
         'lblDesc
@@ -787,7 +794,7 @@ Partial Class frmEdit
         Me.txtDesc.Multiline = True
         Me.txtDesc.Name = "txtDesc"
         Me.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtDesc.Size = New System.Drawing.Size(483, 64)
+        Me.txtDesc.Size = New System.Drawing.Size(530, 64)
         Me.txtDesc.TabIndex = 3
         '
         'fdOpen
@@ -823,6 +830,7 @@ Partial Class frmEdit
         '
         'scMain.Panel1
         '
+        Me.scMain.Panel1.Controls.Add(Me.btnComment)
         Me.scMain.Panel1.Controls.Add(Me.lblTotalTime)
         Me.scMain.Panel1.Controls.Add(Me.lblWaitTime)
         Me.scMain.Panel1.Controls.Add(Me.lbActions)
@@ -853,25 +861,26 @@ Partial Class frmEdit
         Me.scMain.Panel2.Controls.Add(Me.gbGroups)
         Me.scMain.Panel2.Controls.Add(Me.gbControllers)
         Me.scMain.Panel2.Controls.Add(Me.cbPrecompile)
-        Me.scMain.Size = New System.Drawing.Size(701, 429)
-        Me.scMain.SplitterDistance = 531
+        Me.scMain.Size = New System.Drawing.Size(748, 429)
+        Me.scMain.SplitterDistance = 578
         Me.scMain.TabIndex = 65
         '
         'lblTotalTime
         '
         Me.lblTotalTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblTotalTime.Location = New System.Drawing.Point(305, 265)
+        Me.lblTotalTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalTime.Location = New System.Drawing.Point(350, 265)
         Me.lblTotalTime.Name = "lblTotalTime"
-        Me.lblTotalTime.Size = New System.Drawing.Size(125, 16)
+        Me.lblTotalTime.Size = New System.Drawing.Size(124, 16)
         Me.lblTotalTime.TabIndex = 65
         Me.lblTotalTime.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblWaitTime
         '
         Me.lblWaitTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblWaitTime.Location = New System.Drawing.Point(305, 293)
+        Me.lblWaitTime.Location = New System.Drawing.Point(350, 293)
         Me.lblWaitTime.Name = "lblWaitTime"
-        Me.lblWaitTime.Size = New System.Drawing.Size(125, 16)
+        Me.lblWaitTime.Size = New System.Drawing.Size(124, 16)
         Me.lblWaitTime.TabIndex = 63
         Me.lblWaitTime.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -893,7 +902,7 @@ Partial Class frmEdit
         Me.btnStop.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnStop.ForeColor = System.Drawing.SystemColors.ControlText
         Me.btnStop.Image = Global.AutoGH.My.Resources.Resources.stop40
-        Me.btnStop.Location = New System.Drawing.Point(483, 265)
+        Me.btnStop.Location = New System.Drawing.Point(530, 265)
         Me.btnStop.Name = "btnStop"
         Me.btnStop.Size = New System.Drawing.Size(44, 44)
         Me.btnStop.TabIndex = 44
@@ -915,7 +924,7 @@ Partial Class frmEdit
         Me.btnPlayPause.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnPlayPause.ForeColor = System.Drawing.SystemColors.ControlText
         Me.btnPlayPause.Image = Global.AutoGH.My.Resources.Resources.play40
-        Me.btnPlayPause.Location = New System.Drawing.Point(436, 265)
+        Me.btnPlayPause.Location = New System.Drawing.Point(480, 265)
         Me.btnPlayPause.Name = "btnPlayPause"
         Me.btnPlayPause.Size = New System.Drawing.Size(44, 44)
         Me.btnPlayPause.TabIndex = 43
@@ -964,7 +973,7 @@ Partial Class frmEdit
         Me.tcActions.Location = New System.Drawing.Point(3, 126)
         Me.tcActions.Name = "tcActions"
         Me.tcActions.SelectedIndex = 0
-        Me.tcActions.Size = New System.Drawing.Size(524, 133)
+        Me.tcActions.Size = New System.Drawing.Size(571, 133)
         Me.tcActions.TabIndex = 64
         '
         'tpController
@@ -984,7 +993,7 @@ Partial Class frmEdit
         Me.tpController.Location = New System.Drawing.Point(4, 22)
         Me.tpController.Name = "tpController"
         Me.tpController.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpController.Size = New System.Drawing.Size(516, 107)
+        Me.tpController.Size = New System.Drawing.Size(563, 107)
         Me.tpController.TabIndex = 0
         Me.tpController.Text = "Controller"
         Me.tpController.UseVisualStyleBackColor = True
@@ -993,7 +1002,7 @@ Partial Class frmEdit
         '
         Me.lblControllerIP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblControllerIP.AutoSize = True
-        Me.lblControllerIP.Location = New System.Drawing.Point(399, 79)
+        Me.lblControllerIP.Location = New System.Drawing.Point(452, 79)
         Me.lblControllerIP.Name = "lblControllerIP"
         Me.lblControllerIP.Size = New System.Drawing.Size(20, 13)
         Me.lblControllerIP.TabIndex = 71
@@ -1002,7 +1011,7 @@ Partial Class frmEdit
         'lblControllerHold
         '
         Me.lblControllerHold.AutoSize = True
-        Me.lblControllerHold.Location = New System.Drawing.Point(74, 79)
+        Me.lblControllerHold.Location = New System.Drawing.Point(80, 79)
         Me.lblControllerHold.Name = "lblControllerHold"
         Me.lblControllerHold.Size = New System.Drawing.Size(32, 13)
         Me.lblControllerHold.TabIndex = 68
@@ -1010,7 +1019,7 @@ Partial Class frmEdit
         '
         'txtControllerRepeat
         '
-        Me.txtControllerRepeat.Location = New System.Drawing.Point(328, 76)
+        Me.txtControllerRepeat.Location = New System.Drawing.Point(334, 76)
         Me.txtControllerRepeat.Name = "txtControllerRepeat"
         Me.txtControllerRepeat.Size = New System.Drawing.Size(31, 20)
         Me.txtControllerRepeat.TabIndex = 67
@@ -1020,7 +1029,7 @@ Partial Class frmEdit
         'lblControllerRepeat
         '
         Me.lblControllerRepeat.AutoSize = True
-        Me.lblControllerRepeat.Location = New System.Drawing.Point(301, 79)
+        Me.lblControllerRepeat.Location = New System.Drawing.Point(307, 79)
         Me.lblControllerRepeat.Name = "lblControllerRepeat"
         Me.lblControllerRepeat.Size = New System.Drawing.Size(27, 13)
         Me.lblControllerRepeat.TabIndex = 70
@@ -1028,7 +1037,7 @@ Partial Class frmEdit
         '
         'txtControllerHold
         '
-        Me.txtControllerHold.Location = New System.Drawing.Point(106, 76)
+        Me.txtControllerHold.Location = New System.Drawing.Point(112, 76)
         Me.txtControllerHold.Name = "txtControllerHold"
         Me.txtControllerHold.Size = New System.Drawing.Size(75, 20)
         Me.txtControllerHold.TabIndex = 65
@@ -1037,7 +1046,7 @@ Partial Class frmEdit
         '
         'txtControllerWait
         '
-        Me.txtControllerWait.Location = New System.Drawing.Point(219, 76)
+        Me.txtControllerWait.Location = New System.Drawing.Point(225, 76)
         Me.txtControllerWait.Name = "txtControllerWait"
         Me.txtControllerWait.Size = New System.Drawing.Size(76, 20)
         Me.txtControllerWait.TabIndex = 66
@@ -1047,7 +1056,7 @@ Partial Class frmEdit
         'lblControllerWait
         '
         Me.lblControllerWait.AutoSize = True
-        Me.lblControllerWait.Location = New System.Drawing.Point(187, 79)
+        Me.lblControllerWait.Location = New System.Drawing.Point(193, 79)
         Me.lblControllerWait.Name = "lblControllerWait"
         Me.lblControllerWait.Size = New System.Drawing.Size(32, 13)
         Me.lblControllerWait.TabIndex = 69
@@ -1058,7 +1067,7 @@ Partial Class frmEdit
         Me.cbControllerIP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbControllerIP.FormattingEnabled = True
         Me.cbControllerIP.Items.AddRange(New Object() {"1", "2", "3", "4"})
-        Me.cbControllerIP.Location = New System.Drawing.Point(423, 77)
+        Me.cbControllerIP.Location = New System.Drawing.Point(470, 77)
         Me.cbControllerIP.Name = "cbControllerIP"
         Me.cbControllerIP.Size = New System.Drawing.Size(87, 21)
         Me.cbControllerIP.TabIndex = 72
@@ -1078,7 +1087,7 @@ Partial Class frmEdit
         Me.tpFlow.Location = New System.Drawing.Point(4, 22)
         Me.tpFlow.Name = "tpFlow"
         Me.tpFlow.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpFlow.Size = New System.Drawing.Size(516, 107)
+        Me.tpFlow.Size = New System.Drawing.Size(563, 107)
         Me.tpFlow.TabIndex = 1
         Me.tpFlow.Text = "Flow"
         Me.tpFlow.UseVisualStyleBackColor = True
@@ -1156,7 +1165,7 @@ Partial Class frmEdit
         Me.tpInput.Location = New System.Drawing.Point(4, 22)
         Me.tpInput.Name = "tpInput"
         Me.tpInput.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpInput.Size = New System.Drawing.Size(516, 107)
+        Me.tpInput.Size = New System.Drawing.Size(563, 107)
         Me.tpInput.TabIndex = 2
         Me.tpInput.Text = "Input"
         Me.tpInput.UseVisualStyleBackColor = True
@@ -1341,7 +1350,7 @@ Partial Class frmEdit
         Me.tpOutput.Location = New System.Drawing.Point(4, 22)
         Me.tpOutput.Name = "tpOutput"
         Me.tpOutput.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpOutput.Size = New System.Drawing.Size(516, 107)
+        Me.tpOutput.Size = New System.Drawing.Size(563, 107)
         Me.tpOutput.TabIndex = 3
         Me.tpOutput.Text = "Output"
         Me.tpOutput.UseVisualStyleBackColor = True
@@ -1611,6 +1620,15 @@ Partial Class frmEdit
         '
         Me.cdCapture.FullOpen = True
         '
+        'btnComment
+        '
+        Me.btnComment.Image = Global.AutoGH.My.Resources.Resources.comment40
+        Me.btnComment.Location = New System.Drawing.Point(302, 265)
+        Me.btnComment.Name = "btnComment"
+        Me.btnComment.Size = New System.Drawing.Size(44, 44)
+        Me.btnComment.TabIndex = 66
+        Me.btnComment.UseVisualStyleBackColor = True
+        '
         'lbActions
         '
         Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -1621,7 +1639,7 @@ Partial Class frmEdit
         Me.lbActions.Location = New System.Drawing.Point(3, 315)
         Me.lbActions.Name = "lbActions"
         Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lbActions.Size = New System.Drawing.Size(524, 111)
+        Me.lbActions.Size = New System.Drawing.Size(571, 111)
         Me.lbActions.TabIndex = 45
         '
         'lbGroups
@@ -1636,18 +1654,12 @@ Partial Class frmEdit
         Me.lbGroups.Size = New System.Drawing.Size(142, 59)
         Me.lbGroups.TabIndex = 0
         '
-        'AudioSettingsToolStripMenuItem
-        '
-        Me.AudioSettingsToolStripMenuItem.Name = "AudioSettingsToolStripMenuItem"
-        Me.AudioSettingsToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.AudioSettingsToolStripMenuItem.Text = "Audio Settings..."
-        '
         'frmEdit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(705, 451)
+        Me.ClientSize = New System.Drawing.Size(752, 451)
         Me.Controls.Add(Me.scMain)
         Me.Controls.Add(Me.MenuStrip1)
         Me.MainMenuStrip = Me.MenuStrip1
@@ -1828,4 +1840,5 @@ Partial Class frmEdit
     Friend WithEvents nudSpeed As NumericUpDown
     Friend WithEvents lblTotalTime As Label
     Friend WithEvents AudioSettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents btnComment As Button
 End Class

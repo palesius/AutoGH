@@ -154,10 +154,55 @@
     End Class
 
     Sub generateAllXMLMP3(dirPath As String)
-        For Each fi As IO.FileInfo In New IO.DirectoryInfo(dirPath).GetFiles("*.vxla")
-            generateXMLMP3(fi)
+        For Each fi As IO.FileInfo In New IO.DirectoryInfo(dirPath).GetFiles("*.xml")
+            generateGreaseXMLMP3(fi)
         Next
     End Sub
+
+    Function generateGreaseXMLMP3(xmlFI As IO.FileInfo) As IO.FileInfo
+        Dim xml As New Xml.XmlDocument
+        xml.Load(xmlFI.FullName)
+        If xml.SelectNodes("/Song/Pages/Page/Harmonies/*").Count > 0 Then Stop
+        Dim noteNodes As Xml.XmlNodeList = xml.SelectNodes("/Song/Pages/Page/Notes/Note")
+        '		<Interval t1="35.583644" t2="35.748152" value="71"/>
+        Dim neList As New List(Of clsVoiceNoteEntry)
+        For Each n As Xml.XmlNode In noteNodes
+            Select Case n.InnerText
+                Case "START_SONG", "END_SONG"
+                Case Else
+                    Dim t1 As Decimal = n.Attributes("start").Value
+                    Dim t2 As Decimal = n.Attributes("end").Value
+                    Dim note As Integer = n.Attributes("midi_note").Value
+                    Dim ne As New clsVoiceNoteEntry(note, CInt(1000 * t1), CInt(1000 * (t2 - t1)))
+                    ne.frequency = 440 * 2 ^ ((ne.noteVal - 69) / 12)
+                    neList.Add(ne)
+            End Select
+        Next
+        neList.Sort()
+
+        Dim startOffset As Integer = neList(0).tickOffset
+        Dim samples As New List(Of Short)
+        Dim silence As Integer
+        For Each ne As clsVoiceNoteEntry In neList
+            silence = Math.Floor((ne.tickOffset - startOffset) * 44.1) - samples.Count
+            If silence > 0 Then samples.AddRange(generateSilence(silence))
+            If ne.tickDuration > 0 Then samples.AddRange(generateTone(ne.frequency, ne.tickDuration * 44.1))
+        Next
+
+        Dim wavname As String = IO.Path.ChangeExtension(xmlFI.FullName, ".wav")
+        Dim mp3name As String = IO.Path.ChangeExtension(xmlFI.FullName, ".mp3")
+        saveWav(samples.ToArray(), wavname)
+
+        Dim psi As New ProcessStartInfo("\\winterfell\c$\program files\lame\lame.exe", "-V1 """ & wavname & """ """ & mp3name & """")
+        'psi.CreateNoWindow = True
+        psi.WindowStyle = ProcessWindowStyle.Hidden
+        Dim ps As Process = Process.Start(psi)
+        ps.WaitForExit()
+
+        IO.File.Delete(wavname)
+
+        Return New IO.FileInfo(mp3name)
+    End Function
 
     Function generateXMLMP3(xmlFI As IO.FileInfo) As IO.FileInfo
         Dim xml As New Xml.XmlDocument

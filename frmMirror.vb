@@ -1,5 +1,5 @@
-﻿Public Class frmMirror
-
+﻿Imports Vortice.XInput
+Public Class frmMirror
     Structure XIState
         Public eventCount As UInt32
         Public wButtons As UShort
@@ -18,7 +18,7 @@
     Dim IPList As List(Of String)
     Dim controller(4) As clsController
     Dim running As Boolean = False
-    Dim inputController As SharpDX.XInput.Controller
+    'Dim inputController As Controller
     Dim mirror(4) As Boolean
     Dim mirrorThread As System.Threading.Thread
 
@@ -71,8 +71,8 @@
     End Sub
 
     Private Sub btnStart_Click(sender As System.Object, e As System.EventArgs) Handles btnStart.Click
-        If inputController Is Nothing Then inputController = New SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One)
-        If Not inputController.IsConnected Then
+        Dim XIstate As State
+        If Not XInput.GetState(0, XIstate) Then
             MsgBox("No Input controller found.")
             Exit Sub
         End If
@@ -123,34 +123,36 @@
         Dim joyRYInt As Int16
 
         'BBBs need to update slower so it doesn't overwhelm it
-        Dim lastState As SharpDX.XInput.State = Nothing
+        Dim lastState As State = Nothing
         While running
-            Dim xs As SharpDX.XInput.State = inputController.GetState()
-            If xs.PacketNumber > packetNumber Then
-                packetNumber = xs.PacketNumber
-                Dim changed As Boolean
-                changed = xs.Gamepad.Buttons <> lastState.Gamepad.Buttons OrElse
-                    Math.Abs(CInt(xs.Gamepad.LeftTrigger) - CInt(lastState.Gamepad.LeftTrigger)) >= 16 OrElse
-                    Math.Abs(CInt(xs.Gamepad.RightTrigger) - CInt(lastState.Gamepad.RightTrigger)) >= 16 OrElse
-                    Math.Abs(xs.Gamepad.LeftThumbX - lastState.Gamepad.LeftThumbX) >= 1024 OrElse
-                    Math.Abs(xs.Gamepad.LeftThumbY - lastState.Gamepad.LeftThumbY) >= 1024 OrElse
-                    Math.Abs(xs.Gamepad.RightThumbX - lastState.Gamepad.RightThumbX) >= 1024 OrElse
-                    Math.Abs(xs.Gamepad.RightThumbY - lastState.Gamepad.RightThumbY) >= 1024
-                If changed Then
-                    lastState = xs
-                    With xs.Gamepad
-                        buttonHi = .Buttons And 255
-                        buttonLo = .Buttons >> 8
-                        LT = .LeftTrigger
-                        RT = .RightTrigger
-                        joyLXInt = .LeftThumbX
-                        joyLYInt = -1 - .LeftThumbY
-                        joyRXInt = .RightThumbX
-                        joyRYInt = -1 - .RightThumbY
-                    End With
-                    For i = 1 To 4
-                        If mirror(i) Then controller(i).setState(buttonHi, LT, RT, buttonLo, joyLXInt, joyLYInt, joyRXInt, joyRYInt)
-                    Next
+            Dim xs As State
+            If XInput.GetState(0, xs) Then
+                If xs.PacketNumber > packetNumber Then
+                    packetNumber = xs.PacketNumber
+                    Dim changed As Boolean
+                    changed = xs.Gamepad.Buttons <> lastState.Gamepad.Buttons OrElse
+                        Math.Abs(CInt(xs.Gamepad.LeftTrigger) - CInt(lastState.Gamepad.LeftTrigger)) >= 16 OrElse
+                        Math.Abs(CInt(xs.Gamepad.RightTrigger) - CInt(lastState.Gamepad.RightTrigger)) >= 16 OrElse
+                        Math.Abs(xs.Gamepad.LeftThumbX - lastState.Gamepad.LeftThumbX) >= 1024 OrElse
+                        Math.Abs(xs.Gamepad.LeftThumbY - lastState.Gamepad.LeftThumbY) >= 1024 OrElse
+                        Math.Abs(xs.Gamepad.RightThumbX - lastState.Gamepad.RightThumbX) >= 1024 OrElse
+                        Math.Abs(xs.Gamepad.RightThumbY - lastState.Gamepad.RightThumbY) >= 1024
+                    If changed Then
+                        lastState = xs
+                        With xs.Gamepad
+                            buttonHi = .Buttons And 255
+                            buttonLo = .Buttons >> 8
+                            LT = .LeftTrigger
+                            RT = .RightTrigger
+                            joyLXInt = .LeftThumbX
+                            joyLYInt = -1 - .LeftThumbY
+                            joyRXInt = .RightThumbX
+                            joyRYInt = -1 - .RightThumbY
+                        End With
+                        For i = 1 To 4
+                            If mirror(i) Then controller(i).setState(buttonHi, LT, RT, buttonLo, joyLXInt, joyLYInt, joyRXInt, joyRYInt)
+                        Next
+                    End If
                 End If
             End If
         End While
@@ -167,7 +169,6 @@
         Next
         btnStart.Enabled = True
         btnStop.Enabled = False
-        inputController = Nothing
     End Sub
 
     Private Function displayInput(buf() As Byte) As String

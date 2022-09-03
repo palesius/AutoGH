@@ -997,12 +997,13 @@ Public Class frmEdit
         For Each agNode As Xml.XmlNode In actionGroups
             Dim ag As New clsActionGroup(agNode.SelectSingleNode("Name").InnerText)
             For Each actNode As Xml.XmlNode In agNode.ChildNodes
-                If actNode.Name <> "Name" Then
-                    Dim action As clsAction = clsAction.fromXML(actNode, version, ag)
-                    action.index = ag.actions.Count
-                    ag.actions.Add(action)
-                End If
-
+                Select Case actNode.Name
+                    Case "Name", "#comment"
+                    Case Else
+                        Dim action As clsAction = clsAction.fromXML(actNode, version, ag)
+                        action.index = ag.actions.Count
+                        ag.actions.Add(action)
+                End Select
             Next
             groups.Add(ag.name, ag)
         Next
@@ -1589,5 +1590,14 @@ Public Class frmEdit
     Private Sub AudioSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AudioSettingsToolStripMenuItem.Click
         Dim frmA As New frmAudio
         frmA.ShowDialog()
+    End Sub
+
+    Private Sub btnComment_Click(sender As Object, e As EventArgs) Handles btnComment.Click
+        If lbActions.SelectedItems.Count <> 1 Then Exit Sub
+        Dim Action As clsAction = lbActions.SelectedItem
+        Dim comment As String = Action.comment
+        comment = InputBox("Enter new comment for this action:",, comment)
+        Action.comment = comment
+        Action.refresh(lbActions)
     End Sub
 End Class
