@@ -18,7 +18,7 @@ Public Class frmBridge
         cmbController.SelectedIndex = 0
 
         txtWebcam.Text = GetSetting(Application.ProductName, "Settings", "Webcam Path", IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\snapshot.jpg")
-        chkWebcam.Checked = GetSetting(Application.ProductName, "Settings", "Webcam", vbNullString) <> vbNullString
+        chkWebcam.Checked = GetSetting(Application.ProductName, "Settings", "Webcam", "N") <> "N"
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
@@ -113,7 +113,7 @@ Public Class frmBridge
 
     Private Sub chkWebcam_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkWebcam.CheckedChanged
         If chkWebcam.Checked AndAlso txtWebcam.Text = vbNullString Then btnWebcam_Click(Nothing, Nothing)
-        SaveSetting(Application.ProductName, "Settings", "Webcam", IIf(chkWebcam.Checked, "Y", vbNullString))
+        SaveSetting(Application.ProductName, "Settings", "Webcam", IIf(chkWebcam.Checked, "Y", "N"))
     End Sub
 
     Private Sub btnWebcam_Click(sender As System.Object, e As System.EventArgs) Handles btnWebcam.Click
