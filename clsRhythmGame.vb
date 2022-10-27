@@ -10,6 +10,7 @@
     Public loadTime As Integer
     Public truncation As Integer
     Public minimumDuration As Integer
+    Public hopoTrigger As Dictionary(Of String, Integer)
 
     Public Sub New(bn As Xml.XmlNode, base As clsRhythmGame)
         Dim n As Xml.XmlNode
@@ -38,6 +39,19 @@
         For i As Integer = 0 To 4
             drumNotes(i) = notes(CInt(drumNoteStr.Substring(i, 1)))
         Next
+
+        n = bn.SelectSingleNode("Hopo")
+        If n IsNot Nothing Then
+            hopoTrigger = New Dictionary(Of String, Integer)
+            Dim nodeList As Xml.XmlNodeList
+            nodeList = n.SelectNodes("*")
+            For Each node As Xml.XmlNode In n.SelectNodes("Song")
+                hopoTrigger(node.Attributes("Title").Value) = CInt(node.InnerText)
+            Next
+        Else
+            ' Nothing indicates the Guitar Hero default of a 1/12th node
+            hopoTrigger = Nothing
+        End If
     End Sub
 
     Private Function getBtnValue(name As String) As Integer
