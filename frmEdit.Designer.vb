@@ -91,8 +91,10 @@ Partial Class frmEdit
         Me.tmrScriptStatus = New System.Windows.Forms.Timer(Me.components)
         Me.cbPrecompile = New System.Windows.Forms.CheckBox()
         Me.scMain = New System.Windows.Forms.SplitContainer()
+        Me.btnComment = New System.Windows.Forms.Button()
         Me.lblTotalTime = New System.Windows.Forms.Label()
         Me.lblWaitTime = New System.Windows.Forms.Label()
+        Me.lbActions = New AutoGH.RefreshingListBox()
         Me.btnAdd = New System.Windows.Forms.Button()
         Me.btnStop = New System.Windows.Forms.Button()
         Me.btnApply = New System.Windows.Forms.Button()
@@ -111,6 +113,9 @@ Partial Class frmEdit
         Me.lblControllerWait = New System.Windows.Forms.Label()
         Me.cbControllerIP = New System.Windows.Forms.ComboBox()
         Me.tpFlow = New System.Windows.Forms.TabPage()
+        Me.txtFlowMaxWait = New System.Windows.Forms.TextBox()
+        Me.lblFlowMaxWait = New System.Windows.Forms.Label()
+        Me.rbWaitRandom = New System.Windows.Forms.RadioButton()
         Me.btnFlowTarget = New System.Windows.Forms.Button()
         Me.txtFlowTarget = New System.Windows.Forms.TextBox()
         Me.lblFlowTarget = New System.Windows.Forms.Label()
@@ -152,6 +157,7 @@ Partial Class frmEdit
         Me.btnRenameGroup = New System.Windows.Forms.Button()
         Me.btnAddGroup = New System.Windows.Forms.Button()
         Me.btnDeleteGroup = New System.Windows.Forms.Button()
+        Me.lbGroups = New AutoGH.RefreshingListBox()
         Me.gbControllers = New System.Windows.Forms.GroupBox()
         Me.txtController4 = New System.Windows.Forms.TextBox()
         Me.lblController4 = New System.Windows.Forms.Label()
@@ -162,9 +168,6 @@ Partial Class frmEdit
         Me.txtController1 = New System.Windows.Forms.TextBox()
         Me.lblController1 = New System.Windows.Forms.Label()
         Me.cdCapture = New System.Windows.Forms.ColorDialog()
-        Me.btnComment = New System.Windows.Forms.Button()
-        Me.lbActions = New AutoGH.RefreshingListBox()
-        Me.lbGroups = New AutoGH.RefreshingListBox()
         Me.pnlControls.SuspendLayout()
         CType(Me.pbRS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbLS, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -291,7 +294,7 @@ Partial Class frmEdit
         'rbLoop
         '
         Me.rbLoop.AutoSize = True
-        Me.rbLoop.Location = New System.Drawing.Point(3, 19)
+        Me.rbLoop.Location = New System.Drawing.Point(3, 35)
         Me.rbLoop.Name = "rbLoop"
         Me.rbLoop.Size = New System.Drawing.Size(49, 17)
         Me.rbLoop.TabIndex = 8
@@ -611,7 +614,7 @@ Partial Class frmEdit
         'rbGroup
         '
         Me.rbGroup.AutoSize = True
-        Me.rbGroup.Location = New System.Drawing.Point(3, 35)
+        Me.rbGroup.Location = New System.Drawing.Point(3, 51)
         Me.rbGroup.Name = "rbGroup"
         Me.rbGroup.Size = New System.Drawing.Size(54, 17)
         Me.rbGroup.TabIndex = 65
@@ -865,6 +868,15 @@ Partial Class frmEdit
         Me.scMain.SplitterDistance = 578
         Me.scMain.TabIndex = 65
         '
+        'btnComment
+        '
+        Me.btnComment.Image = Global.AutoGH.My.Resources.Resources.comment40
+        Me.btnComment.Location = New System.Drawing.Point(302, 265)
+        Me.btnComment.Name = "btnComment"
+        Me.btnComment.Size = New System.Drawing.Size(44, 44)
+        Me.btnComment.TabIndex = 66
+        Me.btnComment.UseVisualStyleBackColor = True
+        '
         'lblTotalTime
         '
         Me.lblTotalTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -883,6 +895,19 @@ Partial Class frmEdit
         Me.lblWaitTime.Size = New System.Drawing.Size(124, 16)
         Me.lblWaitTime.TabIndex = 63
         Me.lblWaitTime.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lbActions
+        '
+        Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbActions.FormattingEnabled = True
+        Me.lbActions.IntegralHeight = False
+        Me.lbActions.Location = New System.Drawing.Point(3, 315)
+        Me.lbActions.Name = "lbActions"
+        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbActions.Size = New System.Drawing.Size(571, 111)
+        Me.lbActions.TabIndex = 45
         '
         'btnAdd
         '
@@ -1074,6 +1099,9 @@ Partial Class frmEdit
         '
         'tpFlow
         '
+        Me.tpFlow.Controls.Add(Me.txtFlowMaxWait)
+        Me.tpFlow.Controls.Add(Me.lblFlowMaxWait)
+        Me.tpFlow.Controls.Add(Me.rbWaitRandom)
         Me.tpFlow.Controls.Add(Me.btnFlowTarget)
         Me.tpFlow.Controls.Add(Me.txtFlowTarget)
         Me.tpFlow.Controls.Add(Me.lblFlowTarget)
@@ -1091,6 +1119,34 @@ Partial Class frmEdit
         Me.tpFlow.TabIndex = 1
         Me.tpFlow.Text = "Flow"
         Me.tpFlow.UseVisualStyleBackColor = True
+        '
+        'txtFlowMaxWait
+        '
+        Me.txtFlowMaxWait.Location = New System.Drawing.Point(217, 32)
+        Me.txtFlowMaxWait.Name = "txtFlowMaxWait"
+        Me.txtFlowMaxWait.Size = New System.Drawing.Size(76, 20)
+        Me.txtFlowMaxWait.TabIndex = 79
+        Me.txtFlowMaxWait.Text = "500ms"
+        Me.txtFlowMaxWait.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'lblFlowMaxWait
+        '
+        Me.lblFlowMaxWait.AutoSize = True
+        Me.lblFlowMaxWait.Location = New System.Drawing.Point(160, 35)
+        Me.lblFlowMaxWait.Name = "lblFlowMaxWait"
+        Me.lblFlowMaxWait.Size = New System.Drawing.Size(55, 13)
+        Me.lblFlowMaxWait.TabIndex = 80
+        Me.lblFlowMaxWait.Text = "Max Wait:"
+        '
+        'rbWaitRandom
+        '
+        Me.rbWaitRandom.AutoSize = True
+        Me.rbWaitRandom.Location = New System.Drawing.Point(3, 19)
+        Me.rbWaitRandom.Name = "rbWaitRandom"
+        Me.rbWaitRandom.Size = New System.Drawing.Size(90, 17)
+        Me.rbWaitRandom.TabIndex = 78
+        Me.rbWaitRandom.Text = "Wait Random"
+        Me.rbWaitRandom.UseVisualStyleBackColor = True
         '
         'btnFlowTarget
         '
@@ -1149,7 +1205,7 @@ Partial Class frmEdit
         'lblFlowWait
         '
         Me.lblFlowWait.AutoSize = True
-        Me.lblFlowWait.Location = New System.Drawing.Point(185, 9)
+        Me.lblFlowWait.Location = New System.Drawing.Point(160, 9)
         Me.lblFlowWait.Name = "lblFlowWait"
         Me.lblFlowWait.Size = New System.Drawing.Size(32, 13)
         Me.lblFlowWait.TabIndex = 73
@@ -1524,6 +1580,18 @@ Partial Class frmEdit
         Me.btnDeleteGroup.TabIndex = 40
         Me.btnDeleteGroup.UseVisualStyleBackColor = True
         '
+        'lbGroups
+        '
+        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbGroups.FormattingEnabled = True
+        Me.lbGroups.IntegralHeight = False
+        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
+        Me.lbGroups.Name = "lbGroups"
+        Me.lbGroups.Size = New System.Drawing.Size(142, 59)
+        Me.lbGroups.TabIndex = 0
+        '
         'gbControllers
         '
         Me.gbControllers.Controls.Add(Me.txtController4)
@@ -1619,40 +1687,6 @@ Partial Class frmEdit
         'cdCapture
         '
         Me.cdCapture.FullOpen = True
-        '
-        'btnComment
-        '
-        Me.btnComment.Image = Global.AutoGH.My.Resources.Resources.comment40
-        Me.btnComment.Location = New System.Drawing.Point(302, 265)
-        Me.btnComment.Name = "btnComment"
-        Me.btnComment.Size = New System.Drawing.Size(44, 44)
-        Me.btnComment.TabIndex = 66
-        Me.btnComment.UseVisualStyleBackColor = True
-        '
-        'lbActions
-        '
-        Me.lbActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbActions.FormattingEnabled = True
-        Me.lbActions.IntegralHeight = False
-        Me.lbActions.Location = New System.Drawing.Point(3, 315)
-        Me.lbActions.Name = "lbActions"
-        Me.lbActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lbActions.Size = New System.Drawing.Size(571, 111)
-        Me.lbActions.TabIndex = 45
-        '
-        'lbGroups
-        '
-        Me.lbGroups.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbGroups.FormattingEnabled = True
-        Me.lbGroups.IntegralHeight = False
-        Me.lbGroups.Location = New System.Drawing.Point(7, 20)
-        Me.lbGroups.Name = "lbGroups"
-        Me.lbGroups.Size = New System.Drawing.Size(142, 59)
-        Me.lbGroups.TabIndex = 0
         '
         'frmEdit
         '
@@ -1841,4 +1875,7 @@ Partial Class frmEdit
     Friend WithEvents lblTotalTime As Label
     Friend WithEvents AudioSettingsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents btnComment As Button
+    Friend WithEvents txtFlowMaxWait As TextBox
+    Friend WithEvents lblFlowMaxWait As Label
+    Friend WithEvents rbWaitRandom As RadioButton
 End Class

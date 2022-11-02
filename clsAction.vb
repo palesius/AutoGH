@@ -1,6 +1,7 @@
 ﻿Imports System.Xml
 Public Enum ActionType
     actWait
+    actWaitRandom
     actLoop
     actHold
     actRelease
@@ -113,6 +114,8 @@ Public MustInherit Class clsAction
         Select Case type
             Case "Wait"
                 Return New clsActionWait(src, group)
+            Case "WaitRandom"
+                Return New clsActionWaitRandom(src, group)
             Case "Loop"
                 Return New clsActionLoop(src, group)
             Case "Hold"
@@ -131,6 +134,8 @@ Public MustInherit Class clsAction
         Select Case node.Name
             Case "Wait"
                 a = New clsActionWait(node, version, group)
+            Case "WaitRandom"
+                a = New clsActionWaitRandom(node, version, group)
             Case "Loop"
                 a = New clsActionLoop(node, version, group)
             Case "Hold"
@@ -249,6 +254,59 @@ Public Class clsActionWait
 
     Public Overrides Function clone() As clsAction
         Dim tmp As New clsActionWait(delay, group)
+        tmp.baseClone(Me)
+        Return tmp
+    End Function
+End Class
+
+Public Class clsActionWaitRandom
+    Inherits clsAction
+
+    Public minDelay As Integer
+    Public maxDelay As Integer
+
+    Public Sub New(_minDelay As Integer, _maxDelay As Integer, _group As clsActionGroup)
+        controllerNumber = 0
+        minDelay = _minDelay
+        maxDelay = _maxDelay
+        group = _group
+    End Sub
+
+    Public Overrides Function getDescription() As String
+        Return "Wait for " & formatMS(minDelay) & " to " & formatMS(maxDelay)
+    End Function
+
+    Public Overrides Function getActType() As ActionType
+        Return ActionType.actWaitRandom
+    End Function
+
+    Public Overrides Function serialize() As String
+        Return "WaitRandom," & minDelay & "," & maxDelay
+    End Function
+
+    Public Overrides Function toXML(doc As XmlDocument) As XmlElement
+        Dim tmp As XmlElement = doc.CreateElement("WaitRandom")
+        tmp.SetAttribute("MinDelay", minDelay)
+        tmp.SetAttribute("MaxDelay", maxDelay)
+        If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
+        Return tmp
+    End Function
+
+    Public Sub New(serial As String, _group As clsActionGroup)
+        Dim toks() As String = serial.Split(",")
+        minDelay = toks(1)
+        maxDelay = toks(2)
+        group = _group
+    End Sub
+
+    Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
+        minDelay = node.Attributes("MinDelay").Value
+        maxDelay = node.Attributes("MaxDelay").Value
+        group = _group
+    End Sub
+
+    Public Overrides Function clone() As clsAction
+        Dim tmp As New clsActionWaitRandom(minDelay, maxDelay, group)
         tmp.baseClone(Me)
         Return tmp
     End Function

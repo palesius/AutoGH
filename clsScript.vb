@@ -169,6 +169,7 @@
             finalAction.index = actions.Count
             actions.Add(finalAction)
         Next
+        Dim rng As New Random()
         While i < actions.Count
             'Debug.Print(i & "," & timecode & "," & actions(i).toString)
             Select Case actions(i).getActType
@@ -204,6 +205,11 @@
                     Dim actWait As clsActionWait = actions(i)
                     simpleActions.Add(New clsSimpleAction(timecode, actions(i)))
                     timecode = timecode + actWait.delay
+                    i = i + 1
+                Case ActionType.actWaitRandom
+                    Dim actWaitRandom As clsActionWaitRandom = actions(i)
+                    simpleActions.Add(New clsSimpleAction(timecode, actions(i)))
+                    timecode = timecode + actWaitRandom.minDelay + (actWaitRandom.maxDelay - actWaitRandom.minDelay) * rng.NextDouble
                     i = i + 1
                 Case ActionType.actInputVideo
                     simpleActions.Add(New clsSimpleAction(timecode, actions(i)))

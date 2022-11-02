@@ -337,6 +337,8 @@ Public Class frmEdit
             If .Checked Then
                 lblFlowWait.Visible = .Checked
                 txtFlowWait.Visible = .Checked
+                lblFlowMaxWait.Visible = Not .Checked
+                txtFlowMaxWait.Visible = Not .Checked
                 lblFlowRepeat.Visible = Not .Checked
                 txtFlowRepeat.Visible = Not .Checked
                 lblFlowTarget.Visible = Not .Checked
@@ -346,11 +348,28 @@ Public Class frmEdit
         End With
     End Sub
 
+    Private Sub rbWaitRandom_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbWaitRandom.CheckedChanged
+        With rbWaitRandom
+            If .Checked Then
+                lblFlowWait.Visible = .Checked
+                txtFlowWait.Visible = .Checked
+                lblFlowMaxWait.Visible = .Checked
+                txtFlowMaxWait.Visible = .Checked
+                lblFlowRepeat.Visible = Not .Checked
+                txtFlowRepeat.Visible = Not .Checked
+                lblFlowTarget.Visible = Not .Checked
+                txtFlowTarget.Visible = Not .Checked
+                btnFlowTarget.Visible = Not .Checked
+            End If
+        End With
+    End Sub
     Private Sub rbLoop_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbLoop.CheckedChanged
         With rbLoop
             If .Checked Then
                 lblFlowWait.Visible = Not .Checked
                 txtFlowWait.Visible = Not .Checked
+                lblFlowMaxWait.Visible = Not .Checked
+                txtFlowMaxWait.Visible = Not .Checked
                 lblFlowRepeat.Visible = .Checked
                 txtFlowRepeat.Visible = .Checked
                 lblFlowTarget.Visible = .Checked
@@ -365,6 +384,8 @@ Public Class frmEdit
             If .Checked Then
                 lblFlowWait.Visible = Not .Checked
                 txtFlowWait.Visible = Not .Checked
+                lblFlowMaxWait.Visible = Not .Checked
+                txtFlowMaxWait.Visible = Not .Checked
                 lblFlowRepeat.Visible = .Checked
                 txtFlowRepeat.Visible = .Checked
                 lblFlowTarget.Visible = .Checked
@@ -499,6 +520,7 @@ Public Class frmEdit
             If rbPress.Checked Then action = New clsActionPress(cbControllerIP.SelectedItem, btnToMap, valLT, valRT, valLS, valRS, unformatMS(txtControllerHold.Text), unformatMS(txtControllerWait.Text), CInt(txtControllerRepeat.Text), activeGroup)
         ElseIf tcActions.SelectedTab Is tpFlow Then
             If rbWait.Checked Then action = New clsActionWait(unformatMS(txtFlowWait.Text), activeGroup)
+            If rbWaitRandom.Checked Then action = New clsActionWaitRandom(unformatMS(txtFlowWait.Text), unformatMS(txtFlowMaxWait.Text), activeGroup)
             If rbLoop.Checked Then
                 If loopTarget Is Nothing Then MsgBox("You must select a target") Else action = New clsActionLoop(loopTarget, CInt(txtFlowRepeat.Text), activeGroup)
             End If
@@ -584,17 +606,17 @@ Public Class frmEdit
         Return Math.Floor(ts.TotalMilliseconds)
     End Function
 
-    Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtControllerWait.Validating, txtControllerHold.Validating, txtFlowWait.Validating, txtInputInterval.Validating, txtInputDuration.Validating
+    Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtControllerWait.Validating, txtControllerHold.Validating, txtFlowWait.Validating, txtFlowMaxWait.Validating, txtInputInterval.Validating, txtInputDuration.Validating
         Dim ms As Long = unformatMS(sender.text)
         If ms = -1 Then
             e.Cancel = True
-            MsgBox("You may only enter times in this field." & vbCrLf & "Valid formats are:" & vbCrLf & _
-                    "1:02:03.004" & vbCrLf & _
-                    "62:03.004" & vbCrLf & _
-                    "3723.004" & vbCrLf & _
-                    "1h2m3s4ms" & vbCrLf & _
-                    "62m3s4ms" & vbCrLf & _
-                    "3723s4ms" & vbCrLf & _
+            MsgBox("You may only enter times in this field." & vbCrLf & "Valid formats are:" & vbCrLf &
+                    "1:02:03.004" & vbCrLf &
+                    "62:03.004" & vbCrLf &
+                    "3723.004" & vbCrLf &
+                    "1h2m3s4ms" & vbCrLf &
+                    "62m3s4ms" & vbCrLf &
+                    "3723s4ms" & vbCrLf &
                     "3723004ms" & vbCrLf)
         End If
         sender.text = formatMS(ms)
@@ -712,6 +734,14 @@ Public Class frmEdit
                 rbWait.Checked = True
                 With aWait
                     txtFlowWait.Text = formatMS(.delay)
+                End With
+            Case ActionType.actWaitRandom
+                Dim aWaitRandom As clsActionWaitRandom = action
+                tcActions.SelectedTab = tpFlow
+                rbWaitRandom.Checked = True
+                With aWaitRandom
+                    txtFlowWait.Text = formatMS(.minDelay)
+                    txtFlowMaxWait.Text = formatMS(.maxDelay)
                 End With
             Case ActionType.actLoop
                 Dim aLoop As clsActionLoop = action
