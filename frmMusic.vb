@@ -242,6 +242,9 @@ Public Class frmMusic
                                 Dim track As New clsTrack(song.mf, i, match.Groups("part").Value, song)
                                 lstTracks.Add(track)
                                 cb.Items.Add(track)
+                            ElseIf i = 0 Then
+                                ' The track title for track 0 is the title of the song
+                                song.title = name
                             End If
                             Exit For
                         End If
@@ -329,11 +332,19 @@ Public Class frmMusic
                         trackCount += 1
                     Case Else
                         If (Not cbLevel(i).SelectedItem Is Nothing) Then
-                            Dim trackNotes As List(Of clsNoteEntry) = getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem)
+                            Dim hopoThreshold As Integer
+                            With CType(cbGame.SelectedItem, clsRhythmGame)
+                                If .hopoTrigger Is Nothing Then
+                                    hopoThreshold = CType(cbTrack(i).SelectedItem, clsTrack)._song.mf.DeltaTicksPerQuarterNote / 3
+                                ElseIf Not .hopoTrigger.TryGetValue(CType(cbSong.SelectedItem, clsSong).title, hopoThreshold) Then
+                                    hopoThreshold = CType(cbGame.SelectedItem, clsRhythmGame).hopoTrigger("_Default")
+                                End If
+                            End With
+                            Dim trackNotes As List(Of clsNoteEntry) = getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem, hopoThreshold)
                             If trackNotes Is Nothing Then Exit Sub
-                            allNotes.AddRange(trackNotes)
-                            trackCount += 1
-                        End If
+                                allNotes.AddRange(trackNotes)
+                                trackCount += 1
+                            End If
                 End Select
             End If
         Next

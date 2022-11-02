@@ -160,6 +160,7 @@ End Enum
 Friend Class clsSong
     Friend _game As clsRhythmGame
     Friend name As String
+    Friend title As String
     Friend fi As IO.FileInfo
     Private _mf As NAudio.Midi.MidiFile
     Private _startTime As Date
@@ -174,6 +175,9 @@ Friend Class clsSong
     Friend Sub New(newFI As IO.FileInfo, game As clsRhythmGame)
         fi = newFI
         name = IO.Path.GetFileNameWithoutExtension(fi.FullName)
+        ' Only Rock Band MIDIs have song titles which will get loaded when the track list is parsed
+        ' Provide a suitable default for Guitar Hero songs
+        title = name
         _game = game
     End Sub
 
