@@ -348,16 +348,26 @@ Module modVocal
                 End If
             End If
         Next
-        Clipboard.SetText(tb.ToString)
 
-        vocalTrack.readnotes(mf, tempos)
-        beatTrack.readnotes(mf, tempos)
-        Dim files As New List(Of IO.FileInfo)
+        If tb.Length > 0 Then
+            Clipboard.SetText(tb.ToString)
+        End If
+
         Dim filename As String = vbNullString
-        vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime)
-        filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
-        saveWav(vocalTrack.samples.ToArray(), filename)
-        offset = vocalTrack.startTime
+        If vocalTrack IsNot Nothing Then
+            vocalTrack.readnotes(mf, tempos)
+            vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime)
+            filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
+            saveWav(vocalTrack.samples.ToArray(), filename)
+        End If
+
+        If beatTrack IsNot Nothing Then
+            beatTrack.readnotes(mf, tempos)
+            beatTrack.generateSamples(beatTrack.startTime, beatTrack.endTime)
+            filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
+            saveWav(beatTrack.samples.ToArray(), filename)
+        End If
+
         Return New IO.FileInfo(filename)
     End Function
 

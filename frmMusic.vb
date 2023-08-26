@@ -6,6 +6,7 @@
 'ability to pause,stop,start from a certain line
 
 Imports System.IO
+Imports System.Linq
 
 Public Class frmMusic
 
@@ -622,8 +623,17 @@ Public Class frmMusic
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles btnMakeVocals.Click
         Dim rg As clsRhythmGame = CType(cbGame.SelectedItem, clsRhythmGame)
+        Dim errors As List(Of String) = New List(Of String)
         For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & rg.code).GetFiles("*.mid")
-            If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".mp3") Then modVocal.generateMP3(fi.FullName)
+            Try
+                If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".mp3") Then modVocal.generateMP3(fi.FullName)
+            Catch ex As Exception
+                errors.Add(fi.Name)
+            End Try
         Next
+
+        If errors.Any() Then
+            MsgBox("Some error(s) occured whilst generating mp3's for the following:" & vbCrLf & vbCrLf & String.Join("," & vbCrLf, errors.ToArray()))
+        End If
     End Sub
 End Class
