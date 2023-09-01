@@ -1230,8 +1230,10 @@ Public Class frmEdit
                             lbActions.SelectedItems.Clear()
                             If lastAction.original Is Nothing Then
                                 lbActions.SelectedItem = lastAction
+                                centerAction()
                             Else
                                 lbActions.SelectedItem = lastAction.original
+                                centerAction()
                             End If
                         End If
                     End If
@@ -1251,10 +1253,31 @@ Public Class frmEdit
                 btnFaster.Enabled = False
                 btnSlower.Enabled = False
                 setBtnPP(True)
-                    activeScript = Nothing
-                    lblWaitTime.Text = vbNullString
-                    tmrScriptStatus.Enabled = False
+                activeScript = Nothing
+                lblWaitTime.Text = vbNullString
+                tmrScriptStatus.Enabled = False
         End Select
+    End Sub
+
+    Private Sub centerAction()
+        ' Get the index of the selected item
+        Dim selectedIndex As Integer = lbActions.SelectedIndex
+
+        ' Check if an item is selected
+        If selectedIndex >= 0 Then
+            ' Calculate the index to center the selected item
+            Dim centerIndex As Integer = selectedIndex - (lbActions.ClientSize.Height / lbActions.ItemHeight / 2)
+
+            ' Ensure the centerIndex is within valid bounds
+            If centerIndex < 0 Then
+                centerIndex = 0
+            ElseIf centerIndex > lbActions.Items.Count - 1 Then
+                centerIndex = lbActions.Items.Count - 1
+            End If
+
+            ' Set the TopIndex to center the selected item
+            lbActions.TopIndex = centerIndex
+        End If
     End Sub
 
     Private Sub SongToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SongToolStripMenuItem.Click

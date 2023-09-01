@@ -3,7 +3,7 @@
     Public code As String
     Public notes(4) As Integer
     Public drumNoteStr As String
-    Public drumNotes(4) As Integer
+    Public drumNotes(5) As Integer
     Public strum As Integer
     Public soloStrum As Integer
     Public dilation As Decimal
@@ -36,7 +36,10 @@
         If n Is Nothing Then minimumDuration = base.minimumDuration Else minimumDuration = CInt(n.InnerText)
         n = bn.SelectSingleNode("DrumNotes")
         If n Is Nothing Then drumNoteStr = base.drumNoteStr Else drumNoteStr = n.InnerText
-        For i As Integer = 0 To 4
+        For i As Integer = 0 To 5
+            If i >= drumNoteStr.Length Then
+                Exit For
+            End If
             drumNotes(i) = notes(CInt(drumNoteStr.Substring(i, 1)))
         Next
 

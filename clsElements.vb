@@ -244,11 +244,15 @@ Friend Class clsTrack
         End Get
     End Property
 
-    Friend ReadOnly Property noteGreen(Optional nostrum As Boolean = False, Optional solo As Boolean = False) As Integer
+    Friend ReadOnly Property noteGreen(Optional nostrum As Boolean = False, Optional solo As Boolean = False, Optional fifthLane As Boolean = False) As Integer
         Get
             Select Case name
                 Case "DRUMS"
-                    Return _game.drumNotes(0) + IIf(nostrum, 0, strumButton(solo))
+                    If fifthLane Then
+                        Return _game.drumNotes(5) + IIf(nostrum, 0, strumButton(solo))
+                    Else
+                        Return _game.drumNotes(0) + IIf(nostrum, 0, strumButton(solo))
+                    End If
                 Case Else
                     If lefty Then
                         Return _game.notes(4) + IIf(nostrum, 0, strumButton(solo))
@@ -350,6 +354,27 @@ Friend Class clsLevel
                 Case Else
                     Return -1
             End Select
+        End Get
+    End Property
+
+    Friend ReadOnly Property maxNote(track As String) As Integer
+        Get
+            If track <> "DRUMS" Then
+                Return 4
+            Else
+                Select Case index
+                    Case enumLevel.lvlEasy
+                        Return 5
+                    Case enumLevel.lvlMedium
+                        Return 5
+                    Case enumLevel.lvlHard
+                        Return 5
+                    Case enumLevel.lvlExpert
+                        Return 5
+                    Case Else
+                        Return -1
+                End Select
+            End If
         End Get
     End Property
 
