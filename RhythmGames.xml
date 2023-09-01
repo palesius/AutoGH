@@ -32,7 +32,7 @@
     <Dilation>1.0025</Dilation>
     <LoadTime>2100</LoadTime>
   </Game>
-  <Game Name="Guitar Hero III" Code="GH3">
+  <Game Name="Guitar Hero III - Controller" Code="GH3C">
     <Strum />
     <SoloStrum />
     <Notes>
@@ -45,6 +45,33 @@
     <Dilation>1.00008</Dilation>
     <LoadTime>3600</LoadTime>
     <MinimumDuration>25</MinimumDuration>
+  </Game>
+  <Game Name="Guitar Hero III - Guitar" Code="GH3G">
+    <Strum>DOWN</Strum>
+    <SoloStrum />
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+    </Notes>
+    <Dilation>1.00008</Dilation>
+    <LoadTime>3600</LoadTime>
+    <MinimumDuration>25</MinimumDuration>
+  </Game>
+  <Game Name="Guitar Hero: World Tour" Code="GHWT">
+    <Strum>DOWN</Strum>
+    <SoloStrum>DOWN</SoloStrum>
+    <DrumNotes>412330</DrumNotes>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+    </Notes>
+    <Dilation>1.00008</Dilation>
   </Game>
   <Game Name="Rock Band" Code="RB">
     <LoadTime>3500</LoadTime>

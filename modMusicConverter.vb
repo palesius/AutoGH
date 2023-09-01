@@ -1,6 +1,22 @@
 ﻿Imports System.Linq
 Imports NAudio
 'https://github.com/TheBoxyBear/ChartTools/blob/stable/docs/FileFormats/midi.md
+
+Public Class clsNoteInfo
+    Public noteNumber As Integer
+    Public baseNote As Integer
+    Public noteValue As Integer
+
+    Public Sub New(_noteNumber As Integer, _baseNote As Integer)
+        noteNumber = _noteNumber
+        baseNote = _baseNote
+        noteValue = _noteNumber - _baseNote
+    End Sub
+
+    Public Overrides Function ToString() As String
+        Return String.Format("({0}, {1})", noteNumber, noteValue)
+    End Function
+End Class
 Friend Class clsNoteAction
     Implements IComparable(Of clsNoteAction)
     Public controller As Byte
@@ -83,7 +99,7 @@ Friend Class clsNoteEntry
     Public tickDuration As Integer
     Public msOffset As Integer
     Public msDuration As Integer
-    Public noteValue As Integer
+    Public noteInfo As clsNoteInfo
     Public noteMask As Integer
     Public hopo As Boolean = False
     Public solo As Boolean = False
@@ -98,22 +114,30 @@ Friend Class clsNoteEntry
 
     Public Sub New(_controller As String, _track As clsTrack, _level As clsLevel, _nev As Midi.NoteOnEvent, _solo As Boolean, _hopo As Boolean, _eventIndex As Integer, _section As String)
         controller = _controller
-        noteValue = _nev.NoteNumber - _level.baseNote
+        noteInfo = New clsNoteInfo(_nev.NoteNumber, _level.baseNote)
         tickOffset = _nev.AbsoluteTime
         tickDuration = _nev.NoteLength
         solo = _solo
         hopo = _hopo
-        Select Case noteValue
+        Select Case noteInfo.noteValue
             Case 0
                 noteMask = _track.noteGreen(hopo, solo)
+                ' Console.WriteLine(String.Format("{0} Green: ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
             Case 1
                 noteMask = _track.noteRed(hopo, solo)
+                ' Console.WriteLine(String.Format("{0} Red: ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
             Case 2
                 noteMask = _track.noteYellow(hopo, solo)
+                ' Console.WriteLine(String.Format("{0} Yellow: ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
             Case 3
                 noteMask = _track.noteBlue(hopo, solo)
+                ' Console.WriteLine(String.Format("{0} Blue: ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
             Case 4
                 noteMask = _track.noteOrange(hopo, solo)
+                ' Console.WriteLine(String.Format("{0} Orange: ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
+            Case 5
+                noteMask = _track.noteGreen(hopo, solo, True)
+                ' Console.WriteLine(String.Format("{0} Green (Fifth): ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
         End Select
         eventIndex = _eventIndex
         section = _section
@@ -489,7 +513,8 @@ Module modMusicConverter
             Select Case mev.CommandCode
                 Case Midi.MidiCommandCode.NoteOn
                     Dim nev As Midi.NoteOnEvent = CType(mev, Midi.NoteOnEvent)
-                    If nev.NoteNumber >= baseNote And nev.NoteNumber <= baseNote + 4 And nev.Velocity > 0 Then
+                    ' Console.WriteLine(String.Format("Index: {0} | NoteNumber: {1} | Time: {2} | Velocity: {3}", i, nev.NoteNumber, nev.AbsoluteTime, nev.Velocity))
+                    If nev.NoteNumber >= baseNote And nev.NoteNumber <= baseNote + Level.maxNote(Track.name) And nev.Velocity > 0 Then
                         If nev.AbsoluteTime <> lastTime Then
                             lastTime = nev.AbsoluteTime
                             curGroup = New List(Of Tuple(Of Integer, Midi.NoteOnEvent))
