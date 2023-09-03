@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmEdit
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class frmEdit
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmEdit))
@@ -146,6 +146,7 @@ Partial Class frmEdit
         Me.txtOuputAudio = New System.Windows.Forms.TextBox()
         Me.rbOutputAudio = New System.Windows.Forms.RadioButton()
         Me.gbSpeed = New System.Windows.Forms.GroupBox()
+        Me.cbLoop = New System.Windows.Forms.CheckBox()
         Me.nudSpeed = New System.Windows.Forms.NumericUpDown()
         Me.btnFaster = New System.Windows.Forms.Button()
         Me.btnSlower = New System.Windows.Forms.Button()
@@ -856,6 +857,7 @@ Partial Class frmEdit
         '
         'scMain.Panel2
         '
+        Me.scMain.Panel2.Controls.Add(Me.cbLoop)
         Me.scMain.Panel2.Controls.Add(Me.gbSpeed)
         Me.scMain.Panel2.Controls.Add(Me.txtSync)
         Me.scMain.Panel2.Controls.Add(Me.cbSync)
@@ -1452,6 +1454,16 @@ Partial Class frmEdit
         Me.gbSpeed.TabStop = False
         Me.gbSpeed.Text = "Adjust Timing"
         '
+        'cbLoop
+        '
+        Me.cbLoop.AutoSize = True
+        Me.cbLoop.Location = New System.Drawing.Point(90, 139)
+        Me.cbLoop.Name = "cbLoop"
+        Me.cbLoop.Size = New System.Drawing.Size(50, 17)
+        Me.cbLoop.TabIndex = 67
+        Me.cbLoop.Text = "Loop"
+        Me.cbLoop.UseVisualStyleBackColor = True
+        '
         'nudSpeed
         '
         Me.nudSpeed.Increment = New Decimal(New Integer() {10, 0, 0, 0})
@@ -1878,4 +1890,5 @@ Partial Class frmEdit
     Friend WithEvents txtFlowMaxWait As TextBox
     Friend WithEvents lblFlowMaxWait As Label
     Friend WithEvents rbWaitRandom As RadioButton
+    Friend WithEvents cbLoop As CheckBox
 End Class

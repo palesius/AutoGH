@@ -1123,56 +1123,63 @@ Public Class frmEdit
             Dim totalms As Integer = 0
             If activeScript.stateActions.Count > 0 Then totalms = activeScript.stateActions(activeScript.stateActions.Count - 1).timeoffset
             Dim timeString As String = formatMS(totalms)
-                If cbPrecompile.Checked Then
-                    If MsgBox("Ready to Start." & vbCrLf & "Runtime: " & timeString, vbOKCancel) = MsgBoxResult.Cancel Then
-                        activeScript.dispose()
-                        activeScript = Nothing
-                        tmrScriptStatus.Enabled = False
-                        btnStop.Enabled = False
-                        btnFaster.Enabled = False
-                        btnSlower.Enabled = False
-                        Exit Sub
-                    End If
+            If cbPrecompile.Checked Then
+                If MsgBox("Ready to Start." & vbCrLf & "Runtime: " & timeString, vbOKCancel) = MsgBoxResult.Cancel Then
+                    activeScript.dispose()
+                    activeScript = Nothing
+                    tmrScriptStatus.Enabled = False
+                    btnStop.Enabled = False
+                    btnFaster.Enabled = False
+                    btnSlower.Enabled = False
+                    Exit Sub
                 End If
-                If cbSyncWait.Checked Then
-                    Dim receivingUdpClient As New System.Net.Sockets.UdpClient(12345)
-                    Dim RemoteIpEndPoint As New System.Net.IPEndPoint(System.Net.IPAddress.Any, 0)
-                    Dim SyncStart As Boolean = False
-                    Do Until SyncStart
-                        Dim receiveBytes As [Byte]() = receivingUdpClient.Receive(RemoteIpEndPoint)
-                        If System.Text.Encoding.ASCII.GetString(receiveBytes) = "AutoGH" Then SyncStart = True
-                    Loop
-                    RemoteIpEndPoint = Nothing
-                    receivingUdpClient.Close()
-                    receivingUdpClient = Nothing
-                End If
-                If cbSync.Checked Then
-                    Dim sck As Net.Sockets.Socket
-                    sck = New Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, Net.Sockets.SocketType.Dgram, Net.Sockets.ProtocolType.Udp)
-                    sck.Connect(txtSync.Text, 12345)
-                    sck.Send(System.Text.Encoding.ASCII.GetBytes("AutoGH"))
-                    sck.Close()
-                End If
-                asLastTime = 0
-                activeScript.startScript()
-                setBtnPP(False)
-            Else
-                Select Case activeScript.state
+            End If
+            If cbSyncWait.Checked Then
+                Dim receivingUdpClient As New System.Net.Sockets.UdpClient(12345)
+                Dim RemoteIpEndPoint As New System.Net.IPEndPoint(System.Net.IPAddress.Any, 0)
+                Dim SyncStart As Boolean = False
+                Do Until SyncStart
+                    Dim receiveBytes As [Byte]() = receivingUdpClient.Receive(RemoteIpEndPoint)
+                    If System.Text.Encoding.ASCII.GetString(receiveBytes) = "AutoGH" Then SyncStart = True
+                Loop
+                RemoteIpEndPoint = Nothing
+                receivingUdpClient.Close()
+                receivingUdpClient = Nothing
+            End If
+            If cbSync.Checked Then
+                Dim sck As Net.Sockets.Socket
+                sck = New Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, Net.Sockets.SocketType.Dgram, Net.Sockets.ProtocolType.Udp)
+                sck.Connect(txtSync.Text, 12345)
+                sck.Send(System.Text.Encoding.ASCII.GetBytes("AutoGH"))
+                sck.Close()
+            End If
+            asLastTime = 0
+            activeScript.startScript(cbLoop.Checked)
+            setBtnPP(False)
+        Else
+            Select Case activeScript.state
                 Case clsScript.scriptState.finished
                     asLastTime = 0
-                    activeScript.startScript()
+                    activeScript.startScript(cbLoop.Checked)
                     setBtnPP(False)
                 Case clsScript.scriptState.paused
                     activeScript.continueScript()
                     setBtnPP(False)
                 Case clsScript.scriptState.ready
                     asLastTime = 0
-                    activeScript.startScript()
+                    activeScript.startScript(cbLoop.Checked)
                     setBtnPP(False)
                 Case clsScript.scriptState.running
                     activeScript.pauseScript()
                     setBtnPP(True)
             End Select
+        End If
+    End Sub
+
+    Private Sub cbLoop_CheckedChanged(sender As Object, e As EventArgs) Handles cbLoop.CheckedChanged
+        If activeScript IsNot Nothing Then
+            Dim checkBox As CheckBox = DirectCast(sender, CheckBox)
+            activeScript.loopScript(checkBox.Checked)
         End If
     End Sub
 
