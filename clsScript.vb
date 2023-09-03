@@ -13,6 +13,7 @@
     Private capture As clsSnapshot
     Private needsCapture As Boolean
     Private outputActions As List(Of clsActionOutput)
+    Private Event ThreadStopped As EventHandler
 
     Enum scriptState
         ready
@@ -257,12 +258,15 @@
         For Each ao As clsActionOutput In outputActions
             ao.init()
         Next
+
+        AddHandler ThreadStopped, AddressOf HandleThreadStopped
     End Sub
 
     Public startTime As Date
     Public lastTime As Integer
     Private pauseTime As Date
     Private pauseFlag As Boolean
+    Private loopFlag As Boolean
     Private stopFlag As Boolean
     Private runThread As Threading.Thread
 
@@ -358,22 +362,28 @@
                 End If
             End If
         Loop
-        If stopFlag Then
+
+        If Not loopFlag Then
+            If stopFlag Then
+                For Each controller As clsController In controllers.Values
+                    controller.resetController()
+                Next
+            End If
             For Each controller As clsController In controllers.Values
-                controller.resetController()
+                controller.dispose()
             Next
+
+            Me.state = scriptState.finished
         End If
-        For Each controller As clsController In controllers.Values
-            controller.dispose()
-        Next
-        Me.state = scriptState.finished
+
         Me.dispose()
     End Sub
 
-    Public Sub startScript()
+    Public Sub startScript(_loop As Boolean)
         startTime = Now
         stopFlag = False
         pauseFlag = False
+        loopFlag = _loop
         Dim ts As New System.Threading.ThreadStart(AddressOf Me.runScript)
         runThread = New System.Threading.Thread(ts)
         runThread.Start()
@@ -398,6 +408,16 @@
         Me.dispose()
     End Sub
 
+    Public Sub loopScript(_loop As Boolean)
+        loopFlag = _loop
+    End Sub
+
+    Private Sub HandleThreadStopped(sender As Object, e As EventArgs)
+        If loopFlag Then
+            Me.startScript(loopFlag)
+        End If
+    End Sub
+
     Public Sub dispose() Implements IDisposable.Dispose
         If Not outputActions Is Nothing Then
             For Each ao As clsActionOutput In outputActions
@@ -414,5 +434,6 @@
             capture = Nothing
         End If
         MyBase.Finalize()
+        RaiseEvent ThreadStopped(Me, EventArgs.Empty)
     End Sub
 End Class
