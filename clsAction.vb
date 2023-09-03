@@ -36,7 +36,7 @@ Public Class clsActionGroup
     Public Function getActions() As clsAction()
         Dim tmp As New List(Of clsAction)
         For Each action As clsAction In actions
-            tmp.Add(action.clone)
+            tmp.Add(action.Clone)
         Next
         For Each action As clsAction In tmp
             If action.getActType = ActionType.actLoop Then
@@ -379,6 +379,7 @@ Public Class clsActionLoop
 
     Public Overrides Function clone() As clsAction
         Dim tmp As New clsActionLoop(target, repeat, group)
+        tmp.tgtIndex = target.index
         tmp.baseClone(Me)
         Return tmp
     End Function
