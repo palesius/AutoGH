@@ -13,7 +13,7 @@
     Private capture As clsSnapshot
     Private needsCapture As Boolean
     Private outputActions As List(Of clsActionOutput)
-    Private Event ThreadStopped As EventHandler
+    Private Event threadStopped As EventHandler
 
     Enum scriptState
         ready
@@ -259,7 +259,7 @@
             ao.init()
         Next
 
-        AddHandler ThreadStopped, AddressOf HandleThreadStopped
+        AddHandler threadStopped, AddressOf handleThreadStopped
     End Sub
 
     Public startTime As Date
@@ -363,12 +363,10 @@
             End If
         Loop
 
-        If Not loopFlag Then
-            If stopFlag Then
-                For Each controller As clsController In controllers.Values
-                    controller.resetController()
-                Next
-            End If
+        If stopFlag Then
+            For Each controller As clsController In controllers.Values
+                controller.resetController()
+            Next
             For Each controller As clsController In controllers.Values
                 controller.dispose()
             Next
@@ -404,7 +402,13 @@
 
     Public Sub stopScript()
         stopFlag = True
-        If Not runThread.Join(5000) Then runThread.Abort()
+
+        If runThread IsNot Nothing AndAlso runThread.IsAlive Then
+            If Not runThread.Join(TimeSpan.FromSeconds(5)) Then
+                runThread.Abort()
+            End If
+        End If
+
         Me.dispose()
     End Sub
 
@@ -412,9 +416,11 @@
         loopFlag = _loop
     End Sub
 
-    Private Sub HandleThreadStopped(sender As Object, e As EventArgs)
-        If loopFlag Then
+    Private Sub handleThreadStopped(sender As Object, e As EventArgs)
+        If Not stopFlag And loopFlag Then
             Me.startScript(loopFlag)
+        ElseIf Not loopFlag Then
+            Me.state = scriptState.finished
         End If
     End Sub
 
@@ -429,11 +435,13 @@
     End Sub
 
     Protected Overrides Sub Finalize()
+        Console.WriteLine(String.Format("{0} - Finalize Called", Date.Now.ToString()))
+
         If Not capture Is Nothing Then
             capture.Dispose()
             capture = Nothing
         End If
         MyBase.Finalize()
-        RaiseEvent ThreadStopped(Me, EventArgs.Empty)
+        RaiseEvent threadStopped(Me, EventArgs.Empty)
     End Sub
 End Class
