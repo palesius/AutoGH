@@ -73,6 +73,20 @@
     </Notes>
     <Dilation>1.00008</Dilation>
   </Game>
+  <Game Name="Guitar Hero: Van Halen" Code="GHVH">
+    <Strum>DOWN</Strum>
+    <SoloStrum>DOWN</SoloStrum>
+    <DrumNotes>4123304</DrumNotes>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+    </Notes>
+    <Dilation>1.00008</Dilation>
+    <MinimumDuration>20</MinimumDuration>
+  </Game>
   <Game Name="Rock Band" Code="RB">
     <LoadTime>3500</LoadTime>
     <DrumNotes>41230</DrumNotes>

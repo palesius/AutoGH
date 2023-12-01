@@ -12,6 +12,7 @@ Enum enumLevel
     lvlMedium = 1
     lvlHard = 2
     lvlExpert = 3
+    lvlExpertPlus = 4
 End Enum
 
 'Friend Class clsGame
@@ -244,11 +245,13 @@ Friend Class clsTrack
         End Get
     End Property
 
-    Friend ReadOnly Property noteGreen(Optional nostrum As Boolean = False, Optional solo As Boolean = False, Optional fifthLane As Boolean = False) As Integer
+    Friend ReadOnly Property noteGreen(Optional nostrum As Boolean = False, Optional solo As Boolean = False, Optional fifthLane As Boolean = False, Optional sixthLane As Boolean = False) As Integer
         Get
             Select Case name
                 Case "DRUMS"
-                    If fifthLane Then
+                    If sixthLane Then
+                        Return _game.drumNotes(6) + IIf(nostrum, 0, strumButton(solo))
+                    ElseIf fifthLane Then
                         Return _game.drumNotes(5) + IIf(nostrum, 0, strumButton(solo))
                     Else
                         Return _game.drumNotes(0) + IIf(nostrum, 0, strumButton(solo))
@@ -351,6 +354,8 @@ Friend Class clsLevel
                     Return 84
                 Case enumLevel.lvlExpert
                     Return 96
+                Case enumLevel.lvlExpertPlus
+                    Return 95
                 Case Else
                     Return -1
             End Select
@@ -371,6 +376,34 @@ Friend Class clsLevel
                         Return 5
                     Case enumLevel.lvlExpert
                         Return 5
+                    Case enumLevel.lvlExpertPlus
+                        Return 6
+                    Case Else
+                        Return -1
+                End Select
+            End If
+        End Get
+    End Property
+
+    Friend ReadOnly Property noteValue(track As String, noteNumber As Integer) As Integer
+        Get
+            If track <> "DRUMS" Then
+                Return noteNumber - baseNote
+            Else
+                Select Case index
+                    Case enumLevel.lvlEasy
+                    Case enumLevel.lvlMedium
+                    Case enumLevel.lvlHard
+                    Case enumLevel.lvlExpert
+                        Return noteNumber - baseNote
+                    Case enumLevel.lvlExpertPlus
+                        Dim value = (noteNumber - baseNote) - 1
+
+                        If value = -1 Then
+                            Return 6
+                        End If
+
+                        Return value
                     Case Else
                         Return -1
                 End Select
@@ -388,6 +421,8 @@ Friend Class clsLevel
                 Return "Hard"
             Case enumLevel.lvlExpert
                 Return "Expert"
+            Case enumLevel.lvlExpertPlus
+                Return "Expert+"
             Case Else
                 Return vbNullString
         End Select

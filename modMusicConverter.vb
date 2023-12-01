@@ -4,13 +4,11 @@ Imports NAudio
 
 Public Class clsNoteInfo
     Public noteNumber As Integer
-    Public baseNote As Integer
     Public noteValue As Integer
 
-    Public Sub New(_noteNumber As Integer, _baseNote As Integer)
+    Public Sub New(_noteNumber As Integer, _noteValue As Integer)
         noteNumber = _noteNumber
-        baseNote = _baseNote
-        noteValue = _noteNumber - _baseNote
+        noteValue = _noteValue
     End Sub
 
     Public Overrides Function ToString() As String
@@ -114,7 +112,7 @@ Friend Class clsNoteEntry
 
     Public Sub New(_controller As String, _track As clsTrack, _level As clsLevel, _nev As Midi.NoteOnEvent, _solo As Boolean, _hopo As Boolean, _eventIndex As Integer, _section As String)
         controller = _controller
-        noteInfo = New clsNoteInfo(_nev.NoteNumber, _level.baseNote)
+        noteInfo = New clsNoteInfo(_nev.NoteNumber, _level.noteValue(_track.name, _nev.NoteNumber))
         tickOffset = _nev.AbsoluteTime
         tickDuration = _nev.NoteLength
         solo = _solo
@@ -138,6 +136,9 @@ Friend Class clsNoteEntry
             Case 5
                 noteMask = _track.noteGreen(hopo, solo, True)
                 ' Console.WriteLine(String.Format("{0} Green (Fifth): ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
+            Case 6
+                noteMask = _track.noteGreen(hopo, solo, False, True)
+                ' Console.WriteLine(String.Format("{0} Green (Sixth): ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
         End Select
         eventIndex = _eventIndex
         section = _section

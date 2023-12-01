@@ -15,7 +15,7 @@ Public Class frmMusic
     Private dictGames As SortedDictionary(Of String, clsRhythmGame)
     Private lstSongs As New List(Of clsSong)
     Private lstTracks As New List(Of clsTrack)
-    Private arrLevel(3) As clsLevel
+    Private arrLevel(4) As clsLevel
 
     Private lastGame As clsRhythmGame
     Private lastSong As clsSong
@@ -117,7 +117,7 @@ Public Class frmMusic
 
         loadGames()
 
-        For i As Integer = 0 To 3
+        For i As Integer = 0 To 4
             arrLevel(i) = New clsLevel(i)
         Next i
 
