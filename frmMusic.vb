@@ -225,6 +225,13 @@ Public Class frmMusic
     End Sub
 
     Private Sub populateTracks(cb As ComboBox, game As clsRhythmGame, song As clsSong)
+        Dim reTrack As System.Text.RegularExpressions.Regex = Nothing
+        Select Case game.code
+            Case "PG"
+                reTrack = New System.Text.RegularExpressions.Regex("^(?<part>(guitar_1_|drums_1_|vocals_1_)(beginner|easy|medium|hard|expert))$")
+            Case Else
+                reTrack = New System.Text.RegularExpressions.Regex("^(PART (?<part>.*))|(?<part>HARM1)$")
+        End Select
         Dim oldPart As String = vbNullString
         If Not cb.SelectedItem Is Nothing AndAlso Not cb.SelectedItem.ToString = "" Then
             oldPart = CType(cb.SelectedItem, clsTrack).name
@@ -238,7 +245,7 @@ Public Class frmMusic
                     If .Events(i)(j).CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent Then
                         If CType(.Events(i)(j), NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.SequenceTrackName Then
                             Dim name As String = CType(.Events(i)(j), NAudio.Midi.TextEvent).Text
-                            Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(name, "^(PART (?<part>.*))|(?<part>HARM1)$")
+                            Dim match As System.Text.RegularExpressions.Match = reTrack.Match(name)
                             If match.Success Then
                                 Dim track As New clsTrack(song.mf, i, match.Groups("part").Value, song)
                                 lstTracks.Add(track)
@@ -303,6 +310,20 @@ Public Class frmMusic
                         vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
                         vocalsStarted(i) = False
                         trackCount += 1
+                    Case "vocals_1_beginner", "vocals_1_easy", "vocals_1_medium", "vocals_1_hard", "vocals_1_expert"
+                        Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
+                        vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & trackName.Substring(8) & ".mp3"
+                        If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath, trackName)
+                        If Not IO.File.Exists(vocalPath(i)) Then
+                            MsgBox("Couldn't generate vocal file.")
+                            Exit Sub
+                        End If
+                        Dim tf As TagLib.File = TagLib.File.Create(vocalPath(i))
+                        vocalPart(i) = trackName
+                        vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
+                        vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        vocalsStarted(i) = False
+                        trackCount += 1
                     Case "HARM1", "HARM2", "HARM3"
                         Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
                         Dim harmonyPaths(2) As String
@@ -334,18 +355,23 @@ Public Class frmMusic
                     Case Else
                         If (Not cbLevel(i).SelectedItem Is Nothing) Then
                             Dim hopoThreshold As Integer
+                            Dim trackNotes As List(Of clsNoteEntry)
                             With CType(cbGame.SelectedItem, clsRhythmGame)
                                 If .hopoTrigger Is Nothing Then
                                     hopoThreshold = CType(cbTrack(i).SelectedItem, clsTrack)._song.mf.DeltaTicksPerQuarterNote / 3
                                 ElseIf Not .hopoTrigger.TryGetValue(CType(cbSong.SelectedItem, clsSong).title, hopoThreshold) Then
                                     hopoThreshold = CType(cbGame.SelectedItem, clsRhythmGame).hopoTrigger("_Default")
                                 End If
+                                If .code = "PG" Then
+                                    trackNotes = getNotesPG(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem, hopoThreshold)
+                                Else
+                                    trackNotes = getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem, hopoThreshold)
+                                End If
                             End With
-                            Dim trackNotes As List(Of clsNoteEntry) = getNotes(i + 1, cbTrack(i).SelectedItem, cbLevel(i).SelectedItem, hopoThreshold)
                             If trackNotes Is Nothing Then Exit Sub
-                                allNotes.AddRange(trackNotes)
-                                trackCount += 1
-                            End If
+                            allNotes.AddRange(trackNotes)
+                            trackCount += 1
+                        End If
                 End Select
             End If
         Next

@@ -363,16 +363,14 @@
             End If
         Loop
 
-        If stopFlag Then
-            For Each controller As clsController In controllers.Values
-                controller.resetController()
-            Next
-            For Each controller As clsController In controllers.Values
-                controller.dispose()
-            Next
+        For Each controller As clsController In controllers.Values
+            controller.resetController()
+        Next
+        For Each controller As clsController In controllers.Values
+            controller.dispose()
+        Next
 
-            Me.state = scriptState.finished
-        End If
+        Me.state = scriptState.finished
 
         Me.dispose()
     End Sub

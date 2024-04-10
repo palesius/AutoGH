@@ -56,10 +56,12 @@ Module modVocal
                 If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.Lyric Then
                     Dim tev As NAudio.Midi.TextEvent = mev
                     Dim text As String = tev.Text
-                    Select Case text.Substring(text.Length - 1, 1)
-                        Case "#", "^", "*"
-                            talkies.Add(tev.AbsoluteTime)
-                    End Select
+                    If text.Length > 0 Then
+                        Select Case text.Substring(text.Length - 1, 1)
+                            Case "#", "^", "*"
+                                talkies.Add(tev.AbsoluteTime)
+                        End Select
+                    End If
                 End If
             Next
             talkies.Sort()
@@ -277,9 +279,9 @@ Module modVocal
         Return results
     End Function
 
-    Function generateMP3(midipath As String) As IO.FileInfo
+    Function generateMP3(midipath As String, Optional trackName As String = vbNullString) As IO.FileInfo
         Dim offset As Integer = 0
-        Dim fi As IO.FileInfo = generateWAV(midipath, offset)
+        Dim fi As IO.FileInfo = generateWAV(midipath, offset, trackName)
         NAudio.MediaFoundation.MediaFoundationApi.Startup()
         Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_MP3, New NAudio.Wave.WaveFormat(44100, 1), 0)
         Dim enc As New NAudio.Wave.MediaFoundationEncoder(mt)
@@ -301,7 +303,7 @@ Module modVocal
         End If
     End Function
 
-    Function generateWAV(midipath As String, Optional ByRef offset As Integer = 0) As IO.FileInfo
+    Function generateWAV(midipath As String, Optional ByRef offset As Integer = 0, Optional trackName As String = vbNullString) As IO.FileInfo
         Dim mf As New NAudio.Midi.MidiFile(midipath)
         Dim vocalTrack As trackInfo = Nothing
         Dim beatTrack As trackInfo = Nothing
@@ -319,6 +321,8 @@ Module modVocal
                                 Case "BEAT"
                                     beatTrack = New trackInfo(i, "BEAT")
                                     Exit For
+                                Case trackName
+                                    vocalTrack = New trackInfo(i, name)
                             End Select
                         End If
                     End If
@@ -357,7 +361,11 @@ Module modVocal
         If vocalTrack IsNot Nothing Then
             vocalTrack.readnotes(mf, tempos)
             vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime)
-            filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
+            If trackName = vbNullString Then
+                filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
+            Else
+                filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & "_" & trackName.Substring(9) & ".wav"
+            End If
             saveWav(vocalTrack.samples.ToArray(), filename)
         End If
 

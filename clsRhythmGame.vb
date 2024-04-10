@@ -1,7 +1,7 @@
 ﻿Public Class clsRhythmGame
     Public name As String
     Public code As String
-    Public notes(4) As Integer
+    Public notes(5) As Integer
     Public drumNoteStr As String
     Public drumNotes(6) As Integer
     Public strum As Integer
@@ -21,8 +21,8 @@
         If n Is Nothing Then strum = base.strum Else strum = getBtnValue(n.InnerText)
         n = bn.SelectSingleNode("SoloStrum")
         If n Is Nothing Then soloStrum = base.soloStrum Else soloStrum = getBtnValue(n.InnerText)
-        Dim noteColors() As String = New String() {"Green", "Red", "Yellow", "Blue", "Orange"}
-        For i As Integer = 0 To 4
+        Dim noteColors() As String = New String() {"Green", "Red", "Yellow", "Blue", "Orange", "White"}
+        For i As Integer = 0 To 5
             n = bn.SelectSingleNode("Notes/" & noteColors(i))
             If n Is Nothing Then notes(i) = base.notes(i) Else notes(i) = getBtnValue(n.InnerText)
         Next

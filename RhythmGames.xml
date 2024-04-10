@@ -9,6 +9,7 @@
       <Blue>X</Blue>
       <Yellow>Y</Yellow>
       <Orange>LB</Orange>
+      <White></White>
     </Notes>
     <Dilation>1</Dilation>
     <LoadTime>4000</LoadTime>
@@ -19,6 +20,14 @@
       <Song Title="_Default">170</Song>
     </Hopo>
   </Game>
+  <Game Name="Powergig" Code="PG">
+    <Strum>Down</Strum>
+    <LoadTime>3500</LoadTime>
+    <Notes>
+      <White>Down</White>
+    </Notes>
+    <DrumNotes>01234</DrumNotes>
+  </Game>
   <Game Name="Guitar Hero II" Code="GH2">
     <Strum />
     <SoloStrum />
@@ -28,6 +37,7 @@
       <Blue>RT</Blue>
       <Yellow>RB</Yellow>
       <Orange>A</Orange>
+      <White></White>
     </Notes>
     <Dilation>1.0025</Dilation>
     <LoadTime>2100</LoadTime>
@@ -41,6 +51,7 @@
       <Blue>RT</Blue>
       <Yellow>RB</Yellow>
       <Orange>A</Orange>
+      <White></White>
     </Notes>
     <Dilation>1.00008</Dilation>
     <LoadTime>3600</LoadTime>
@@ -55,6 +66,7 @@
       <Blue>X</Blue>
       <Yellow>Y</Yellow>
       <Orange>LB</Orange>
+      <White></White>
     </Notes>
     <Dilation>1.00008</Dilation>
     <LoadTime>3600</LoadTime>
@@ -70,6 +82,7 @@
       <Blue>X</Blue>
       <Yellow>Y</Yellow>
       <Orange>LB</Orange>
+      <White></White>
     </Notes>
     <Dilation>1.00008</Dilation>
   </Game>
@@ -83,6 +96,7 @@
       <Blue>X</Blue>
       <Yellow>Y</Yellow>
       <Orange>LB</Orange>
+      <White></White>
     </Notes>
     <Dilation>1.00008</Dilation>
     <MinimumDuration>20</MinimumDuration>

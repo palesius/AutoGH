@@ -240,6 +240,7 @@ Friend Class clsTrack
                 Case "BASS", "RHYTHM", "GUITAR COOP"
                     Return _game.strum
                 Case Else
+                    If name.StartsWith("guitar_1_") Then Return _game.strum Else Return 0
                     Return 0
             End Select
         End Get
@@ -250,17 +251,17 @@ Friend Class clsTrack
             Select Case name
                 Case "DRUMS"
                     If sixthLane Then
-                        Return _game.drumNotes(6) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.drumNotes(6) Or IIf(nostrum, 0, strumButton(solo))
                     ElseIf fifthLane Then
-                        Return _game.drumNotes(5) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.drumNotes(5) Or IIf(nostrum, 0, strumButton(solo))
                     Else
-                        Return _game.drumNotes(0) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.drumNotes(0) Or IIf(nostrum, 0, strumButton(solo))
                     End If
                 Case Else
                     If lefty Then
-                        Return _game.notes(4) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(4) Or IIf(nostrum, 0, strumButton(solo))
                     Else
-                        Return _game.notes(0) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(0) Or IIf(nostrum, 0, strumButton(solo))
                     End If
             End Select
         End Get
@@ -270,12 +271,12 @@ Friend Class clsTrack
         Get
             Select Case name
                 Case "DRUMS"
-                    Return _game.drumNotes(1) + IIf(nostrum, 0, strumButton(solo))
+                    Return _game.drumNotes(1) Or IIf(nostrum, 0, strumButton(solo))
                 Case Else
                     If lefty Then
-                        Return _game.notes(3) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(3) Or IIf(nostrum, 0, strumButton(solo))
                     Else
-                        Return _game.notes(1) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(1) Or IIf(nostrum, 0, strumButton(solo))
                     End If
             End Select
         End Get
@@ -285,9 +286,20 @@ Friend Class clsTrack
         Get
             Select Case name
                 Case "DRUMS"
-                    Return _game.drumNotes(2) + IIf(nostrum, 0, strumButton(solo))
+                    Return _game.drumNotes(2) Or IIf(nostrum, 0, strumButton(solo))
                 Case Else
-                    Return _game.notes(2) + IIf(nostrum, 0, strumButton(solo))
+                    Return _game.notes(2) Or IIf(nostrum, 0, strumButton(solo))
+            End Select
+        End Get
+    End Property
+
+    Friend ReadOnly Property noteWhite(Optional nostrum As Boolean = False, Optional solo As Boolean = False) As Integer
+        Get
+            Select Case name
+                Case "DRUMS"
+                    Return _game.drumNotes(5) Or IIf(nostrum, 0, strumButton(solo))
+                Case Else
+                    Return _game.notes(5) Or IIf(nostrum, 0, strumButton(solo))
             End Select
         End Get
     End Property
@@ -296,12 +308,12 @@ Friend Class clsTrack
         Get
             Select Case name
                 Case "DRUMS"
-                    Return _game.drumNotes(3) + IIf(nostrum, 0, strumButton(solo))
+                    Return _game.drumNotes(3) Or IIf(nostrum, 0, strumButton(solo))
                 Case Else
                     If lefty Then
-                        Return _game.notes(1) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(1) Or IIf(nostrum, 0, strumButton(solo))
                     Else
-                        Return _game.notes(3) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(3) Or IIf(nostrum, 0, strumButton(solo))
                     End If
             End Select
         End Get
@@ -311,12 +323,12 @@ Friend Class clsTrack
         Get
             Select Case name
                 Case "DRUMS"
-                    Return _game.drumNotes(4) + IIf(nostrum, 0, strumButton(solo))
+                    Return _game.drumNotes(4) Or IIf(nostrum, 0, strumButton(solo))
                 Case Else
                     If lefty Then
-                        Return _game.notes(0) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(0) Or IIf(nostrum, 0, strumButton(solo))
                     Else
-                        Return _game.notes(4) + IIf(nostrum, 0, strumButton(solo))
+                        Return _game.notes(4) Or IIf(nostrum, 0, strumButton(solo))
                     End If
             End Select
         End Get
@@ -408,6 +420,7 @@ Friend Class clsLevel
                         Return -1
                 End Select
             End If
+            Return noteNumber - baseNote
         End Get
     End Property
 

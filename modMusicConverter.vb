@@ -110,13 +110,30 @@ Friend Class clsNoteEntry
         Return t.ToString("mm:ss." & t.Millisecond.ToString.PadLeft(3, "0"))
     End Function
 
-    Public Sub New(_controller As String, _track As clsTrack, _level As clsLevel, _nev As Midi.NoteOnEvent, _solo As Boolean, _hopo As Boolean, _eventIndex As Integer, _section As String)
+    Public Sub New(_controller As String, _track As clsTrack, _level As clsLevel, _nev As Midi.NoteOnEvent, _solo As Boolean, _hopo As Boolean, _eventIndex As Integer, _section As String, _powergig As Boolean)
         controller = _controller
-        noteInfo = New clsNoteInfo(_nev.NoteNumber, _level.noteValue(_track.name, _nev.NoteNumber))
         tickOffset = _nev.AbsoluteTime
         tickDuration = _nev.NoteLength
         solo = _solo
         hopo = _hopo
+        If _powergig Then
+            Select Case _nev.NoteNumber
+                Case 60
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 7)
+                Case 62
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 0)
+                Case 64
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 1)
+                Case 65
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 2)
+                Case 67
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 3)
+                Case 69
+                    noteInfo = New clsNoteInfo(_nev.NoteNumber, 4)
+            End Select
+        Else
+            noteInfo = New clsNoteInfo(_nev.NoteNumber, _level.noteValue(_track.name, _nev.NoteNumber))
+        End If
         Select Case noteInfo.noteValue
             Case 0
                 noteMask = _track.noteGreen(hopo, solo)
@@ -139,6 +156,8 @@ Friend Class clsNoteEntry
             Case 6
                 noteMask = _track.noteGreen(hopo, solo, False, True)
                 ' Console.WriteLine(String.Format("{0} Green (Sixth): ({1} | {2} | NM: {3})", _eventIndex, noteInfo.ToString(), _section, noteMask.ToString()))
+            Case 7
+                noteMask = _track.noteWhite(hopo, solo)
         End Select
         eventIndex = _eventIndex
         section = _section
@@ -266,7 +285,7 @@ Module modMusicConverter
                         'If nev.Velocity > 0 Then Debug.Print(curBeat.number & "," & mev.AbsoluteTime & "," & nev.NoteNumber)
                         If nev.NoteNumber >= baseNote And nev.NoteNumber <= baseNote + 4 And nev.Velocity > 0 Then
                             Dim ne As clsNoteEntry = Nothing
-                            ne = New clsNoteEntry(controller, track, level, nev, False, False, i, vbNullString)
+                            ne = New clsNoteEntry(controller, track, level, nev, False, False, i, vbNullString, False)
                             curBeat.notes.Add(ne)
                             'If ne.hopo Then Debug.Print(tmpNotes.Count & " : " & nev.AbsoluteTime & " : " & ne.tickDuration)
                         End If
@@ -561,16 +580,100 @@ Module modMusicConverter
 
                 For Each nevTup As Tuple(Of Integer, Midi.NoteOnEvent) In nevGroup
                     Dim ne As clsNoteEntry = Nothing
-                    ne = New clsNoteEntry(controller, Track, Level, nevTup.Item2, inSolo, doHopo, nevTup.Item1, sections(curSection).name & "-" & nevTup.Item1)
+                    ne = New clsNoteEntry(controller, Track, Level, nevTup.Item2, inSolo, doHopo, nevTup.Item1, sections(curSection).name & "-" & nevTup.Item1, False)
                     tmpNotes.Add(ne)
                 Next
             Else
                 For Each nevTup As Tuple(Of Integer, Midi.NoteOnEvent) In nevGroup
                     Dim ne As clsNoteEntry = Nothing
-                    ne = New clsNoteEntry(controller, Track, Level, nevTup.Item2, inSolo, False, nevTup.Item1, sections(curSection).name & "-" & nevTup.Item1)
+                    ne = New clsNoteEntry(controller, Track, Level, nevTup.Item2, inSolo, False, nevTup.Item1, sections(curSection).name & "-" & nevTup.Item1, False)
                     tmpNotes.Add(ne)
                 Next
             End If
+            lastGroup = nevGroup
+        Next
+
+        tmpNotes.Sort()
+        Dim t As Integer = 0
+
+        For Each ne As clsNoteEntry In tmpNotes
+            While ne.tickOffset >= tempos(t).tickEnd
+                t = t + 1
+            End While
+            ne.msOffset = Track._game.dilation * (tempos(t).usStart + tempos(t).rate * (ne.tickOffset - tempos(t).tickStart)) / 1000
+            If ne.tickDuration + ne.tickOffset <= tempos(t).tickEnd Then
+                ne.msDuration = ne.tickDuration * tempos(t).rate / 1000
+            Else
+                'If ne.tickDuration + ne.tickOffset > tempos(t + 1).tickEnd Then Stop
+                ne.msDuration = (tempos(t).tickEnd - ne.tickOffset) * tempos(t).rate / 1000 + (ne.tickDuration + ne.tickOffset - tempos(t + 1).tickStart) * tempos(t + 1).rate / 1000
+            End If
+            ne.msDuration = ne.msDuration * Track._game.dilation - Track._game.truncation
+            If ne.msDuration < Track._game.minimumDuration Then ne.msDuration = Track._game.minimumDuration
+            ne.setComment()
+        Next
+        Return tmpNotes
+    End Function
+    Public Function getNotesPG(controller As Byte, Track As clsTrack, Level As clsLevel, HopoThreshold As Integer) As List(Of clsNoteEntry)
+        Dim baseNote As Integer = Level.baseNote
+        Dim mf As Midi.MidiFile = Track.mf
+        Dim tempos As New List(Of clsTempoEntry)
+        Dim tpq As Integer = mf.DeltaTicksPerQuarterNote
+        Dim prevTempo As clsTempoEntry = Nothing
+
+        Dim evtTrack As Integer = -1
+        For i As Integer = 1 To mf.Tracks - 1
+            Dim mev As Midi.MidiEvent = mf.Events(i)(0)
+            If mev.CommandCode = Midi.MidiCommandCode.MetaEvent _
+                AndAlso CType(mev, Midi.MetaEvent).MetaEventType = Midi.MetaEventType.SequenceTrackName _
+                AndAlso CType(mev, Midi.TextEvent).Text = "EVENTS" Then
+                evtTrack = i
+                Exit For
+            End If
+        Next
+
+        For Each mev As Midi.MidiEvent In mf.Events(0)
+            If mev.CommandCode = Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, Midi.MetaEvent).MetaEventType = Midi.MetaEventType.SetTempo Then
+                Dim tev As Midi.TempoEvent = CType(mev, Midi.TempoEvent)
+                Dim tempo As New clsTempoEntry(tev.AbsoluteTime, tev.MicrosecondsPerQuarterNote / mf.DeltaTicksPerQuarterNote, prevTempo)
+                tempos.Add(tempo)
+                prevTempo = tempo
+            End If
+        Next
+
+        Dim nevGroups As New List(Of List(Of Tuple(Of Integer, Midi.NoteOnEvent)))
+        Dim lastTime As Long = 0
+        Dim curGroup As List(Of Tuple(Of Integer, Midi.NoteOnEvent)) = Nothing
+        For i As Integer = 0 To mf.Events(Track.index).Count - 1
+            Dim mev As Midi.MidiEvent = mf.Events(Track.index)(i)
+            Select Case mev.CommandCode
+                Case Midi.MidiCommandCode.NoteOn
+                    Dim nev As Midi.NoteOnEvent = CType(mev, Midi.NoteOnEvent)
+                    ' Console.WriteLine(String.Format("Index: {0} | NoteNumber: {1} | Time: {2} | Velocity: {3}", i, nev.NoteNumber, nev.AbsoluteTime, nev.Velocity))
+                    Select Case nev.NoteNumber
+                        Case 60, 62, 64, 65, 67, 69
+                            If nev.Velocity > 0 Then
+                                If nev.AbsoluteTime <> lastTime Then
+                                    lastTime = nev.AbsoluteTime
+                                    curGroup = New List(Of Tuple(Of Integer, Midi.NoteOnEvent))
+                                    nevGroups.Add(curGroup)
+                                End If
+                                curGroup.Add(New Tuple(Of Integer, Midi.NoteOnEvent)(i, nev))
+                            End If
+                    End Select
+
+            End Select
+        Next
+
+        Dim tmpNotes As New List(Of clsNoteEntry)
+        Dim lastGroup As List(Of Tuple(Of Integer, Midi.NoteOnEvent)) = Nothing
+        For Each nevGroup As List(Of Tuple(Of Integer, Midi.NoteOnEvent)) In nevGroups
+            Dim nevTime As Long = nevGroup(0).Item2.AbsoluteTime
+
+            For Each nevTup As Tuple(Of Integer, Midi.NoteOnEvent) In nevGroup
+                Dim ne As clsNoteEntry = Nothing
+                ne = New clsNoteEntry(controller, Track, Level, nevTup.Item2, False, False, nevTup.Item1, "Full", True)
+                tmpNotes.Add(ne)
+            Next
             lastGroup = nevGroup
         Next
 
