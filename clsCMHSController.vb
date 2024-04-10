@@ -65,9 +65,9 @@ Public Class clsCMHSController
 
         reportData = baseReport()
         update()
-        System.Threading.Thread.Sleep(25)
+        System.Threading.Thread.Sleep(40)
         update()
-        System.Threading.Thread.Sleep(25)
+        System.Threading.Thread.Sleep(40)
     End Sub
 
     Public Overrides Sub sendReport(newReport() As Byte)
