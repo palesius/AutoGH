@@ -35,9 +35,9 @@ Friend Class clsNoteAction
         If msOffset < other.msOffset Then Return -1
         If msOffset > other.msOffset Then Return 1
         If controller.CompareTo(other.controller) <> 0 Then Return controller.CompareTo(other.controller)
+        If press <> other.press Then Return IIf(press, -1, 1)
         If noteMask < other.noteMask Then Return -1
         If noteMask > other.noteMask Then Return 1
-        If press <> other.press Then Return IIf(press, -1, 1)
         Return 0
     End Function
 End Class
@@ -104,6 +104,27 @@ Friend Class clsNoteEntry
     Public comment As String
     Public eventIndex As Integer
     Public section As String
+
+    Public Function clone() As clsNoteEntry
+        Dim n As New clsNoteEntry()
+        n.controller = controller
+        n.tickOffset = tickOffset
+        n.tickDuration = tickDuration
+        n.msOffset = msOffset
+        n.msDuration = msDuration
+        n.noteInfo = noteInfo
+        n.noteMask = noteMask
+        n.hopo = hopo
+        n.solo = solo
+        n.comment = comment
+        n.eventIndex = eventIndex
+        n.section = section
+        Return n
+    End Function
+
+    Private Sub New()
+
+    End Sub
 
     Private Function formatMS(ms As Integer) As String
         Dim t As New Date(10000 * CLng(ms))
@@ -611,6 +632,23 @@ Module modMusicConverter
             If ne.msDuration < Track._game.minimumDuration Then ne.msDuration = Track._game.minimumDuration
             ne.setComment()
         Next
+
+        Dim strum As Integer = Track._game.strum
+        Dim tmpStrums As New List(Of clsNoteEntry)
+        For Each ne As clsNoteEntry In tmpNotes
+            If ne.noteMask And strum And ne.msDuration > Track._game.minimumDuration Then
+                Dim neStrum As clsNoteEntry = ne.clone
+                ne.noteMask = ne.noteMask And (Not strum)
+                ne.comment = "note only"
+                neStrum.noteMask = strum
+                neStrum.msDuration = Track._game.minimumDuration
+                neStrum.comment = "strum only"
+                tmpStrums.Add(neStrum)
+            End If
+        Next
+        tmpNotes.AddRange(tmpStrums)
+        tmpNotes.Sort()
+
         Return tmpNotes
     End Function
     Public Function getNotesPG(controller As Byte, Track As clsTrack, Level As clsLevel, HopoThreshold As Integer) As List(Of clsNoteEntry)

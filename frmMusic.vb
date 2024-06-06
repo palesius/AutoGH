@@ -387,7 +387,7 @@ Public Class frmMusic
             Dim lastNote As clsNoteEntry = allNotes(0)
             mergedNotes.Add(lastNote)
             For i = 1 To allNotes.Count - 1
-                If allNotes(i).controller = lastNote.controller AndAlso allNotes(i).tickOffset = lastNote.tickOffset Then 'AndAlso allNotes(i).tickDuration = lastNote.tickDuration Then
+                If allNotes(i).controller = lastNote.controller AndAlso allNotes(i).msOffset = lastNote.msOffset AndAlso allNotes(i).msDuration = lastNote.msDuration Then
                     lastNote.merge(allNotes(i))
                 Else
                     mergedNotes.Add(allNotes(i))
@@ -420,13 +420,30 @@ Public Class frmMusic
         '    Debug.Print(line)
         'Next i
 
-        Dim noteActions As New List(Of clsNoteAction)
+        Dim allNoteActions As New List(Of clsNoteAction)
         For Each ne As clsNoteEntry In mergedNotes
-            noteActions.Add(New clsNoteAction(ne.controller, ne.noteMask, ne.msOffset + lastGame.loadTime, True, ne.comment))
-            noteActions.Add(New clsNoteAction(ne.controller, ne.noteMask, ne.msOffset + ne.msDuration + lastGame.loadTime, False, ne.comment))
+            allNoteActions.Add(New clsNoteAction(ne.controller, ne.noteMask, ne.msOffset + lastGame.loadTime, True, ne.comment))
+            allNoteActions.Add(New clsNoteAction(ne.controller, ne.noteMask, ne.msOffset + ne.msDuration + lastGame.loadTime, False, ne.comment))
         Next
 
-        noteActions.Sort()
+        allNoteActions.Sort()
+
+        'merge note actions with the same start time (the GHVH fix for interleaved holds splits up strum and notes)
+        Dim noteActions As New List(Of clsNoteAction)
+        Dim lastNA As clsNoteAction = Nothing
+        For Each na As clsNoteAction In allNoteActions
+            If lastNA Is Nothing Then
+                noteActions.Add(na)
+                lastNA = na
+            Else
+                If na.msOffset = lastNA.msOffset And na.controller = lastNA.controller And na.press = lastNA.press Then
+                    lastNA.noteMask = lastNA.noteMask Or na.noteMask
+                Else
+                    noteActions.Add(na)
+                    lastNA = na
+                End If
+            End If
+        Next
 
         actions = New List(Of clsAction)
         Dim curOffset As Integer
