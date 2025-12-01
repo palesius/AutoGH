@@ -69,10 +69,14 @@ Partial Class frmEdit
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveAsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConsoleTunerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConsoleTunerBulkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SongToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PatternToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TextToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BridgeModeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CronusIdentifyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureCardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -142,11 +146,13 @@ Partial Class frmEdit
         Me.rbInputRumble = New System.Windows.Forms.RadioButton()
         Me.rbInputAudio = New System.Windows.Forms.RadioButton()
         Me.tpOutput = New System.Windows.Forms.TabPage()
+        Me.txtSkip = New System.Windows.Forms.TextBox()
+        Me.lblSkip = New System.Windows.Forms.Label()
         Me.btnOutputAudio = New System.Windows.Forms.Button()
-        Me.txtOuputAudio = New System.Windows.Forms.TextBox()
+        Me.txtOutputAudio = New System.Windows.Forms.TextBox()
         Me.rbOutputAudio = New System.Windows.Forms.RadioButton()
-        Me.gbSpeed = New System.Windows.Forms.GroupBox()
         Me.cbLoop = New System.Windows.Forms.CheckBox()
+        Me.gbSpeed = New System.Windows.Forms.GroupBox()
         Me.nudSpeed = New System.Windows.Forms.NumericUpDown()
         Me.btnFaster = New System.Windows.Forms.Button()
         Me.btnSlower = New System.Windows.Forms.Button()
@@ -642,7 +648,7 @@ Partial Class frmEdit
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ExportToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ImportToolStripMenuItem, Me.ExportToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -674,6 +680,25 @@ Partial Class frmEdit
         Me.SaveAsToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
         Me.SaveAsToolStripMenuItem.Text = "Save As..."
         '
+        'ImportToolStripMenuItem
+        '
+        Me.ImportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConsoleTunerToolStripMenuItem, Me.ConsoleTunerBulkToolStripMenuItem})
+        Me.ImportToolStripMenuItem.Name = "ImportToolStripMenuItem"
+        Me.ImportToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.ImportToolStripMenuItem.Text = "Import"
+        '
+        'ConsoleTunerToolStripMenuItem
+        '
+        Me.ConsoleTunerToolStripMenuItem.Name = "ConsoleTunerToolStripMenuItem"
+        Me.ConsoleTunerToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.ConsoleTunerToolStripMenuItem.Text = "Console Tuner..."
+        '
+        'ConsoleTunerBulkToolStripMenuItem
+        '
+        Me.ConsoleTunerBulkToolStripMenuItem.Name = "ConsoleTunerBulkToolStripMenuItem"
+        Me.ConsoleTunerBulkToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.ConsoleTunerBulkToolStripMenuItem.Text = "Console Tuner Bulk..."
+        '
         'ExportToolStripMenuItem
         '
         Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
@@ -682,9 +707,9 @@ Partial Class frmEdit
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem, Me.DJHero1ToolStripMenuItem, Me.MirroringToolStripMenuItem, Me.AudioSettingsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SongToolStripMenuItem, Me.PatternToolStripMenuItem, Me.TextToolStripMenuItem, Me.BridgeModeToolStripMenuItem, Me.CronusIdentifyToolStripMenuItem, Me.CaptureCardToolStripMenuItem, Me.USBDeviceFinderToolStripMenuItem, Me.DJHero1ToolStripMenuItem, Me.MirroringToolStripMenuItem, Me.AudioSettingsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
         '
         'SongToolStripMenuItem
@@ -702,6 +727,15 @@ Partial Class frmEdit
             Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
         Me.PatternToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
         Me.PatternToolStripMenuItem.Text = "Pattern..."
+        '
+        'TextToolStripMenuItem
+        '
+        Me.TextToolStripMenuItem.Name = "TextToolStripMenuItem"
+        Me.TextToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Alt+T"
+        Me.TextToolStripMenuItem.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.T), System.Windows.Forms.Keys)
+        Me.TextToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.TextToolStripMenuItem.Text = "Text..."
         '
         'BridgeModeToolStripMenuItem
         '
@@ -1402,8 +1436,10 @@ Partial Class frmEdit
         '
         'tpOutput
         '
+        Me.tpOutput.Controls.Add(Me.txtSkip)
+        Me.tpOutput.Controls.Add(Me.lblSkip)
         Me.tpOutput.Controls.Add(Me.btnOutputAudio)
-        Me.tpOutput.Controls.Add(Me.txtOuputAudio)
+        Me.tpOutput.Controls.Add(Me.txtOutputAudio)
         Me.tpOutput.Controls.Add(Me.rbOutputAudio)
         Me.tpOutput.Location = New System.Drawing.Point(4, 22)
         Me.tpOutput.Name = "tpOutput"
@@ -1413,34 +1449,62 @@ Partial Class frmEdit
         Me.tpOutput.Text = "Output"
         Me.tpOutput.UseVisualStyleBackColor = True
         '
+        'txtSkip
+        '
+        Me.txtSkip.Location = New System.Drawing.Point(481, 4)
+        Me.txtSkip.Name = "txtSkip"
+        Me.txtSkip.Size = New System.Drawing.Size(76, 20)
+        Me.txtSkip.TabIndex = 74
+        Me.txtSkip.Text = "0ms"
+        Me.txtSkip.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'lblSkip
+        '
+        Me.lblSkip.AutoSize = True
+        Me.lblSkip.Location = New System.Drawing.Point(453, 7)
+        Me.lblSkip.Name = "lblSkip"
+        Me.lblSkip.Size = New System.Drawing.Size(31, 13)
+        Me.lblSkip.TabIndex = 75
+        Me.lblSkip.Text = "Skip:"
+        '
         'btnOutputAudio
         '
-        Me.btnOutputAudio.Location = New System.Drawing.Point(486, 3)
+        Me.btnOutputAudio.Location = New System.Drawing.Point(423, 3)
         Me.btnOutputAudio.Name = "btnOutputAudio"
         Me.btnOutputAudio.Size = New System.Drawing.Size(24, 20)
         Me.btnOutputAudio.TabIndex = 9
         Me.btnOutputAudio.Text = "..."
         Me.btnOutputAudio.UseVisualStyleBackColor = True
         '
-        'txtOuputAudio
+        'txtOutputAudio
         '
-        Me.txtOuputAudio.Location = New System.Drawing.Point(95, 3)
-        Me.txtOuputAudio.Name = "txtOuputAudio"
-        Me.txtOuputAudio.ReadOnly = True
-        Me.txtOuputAudio.Size = New System.Drawing.Size(391, 20)
-        Me.txtOuputAudio.TabIndex = 8
+        Me.txtOutputAudio.Location = New System.Drawing.Point(95, 3)
+        Me.txtOutputAudio.Name = "txtOutputAudio"
+        Me.txtOutputAudio.ReadOnly = True
+        Me.txtOutputAudio.Size = New System.Drawing.Size(328, 20)
+        Me.txtOutputAudio.TabIndex = 8
         '
         'rbOutputAudio
         '
         Me.rbOutputAudio.AutoSize = True
         Me.rbOutputAudio.Checked = True
-        Me.rbOutputAudio.Location = New System.Drawing.Point(3, 3)
+        Me.rbOutputAudio.Location = New System.Drawing.Point(6, 5)
         Me.rbOutputAudio.Name = "rbOutputAudio"
         Me.rbOutputAudio.Size = New System.Drawing.Size(52, 17)
         Me.rbOutputAudio.TabIndex = 7
         Me.rbOutputAudio.TabStop = True
         Me.rbOutputAudio.Text = "Audio"
         Me.rbOutputAudio.UseVisualStyleBackColor = True
+        '
+        'cbLoop
+        '
+        Me.cbLoop.AutoSize = True
+        Me.cbLoop.Location = New System.Drawing.Point(90, 139)
+        Me.cbLoop.Name = "cbLoop"
+        Me.cbLoop.Size = New System.Drawing.Size(50, 17)
+        Me.cbLoop.TabIndex = 67
+        Me.cbLoop.Text = "Loop"
+        Me.cbLoop.UseVisualStyleBackColor = True
         '
         'gbSpeed
         '
@@ -1453,16 +1517,6 @@ Partial Class frmEdit
         Me.gbSpeed.TabIndex = 67
         Me.gbSpeed.TabStop = False
         Me.gbSpeed.Text = "Adjust Timing"
-        '
-        'cbLoop
-        '
-        Me.cbLoop.AutoSize = True
-        Me.cbLoop.Location = New System.Drawing.Point(90, 139)
-        Me.cbLoop.Name = "cbLoop"
-        Me.cbLoop.Size = New System.Drawing.Size(50, 17)
-        Me.cbLoop.TabIndex = 67
-        Me.cbLoop.Text = "Loop"
-        Me.cbLoop.UseVisualStyleBackColor = True
         '
         'nudSpeed
         '
@@ -1878,7 +1932,7 @@ Partial Class frmEdit
     Friend WithEvents MirroringToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tpOutput As TabPage
     Friend WithEvents btnOutputAudio As Button
-    Friend WithEvents txtOuputAudio As TextBox
+    Friend WithEvents txtOutputAudio As TextBox
     Friend WithEvents rbOutputAudio As RadioButton
     Friend WithEvents gbSpeed As GroupBox
     Friend WithEvents btnFaster As Button
@@ -1891,4 +1945,10 @@ Partial Class frmEdit
     Friend WithEvents lblFlowMaxWait As Label
     Friend WithEvents rbWaitRandom As RadioButton
     Friend WithEvents cbLoop As CheckBox
+    Friend WithEvents ImportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ConsoleTunerToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ConsoleTunerBulkToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TextToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents txtSkip As TextBox
+    Friend WithEvents lblSkip As Label
 End Class

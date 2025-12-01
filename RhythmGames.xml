@@ -19,6 +19,21 @@
     <Hopo>
       <Song Title="_Default">170</Song>
     </Hopo>
+    <StaticNoise>False</StaticNoise>
+  </Game>
+  <Game Name="Band Hero" Code="BH">
+    <Strum>UP</Strum>
+    <SoloStrum>DOWN</SoloStrum>
+    <DrumNotes>412330</DrumNotes>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+      <White></White>
+    </Notes>
+    <Dilation>1.00008</Dilation>
   </Game>
   <Game Name="Powergig" Code="PG">
     <Strum>Down</Strum>
@@ -86,10 +101,26 @@
     </Notes>
     <Dilation>1.00008</Dilation>
   </Game>
+  <Game Name="Guitar Hero 5" Code="GH5">
+    <Strum>UP</Strum>
+    <SoloStrum>DOWN</SoloStrum>
+    <DrumNotes>412300</DrumNotes>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+      <White></White>
+    </Notes>
+    <Dilation>1</Dilation>
+    <MinimumDuration>30</MinimumDuration>
+    <StaticNoise>True</StaticNoise>
+  </Game>
   <Game Name="Guitar Hero: Van Halen" Code="GHVH">
     <Strum>DOWN</Strum>
     <SoloStrum>DOWN</SoloStrum>
-    <DrumNotes>4123304</DrumNotes>
+    <DrumNotes>412330</DrumNotes>
     <Notes>
       <Green>A</Green>
       <Red>B</Red>
@@ -99,7 +130,25 @@
       <White></White>
     </Notes>
     <Dilation>1.00008</Dilation>
-    <MinimumDuration>20</MinimumDuration>
+    <LoadTime>3400</LoadTime>
+    <MinimumDuration>30</MinimumDuration>
+    <StaticNoise>True</StaticNoise>
+  </Game>
+  <Game Name="Guitar Hero: Aerosmith" Code="GHAERO">
+    <Strum>DOWN</Strum>
+    <SoloStrum>DOWN</SoloStrum>
+    <DrumNotes>412330</DrumNotes>
+    <Notes>
+      <Green>A</Green>
+      <Red>B</Red>
+      <Blue>X</Blue>
+      <Yellow>Y</Yellow>
+      <Orange>LB</Orange>
+      <White></White>
+    </Notes>
+    <Dilation>1</Dilation>
+    <MinimumDuration>25</MinimumDuration>
+    <StaticNoise>True</StaticNoise>
   </Game>
   <Game Name="Rock Band" Code="RB">
     <LoadTime>3500</LoadTime>

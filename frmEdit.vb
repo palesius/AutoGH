@@ -8,12 +8,10 @@ Public Class frmEdit
     Private valRT As Integer
     Private loopTarget As clsAction
     Private groupTarget As clsActionGroup
-    Private filename As String
     Private asLastTime As Integer = 0
 
-    Private Const mainGroup As String = "[Main]"
+    Private activeFile As clsScriptFile
     Private activeScript As clsScript
-    Private groups As New Dictionary(Of String, clsActionGroup)
     Private activeGroup As clsActionGroup = Nothing
 
     Private Sub frmEdit_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
@@ -103,20 +101,21 @@ Public Class frmEdit
         cmbAdd.SelectedIndex = 0
         loopTarget = Nothing
         txtFlowTarget.Text = vbNullString
-        filename = vbNullString
         txtGame.Text = vbNullString
         txtTitle.Text = vbNullString
         txtDesc.Text = vbNullString
         cbControllerIP.SelectedIndex = 0
 
-        groups.Clear()
+        If Not activeFile Is Nothing Then activeFile.groups.Clear()
+        activeFile = New clsScriptFile
         lbGroups.Items.Clear()
         lbActions.Items.Clear()
     End Sub
 
     Private Sub blankScript()
+        activeFile = New clsScriptFile
         Dim g As New clsActionGroup(mainGroup)
-        groups.Add(g.name, g)
+        activeFile.groups.Add(g.name, g)
         lbGroups.Items.Add(g)
         activeGroup = g
         lbGroups.SelectedItem = g
@@ -535,10 +534,10 @@ Public Class frmEdit
             'todo: create input actions
         ElseIf tcActions.SelectedTab Is tpOutput Then
             If rbOutputAudio.Checked Then
-                If txtOuputAudio.Text = vbNullString OrElse Not IO.File.Exists(txtOuputAudio.Text) Then
+                If txtOutputAudio.Text = vbNullString OrElse Not IO.File.Exists(txtOutputAudio.Text) Then
                     MsgBox("You must select a valid audio file")
                 Else
-                    action = New clsActionOutputAudio(txtOuputAudio.Text, activeGroup)
+                    action = New clsActionOutputAudio(txtOutputAudio.Text, unformatMS(txtSkip.Text), activeGroup)
                     Dim ai As clsActionOutput = action
                 End If
             End If
@@ -586,27 +585,7 @@ Public Class frmEdit
         End If
     End Sub
 
-    Public Function unformatMS(src As String) As Integer
-        Dim re As New Regex("^((((?<d>\d+)d)?((?<h>\d+)h)?((?<m>\d+)m)?((?<s>\d+)s)?((?<ms>\d+)ms)?)|((?<h>\d+):(?<m>\d\d):(?<s>\d\d)(\.(?<msd>\d{1,3}))?)|((?<m>\d+):(?<s>\d\d)(\.(?<msd>\d{1,3}))?)|((?<s>\d+)?(\.(?<msd>\d{1,3}))?))$")
-        Dim m As System.Text.RegularExpressions.Match = re.Match(src)
-        If Not m.Success Then Return -1
-        Dim strMs As String = m.Groups("msd").Value
-        If strMs = vbNullString Then strMs = m.Groups("ms").Value Else strMs = strMs.PadRight(3, "0")
-        If strMs = vbNullString Then strMs = 0
-        Dim strS As String = m.Groups("s").Value
-        If strS = vbNullString Then strS = 0
-        Dim strM As String = m.Groups("m").Value
-        If strM = vbNullString Then strM = 0
-        Dim strH As String = m.Groups("h").Value
-        If strH = vbNullString Then strH = 0
-        Dim strD As String = m.Groups("d").Value
-        If strD = vbNullString Then strD = 0
-
-        Dim ts As New TimeSpan(strD, strH, strM, strS, strMs)
-        Return Math.Floor(ts.TotalMilliseconds)
-    End Function
-
-    Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtControllerWait.Validating, txtControllerHold.Validating, txtFlowWait.Validating, txtFlowMaxWait.Validating, txtInputInterval.Validating, txtInputDuration.Validating
+    Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtControllerWait.Validating, txtControllerHold.Validating, txtFlowWait.Validating, txtFlowMaxWait.Validating, txtInputInterval.Validating, txtInputDuration.Validating, txtSkip.Validating
         Dim ms As Long = unformatMS(sender.text)
         If ms = -1 Then
             e.Cancel = True
@@ -852,7 +831,8 @@ Public Class frmEdit
             Case ActionType.actOutputAudio
                 Dim aOutputAudio As clsActionOutputAudio = action
                 tcActions.SelectedTab = tpOutput
-                txtOuputAudio.Text = Join(aOutputAudio.paths.ToArray, "|")
+                txtOutputAudio.Text = Join(aOutputAudio.paths.ToArray, "|")
+                txtSkip.Text = formatMS(aOutputAudio.skipMS)
         End Select
     End Sub
 
@@ -882,22 +862,23 @@ Public Class frmEdit
         fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\scripts"
         fdOpen.ShowDialog()
         If fdOpen.FileName = vbNullString Then Exit Sub
-        filename = fdOpen.FileName
-        loadScript(filename)
+        loadScript(fdOpen.FileName)
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveToolStripMenuItem.Click
-        If filename = vbNullString Then
+        MenuStrip1.Focus()
+        If activeFile.path = vbNullString Then
             SaveAsToolStripMenuItem_Click(sender, e)
             Exit Sub
         End If
-        saveScriptXML(filename)
+        activeFile.saveScriptXML()
     End Sub
 
     Private Sub SaveAsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveAsToolStripMenuItem.Click
+        MenuStrip1.Focus()
         fdSave.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\scripts"
-        If filename <> vbNullString Then
-            fdSave.FileName = filename
+        If activeFile.path <> vbNullString Then
+            fdSave.FileName = activeFile.path
         Else
             If txtGame.Text = vbNullString Then
                 If txtTitle.Text = vbNullString Then
@@ -915,8 +896,7 @@ Public Class frmEdit
         End If
         fdSave.ShowDialog()
         If fdSave.FileName = vbNullString Then Exit Sub
-        filename = fdSave.FileName
-        saveScriptXML(filename)
+        activeFile.saveScriptXML(fdSave.FileName)
     End Sub
 
     'Private Sub saveScript(path As String)
@@ -932,48 +912,28 @@ Public Class frmEdit
     '    IO.File.WriteAllText(path, sb.ToString)
     'End Sub
 
-    Private Sub saveScriptXML(path As String)
-        Dim doc As New XmlDocument
-        Dim root As XmlElement = doc.CreateElement("XBScript")
-        doc.AppendChild(root)
-        Dim desc As XmlElement = doc.CreateElement("Information")
-        root.AppendChild(desc)
-        desc.AppendChild(doc.CreateElement("Game")).InnerText = txtGame.Text
-        desc.AppendChild(doc.CreateElement("Title")).InnerText = txtTitle.Text
-        desc.AppendChild(doc.CreateElement("Description")).InnerText = Join(txtDesc.Lines, vbCrLf)
-        desc.AppendChild(doc.CreateElement("Version")).InnerText = 2
-        Dim agsNode As XmlElement = doc.CreateElement("ActionGroups")
-        root.AppendChild(agsNode)
-        For Each group As clsActionGroup In groups.Values
-            Dim agNode As XmlElement = doc.CreateElement("ActionGroup")
-            agsNode.AppendChild(agNode)
-            agNode.AppendChild(doc.CreateElement("Name")).InnerText = group.name
-            For Each action As clsAction In group.actions
-                agNode.AppendChild(action.toXML(doc))
-            Next
-        Next
-        Dim ws As New Xml.XmlWriterSettings()
-        ws.Indent = True
-        Dim w As Xml.XmlWriter = Xml.XmlWriter.Create(path, ws)
-        doc.WriteTo(w)
-        w.Close()
-        w.Dispose()
+    Private Sub loadScript(path As String)
+        loadScript(clsScriptFile.loadScriptXML(path))
     End Sub
 
-    Private Sub loadScript(path As String)
+    Private Sub loadScript(sf As clsScriptFile)
         clearScript()
-        loadScriptXML(path)
-        For Each g As clsActionGroup In groups.Values
+        activeFile = sf
+        txtGame.Text = activeFile.game
+        txtTitle.Text = activeFile.title
+        txtDesc.Text = activeFile.description
+
+        For Each g As clsActionGroup In activeFile.groups.Values
             lbGroups.Items.Add(g)
         Next
-        If groups.ContainsKey(mainGroup) Then activeGroup = groups(mainGroup) Else activeGroup = lbGroups.Items(0)
+        If activeFile.groups.ContainsKey(mainGroup) Then activeGroup = activeFile.groups(mainGroup) Else activeGroup = lbGroups.Items(0)
         lbGroups.SelectedItem = activeGroup
         linkActions()
         refreshGroup()
     End Sub
 
     Private Sub linkActions()
-        For Each group In groups.Values
+        For Each group In activeFile.groups.Values
             For Each action As clsAction In group.actions
                 If action.getActType = ActionType.actLoop Then
                     Dim aLoop As clsActionLoop = action
@@ -981,7 +941,7 @@ Public Class frmEdit
                 End If
                 If action.getActType = ActionType.actGroup Then
                     Dim aGroup As clsActionAGroup = action
-                    aGroup.linkTarget(groups)
+                    aGroup.linkTarget(activeFile.groups)
                 End If
             Next
         Next
@@ -1006,90 +966,10 @@ Public Class frmEdit
 
     End Sub
 
-    Private Sub loadScriptXML(path As String)
-        Dim doc As New XmlDocument
-        Try
-            doc.Load(path)
-        Catch ex As XmlException
-            loadScriptLegacy(path)
-            Exit Sub
-        End Try
-        Dim version As Integer = 1
-        Dim node As Xml.XmlNode = doc.SelectSingleNode("/XBScript/Information/Game")
-        If Not node Is Nothing Then txtGame.Text = node.InnerText
-        node = doc.SelectSingleNode("/XBScript/Information/Title")
-        If Not node Is Nothing Then txtTitle.Text = node.InnerText
-        node = doc.SelectSingleNode("/XBScript/Information/Description")
-        If Not node Is Nothing Then txtDesc.Text = node.InnerText
-        node = doc.SelectSingleNode("/XBScript/Information/Version")
-        If Not node Is Nothing Then version = CInt(node.InnerText)
-        Dim actionGroups As Xml.XmlNodeList = doc.SelectNodes("/XBScript/ActionGroups/ActionGroup")
-        For Each agNode As Xml.XmlNode In actionGroups
-            Dim ag As New clsActionGroup(agNode.SelectSingleNode("Name").InnerText)
-            For Each actNode As Xml.XmlNode In agNode.ChildNodes
-                Select Case actNode.Name
-                    Case "Name", "#comment"
-                    Case Else
-                        Dim action As clsAction = clsAction.fromXML(actNode, version, ag)
-                        action.index = ag.actions.Count
-                        ag.actions.Add(action)
-                End Select
-            Next
-            groups.Add(ag.name, ag)
-        Next
-        filename = path
-    End Sub
-
-    Private Sub loadScriptLegacy(path As String)
-        Dim lines() As String = IO.File.ReadAllLines(path)
-        Dim header As New List(Of String)
-        Dim start As Integer = 0
-        While lines(start).StartsWith("#")
-            header.Add(lines(start).Substring(1))
-            start = start + 1
-        End While
-
-        If header.Count > 0 Then
-            txtGame.Text = header(0)
-            header.RemoveAt(0)
-        End If
-
-        If header.Count > 0 Then
-            txtTitle.Text = header(0)
-            header.RemoveAt(0)
-        End If
-
-        If header.Count > 0 Then txtDesc.Lines = header.ToArray
-
-        Dim group As clsActionGroup = New clsActionGroup(mainGroup)
-        groups.Add(group.name, group)
-
-        For i = start To lines.Length - 1
-            Dim action As clsAction = clsAction.deSerialize(lines(i), group)
-            action.index = group.actions.Count
-            group.actions.Add(action)
-        Next
-    End Sub
-
-    Private Function formatMS(ms As Integer) As String
-        Dim s As New TimeSpan(CLng(ms) * 10000)
-        Dim sb As New System.Text.StringBuilder
-        If s.Days > 0 Then sb.Append(Math.Floor(s.TotalDays) & "d")
-        If s.Hours = 0 And s.Minutes = 0 And s.Seconds = 0 And s.Milliseconds = 0 Then Return sb.ToString
-        If sb.Length > 0 OrElse s.Hours > 0 Then sb.Append(s.Hours.ToString(IIf(sb.Length = 0, "0", "00")) & "h")
-        If s.Minutes = 0 And s.Seconds = 0 And s.Milliseconds = 0 Then Return sb.ToString
-        If sb.Length > 0 OrElse s.Minutes > 0 Then sb.Append(s.Minutes.ToString(IIf(sb.Length = 0, "0", "00")) & "m")
-        If s.Seconds = 0 And s.Milliseconds = 0 Then Return sb.ToString
-        If sb.Length > 0 OrElse s.Seconds > 0 Then sb.Append(s.Seconds.ToString(IIf(sb.Length = 0, "0", "00")) & "s")
-        If s.Milliseconds = 0 Then Return sb.ToString
-        If sb.Length > 0 OrElse s.Milliseconds > 0 Then sb.Append(s.Milliseconds.ToString(IIf(sb.Length = 0, "0", "000")) & "ms")
-        Return sb.ToString
-    End Function
-
     Private Sub btnPlayPause_Click(sender As System.Object, e As System.EventArgs) Handles btnPlayPause.Click
         If activeScript Is Nothing Then
-            If Not activeGroup Is groups(mainGroup) Then
-                activeGroup = groups(mainGroup)
+            If Not activeGroup Is activeFile.groups(mainGroup) Then
+                activeGroup = activeFile.groups(mainGroup)
                 refreshGroup()
             End If
             Dim actions As New Generic.List(Of clsAction)
@@ -1249,7 +1129,7 @@ Public Class frmEdit
                     Dim endTime As New TimeSpan(0, 0, 0, 0, asLastTime)
                     If endTime.Days > 0 Then
                         lblTotalTime.Text = curTime.ToString("d\dhh\:mm\:ss") & " / " & endTime.ToString("d\dhh\:mm\:ss")
-                    ElseIf endTime.hours > 0 Then
+                    ElseIf endTime.Hours > 0 Then
                         lblTotalTime.Text = curTime.ToString("h\:mm\:ss") & " / " & endTime.ToString("h\:mm\:ss")
                     Else
                         lblTotalTime.Text = curTime.ToString("m\:ss") & " / " & endTime.ToString("m\:ss")
@@ -1322,7 +1202,7 @@ Public Class frmEdit
         Dim ag As clsActionGroup = lbGroups.SelectedItem
         Dim name As String = InputBox("Enter new name:", , ag.name)
         If name = vbNullString Then Exit Sub
-        For Each group As clsActionGroup In groups.Values
+        For Each group As clsActionGroup In activeFile.groups.Values
             If group.name.ToUpper() = name.ToUpper() Then
                 If group Is ag Then Exit Sub
                 MsgBox("That name is already in use.")
@@ -1330,16 +1210,16 @@ Public Class frmEdit
             End If
         Next
 
-        groups.Remove(ag.name)
+        activeFile.groups.Remove(ag.name)
         ag.name = name
-        groups.Add(ag.name, ag)
+        activeFile.groups.Add(ag.name, ag)
         lbGroups.RefreshItem(lbGroups.SelectedIndex)
     End Sub
 
     Private Sub btnAddGroup_Click(sender As System.Object, e As System.EventArgs) Handles btnAddGroup.Click
         Dim name As String = InputBox("Enter name of new group:")
         If name = vbNullString Then Exit Sub
-        For Each group As clsActionGroup In groups.Values
+        For Each group As clsActionGroup In activeFile.groups.Values
             If group.name.ToUpper() = name.ToUpper() Then
                 MsgBox("That name is already in use.")
                 Exit Sub
@@ -1347,7 +1227,7 @@ Public Class frmEdit
         Next
         Dim ag As New clsActionGroup(name)
         lbGroups.Items.Add(ag)
-        groups.Add(ag.name, ag)
+        activeFile.groups.Add(ag.name, ag)
     End Sub
 
     Private Sub btnDeleteGroup_Click(sender As System.Object, e As System.EventArgs) Handles btnDeleteGroup.Click
@@ -1356,13 +1236,13 @@ Public Class frmEdit
             Exit Sub
         End If
         Dim ag As clsActionGroup = lbGroups.SelectedItem
-        For Each group As clsActionGroup In groups.Values
+        For Each group As clsActionGroup In activeFile.groups.Values
             If (Not group Is ag) AndAlso group.containsGroup(ag) Then
                 MsgBox("This group is used by the group """ & group.name & """ and cannot be deleted.")
                 Exit Sub
             End If
         Next
-        groups.Remove(ag.name)
+        activeFile.groups.Remove(ag.name)
         lbGroups.Items.Remove(ag)
     End Sub
 
@@ -1411,10 +1291,11 @@ Public Class frmEdit
     End Sub
 
     Private Sub ExportToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ExportToolStripMenuItem.Click
+        MenuStrip1.Focus()
         fdSave.Filter = "GPC Script|*.gpc"
         Dim gpcFilename As String = vbNullString
-        If filename <> vbNullString Then
-            gpcFilename = filename
+        If activeFile.path <> vbNullString Then
+            gpcFilename = activeFile.path
         Else
             If txtGame.Text = vbNullString Then
                 If txtTitle.Text = vbNullString Then
@@ -1430,12 +1311,12 @@ Public Class frmEdit
                 End If
             End If
         End If
-        If gpcFilename.EndsWith(".axb") Then gpcFilename = gpcFilename.Substring(0, gpcFilename.Length - 4) & ".gpc"
+        If gpcFilename IsNot Nothing AndAlso gpcFilename.EndsWith(".axb") Then gpcFilename = gpcFilename.Substring(0, gpcFilename.Length - 4) & ".gpc"
         fdSave.FileName = gpcFilename
         fdSave.ShowDialog()
         If fdSave.FileName <> vbNullString Then
-            If Not activeGroup Is groups(mainGroup) Then
-                activeGroup = groups(mainGroup)
+            If Not activeGroup Is activeFile.groups(mainGroup) Then
+                activeGroup = activeFile.groups(mainGroup)
                 refreshGroup()
             End If
             Dim actions As New Generic.List(Of clsAction)
@@ -1634,7 +1515,7 @@ Public Class frmEdit
         fdOpen.Multiselect = True
         fdOpen.FileName = vbNullString
         fdOpen.InitialDirectory = IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\GH"
-        If fdOpen.ShowDialog() <> DialogResult.Cancel Then txtOuputAudio.Text = Join(fdOpen.FileNames, "|")
+        If fdOpen.ShowDialog() <> DialogResult.Cancel Then txtOutputAudio.Text = Join(fdOpen.FileNames, "|")
         fdOpen.Filter = "AutoXB Scripts|*.axb"
         fdOpen.Multiselect = False
     End Sub
@@ -1659,5 +1540,54 @@ Public Class frmEdit
         comment = InputBox("Enter new comment for this action:",, comment)
         Action.comment = comment
         Action.refresh(lbActions)
+    End Sub
+
+    Private Sub txtGame_Validated(sender As Object, e As EventArgs) Handles txtGame.LostFocus
+        activeFile.game = txtGame.Text
+    End Sub
+
+    Private Sub txtTitle_Validated(sender As Object, e As EventArgs) Handles txtTitle.LostFocus
+        activeFile.title = txtTitle.Text
+    End Sub
+
+    Private Sub txtDesc_Validated(sender As Object, e As EventArgs) Handles txtDesc.LostFocus
+        activeFile.description = txtDesc.Text
+    End Sub
+
+    Private Sub ConsoleTunerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConsoleTunerToolStripMenuItem.Click
+        Dim url As String = InputBox("Enter the URL to import:",, "https://www.consoletuner.com/gpclib/?s=850")
+        Dim sf As clsScriptFile = convertCTScript(url)
+        If sf Is Nothing Then Exit Sub
+        loadScript(sf)
+    End Sub
+
+    Private Sub ConsoleTunerBulkToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConsoleTunerBulkToolStripMenuItem.Click
+        Dim urls As String = frmMLInput.MLInputBox("Console Tuner Bulk Import", "Paste the URLs to convert:")
+        Dim urlLines() As String = urls.Split(vbCrLf)
+        If Not IO.Directory.Exists("Scripts\ConsoleTuner") Then IO.Directory.CreateDirectory("Scripts\ConsoleTuner")
+
+        For Each url As String In urlLines
+            Dim sf As clsScriptFile = convertCTScript(url)
+            If Not sf Is Nothing Then
+                Dim path As String = "Scripts\ConsoleTuner\" & sf.title & ".axb"
+                sf.saveScriptXML(path)
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TextToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TextToolStripMenuItem.Click
+        Dim ss As New frmText
+        ss.ShowDialog()
+        If Not ss.actions Is Nothing Then
+            activeGroup.actions.Clear()
+            For Each act As clsAction In ss.actions
+                act.group = activeGroup
+                activeGroup.actions.Add(act)
+            Next
+            refreshGroup()
+        End If
+        ss.Dispose()
+        ss = Nothing
     End Sub
 End Class

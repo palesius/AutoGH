@@ -53,6 +53,7 @@ Module modVocal
             Dim talkies As New List(Of Long)
             For i As Integer = mf.Events(number).Count - 1 To 0 Step -1
                 Dim mev As NAudio.Midi.MidiEvent = mf.Events(number)(i)
+                Debug.Print(mev.CommandCode)
                 If mev.CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent AndAlso CType(mev, NAudio.Midi.MetaEvent).MetaEventType = NAudio.Midi.MetaEventType.Lyric Then
                     Dim tev As NAudio.Midi.TextEvent = mev
                     Dim text As String = tev.Text
@@ -85,17 +86,22 @@ Module modVocal
                 For Each mev As NAudio.Midi.MidiEvent In mf.Events(number)
                     If mev.CommandCode = NAudio.Midi.MidiCommandCode.NoteOn Then
                         Dim nev As NAudio.Midi.NoteOnEvent = CType(mev, NAudio.Midi.NoteOnEvent)
-                        If nev.NoteNumber >= 16 And nev.NoteNumber <= 95 And nev.Velocity > 0 Then
-                            If nev.NoteNumber <= 28 Or nev.NoteNumber >= 84 Then Stop
-                            Dim ne As clsVoiceNoteEntry = Nothing
-                            ne = New clsVoiceNoteEntry(nev.NoteNumber, nev.AbsoluteTime, nev.NoteLength)
-                            notes.Add(ne)
+                        If nev.Velocity > 0 Then
+                            If nev.NoteNumber >= 16 And nev.NoteNumber <= 95 Then
+                                'previously >=84
+                                If nev.NoteNumber <= 28 Or nev.NoteNumber > 84 Then Stop
+                                notes.Add(New clsVoiceNoteEntry(nev.NoteNumber, nev.AbsoluteTime, nev.NoteLength))
+                            ElseIf nev.NoteNumber = 105 Then
+                                notes.Add(New clsVoiceNoteEntry(-1, nev.AbsoluteTime, nev.NoteLength))
+                            ElseIf nev.NoteNumber = 116 Then
+                                notes.Add(New clsVoiceNoteEntry(-1, nev.AbsoluteTime, nev.NoteLength))
+                            Else Stop
+                            End If
                         End If
                     End If
                 Next
                 notes.Sort()
             End If
-
 
             Dim t As Integer = 0
             For Each ne As clsVoiceNoteEntry In notes
@@ -121,7 +127,7 @@ Module modVocal
             Dim spreadMS_Post As Integer = 100
             For i = 0 To notes.Count - 1
                 With notes(i)
-                    If i > 0 Then
+                    If i >= 0 Then
                         .msOffset = .msOffset - spreadMS_Pre
                         .msDuration = .msDuration + spreadMS_Post + spreadMS_Pre
                     Else
@@ -141,7 +147,7 @@ Module modVocal
             Next
         End Sub
 
-        Public Sub generateSamples(startoffset As Integer, endoffset As Integer)
+        Public Sub generateSamples(startoffset As Integer, endoffset As Integer, staticNoise As Boolean)
             samples = New List(Of Short)
             Dim silence As Integer
             For Each ne As clsVoiceNoteEntry In notes
@@ -151,7 +157,11 @@ Module modVocal
                     If ne.frequency > 0 Then
                         samples.AddRange(generateTone(ne.frequency, ne.msDuration * 44.1))
                     Else
-                        samples.AddRange(generateNoise(ne.msDuration * 44.1))
+                        If staticNoise Then
+                            samples.AddRange(generateStatic(ne.msDuration * 44.1))
+                        Else
+                            samples.AddRange(generateNoise(ne.msDuration * 44.1))
+                        End If
                     End If
                 End If
             Next
@@ -251,9 +261,9 @@ Module modVocal
         Return New IO.FileInfo(mp3name)
     End Function
 
-    Function generateHarmMP3(midipath As String) As List(Of IO.FileInfo)
+    Function generateHarmMP3(midipath As String, staticnoise As Boolean) As List(Of IO.FileInfo)
         Dim offset As Integer = 0
-        Dim fiList As List(Of IO.FileInfo) = generateHarmWAV(midipath, offset)
+        Dim fiList As List(Of IO.FileInfo) = generateHarmWAV(midipath, staticnoise, offset)
         Dim inputs As New List(Of NAudio.Wave.WaveFileReader)
         NAudio.MediaFoundation.MediaFoundationApi.Startup()
         Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_MP3, New NAudio.Wave.WaveFormat(44100, 1), 0)
@@ -279,9 +289,9 @@ Module modVocal
         Return results
     End Function
 
-    Function generateMP3(midipath As String, Optional trackName As String = vbNullString) As IO.FileInfo
+    Function generateMP3(midipath As String, staticnoise As Boolean, Optional trackName As String = vbNullString) As IO.FileInfo
         Dim offset As Integer = 0
-        Dim fi As IO.FileInfo = generateWAV(midipath, offset, trackName)
+        Dim fi As IO.FileInfo = generateWAV(midipath, staticnoise, offset, trackName)
         NAudio.MediaFoundation.MediaFoundationApi.Startup()
         Dim mt As NAudio.MediaFoundation.MediaType = NAudio.Wave.MediaFoundationEncoder.SelectMediaType(NAudio.MediaFoundation.AudioSubtypes.MFAudioFormat_MP3, New NAudio.Wave.WaveFormat(44100, 1), 0)
         Dim enc As New NAudio.Wave.MediaFoundationEncoder(mt)
@@ -303,7 +313,7 @@ Module modVocal
         End If
     End Function
 
-    Function generateWAV(midipath As String, Optional ByRef offset As Integer = 0, Optional trackName As String = vbNullString) As IO.FileInfo
+    Function generateWAV(midipath As String, staticnoise As Boolean, Optional ByRef offset As Integer = 0, Optional trackName As String = vbNullString) As IO.FileInfo
         Dim mf As New NAudio.Midi.MidiFile(midipath)
         Dim vocalTrack As trackInfo = Nothing
         Dim beatTrack As trackInfo = Nothing
@@ -323,6 +333,8 @@ Module modVocal
                                     Exit For
                                 Case trackName
                                     vocalTrack = New trackInfo(i, name)
+                                Case Else
+                                    Debug.Print("Track: " & name)
                             End Select
                         End If
                     End If
@@ -343,15 +355,17 @@ Module modVocal
         Next
 
         Dim tb As New Text.StringBuilder
-        For j = 0 To mf.Events(4).Count - 1
-            If mf.Events(4)(j).CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent Then
-                Dim mev As NAudio.Midi.MetaEvent = mf.Events(4)(j)
-                If mev.MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
-                    Dim tev As NAudio.Midi.TextEvent = mev
-                    tb.AppendLine(tev.ToString)
+        If mf.Tracks >= 4 Then
+            For j = 0 To mf.Events(4).Count - 1
+                If mf.Events(4)(j).CommandCode = NAudio.Midi.MidiCommandCode.MetaEvent Then
+                    Dim mev As NAudio.Midi.MetaEvent = mf.Events(4)(j)
+                    If mev.MetaEventType = NAudio.Midi.MetaEventType.TextEvent Then
+                        Dim tev As NAudio.Midi.TextEvent = mev
+                        tb.AppendLine(tev.ToString)
+                    End If
                 End If
-            End If
-        Next
+            Next
+        End If
 
         If tb.Length > 0 Then
             Clipboard.SetText(tb.ToString)
@@ -360,26 +374,28 @@ Module modVocal
         Dim filename As String = vbNullString
         If vocalTrack IsNot Nothing Then
             vocalTrack.readnotes(mf, tempos)
-            vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime)
+            vocalTrack.generateSamples(vocalTrack.startTime, vocalTrack.endTime, staticnoise)
             If trackName = vbNullString Then
                 filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
             Else
                 filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & "_" & trackName.Substring(9) & ".wav"
             End If
             saveWav(vocalTrack.samples.ToArray(), filename)
+            offset = vocalTrack.startTime
         End If
 
         If beatTrack IsNot Nothing Then
             beatTrack.readnotes(mf, tempos)
-            beatTrack.generateSamples(beatTrack.startTime, beatTrack.endTime)
+            beatTrack.generateSamples(beatTrack.startTime, beatTrack.endTime, staticnoise)
             filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & ".wav"
             saveWav(beatTrack.samples.ToArray(), filename)
+            offset = beatTrack.startTime
         End If
 
         Return New IO.FileInfo(filename)
     End Function
 
-    Function generateHarmWAV(midipath As String, Optional ByRef offset As Integer = 0) As List(Of IO.FileInfo)
+    Function generateHarmWAV(midipath As String, staticnoise As Boolean, Optional ByRef offset As Integer = 0) As List(Of IO.FileInfo)
         Dim mf As New NAudio.Midi.MidiFile(midipath)
         Dim tracks As New List(Of trackInfo)
         Dim beat As trackInfo = Nothing
@@ -441,7 +457,7 @@ Module modVocal
         Dim files As New List(Of IO.FileInfo)
         For Each track As trackInfo In tracks
             Dim filename As String = vbNullString
-            track.generateSamples(startoffset, track.endTime)
+            track.generateSamples(startoffset, track.endTime, staticnoise)
             filename = midipath.Substring(0, InStrRev(midipath, ".") - 1) & "-" & track.name & ".wav"
             saveWav(track.samples.ToArray(), filename)
             files.Add(New IO.FileInfo(filename))
@@ -481,6 +497,16 @@ Module modVocal
         Dim noise = noiseData.Value
         For i = 0 To samples - 1
             tmp(i) = noise(i Mod noise.Length)
+        Next
+        Return tmp
+    End Function
+
+    Function generateStatic(samples As Integer) As Short()
+        Dim tmp(samples - 1) As Short
+        Dim i As Integer = 0
+        Dim r As New Random
+        For i = 0 To samples - 1
+            tmp(i) = 60000 * r.NextDouble - 30000
         Next
         Return tmp
     End Function

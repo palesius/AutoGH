@@ -24,6 +24,7 @@ Public Class frmMusic
     Private cbLevel(3) As ComboBox
     Private chkLF(3) As CheckBox
     Private chkHOPO(3) As CheckBox
+    Private cmbStrum(3) As ComboBox
 
     Public actions As List(Of clsAction)
     Public info As String
@@ -42,6 +43,11 @@ Public Class frmMusic
                 Case "GUITAR", "BASS"
                     SaveSetting(Application.ProductName, "Settings" & i, "LF", IIf(chkLF(i).Checked, "T", ""))
                     SaveSetting(Application.ProductName, "Settings" & i, "HOPO", IIf(chkHOPO(i).Checked, "T", ""))
+                    If cmbStrum(i).SelectedItem Is Nothing Then
+                        SaveSetting(Application.ProductName, "Settings" & i, "Strum", "Default")
+                    Else
+                        SaveSetting(Application.ProductName, "Settings" & i, "Strum", cmbStrum(i).SelectedItem)
+                    End If
             End Select
             If cbLevel(i).SelectedItem Is Nothing Then val = "" Else val = cbLevel(i).SelectedItem.ToString
             SaveSetting(Application.ProductName, "Settings" & i, "Level", val)
@@ -114,6 +120,10 @@ Public Class frmMusic
         chkHOPO(1) = chkHOPO1
         chkHOPO(2) = chkHOPO2
         chkHOPO(3) = chkHOPO3
+        cmbStrum(0) = cmbStrum0
+        cmbStrum(1) = cmbStrum1
+        cmbStrum(2) = cmbStrum2
+        cmbStrum(3) = cmbStrum3
 
         loadGames()
 
@@ -155,13 +165,17 @@ Public Class frmMusic
                 Case "GUITAR", "BASS"
                     chkLF(i).Checked = GetSetting(Application.ProductName, "Settings" & i, "LF") = "T"
                     chkHOPO(i).Checked = GetSetting(Application.ProductName, "Settings" & i, "HOPO") = "T"
+                    cmbStrum(i).SelectedItem = GetSetting(Application.ProductName, "Settings" & i, "Strum", "Default")
                     chkLF(i).Enabled = True
                     chkHOPO(i).Enabled = True
+                    cmbStrum(i).Enabled = True
                 Case Else
                     chkLF(i).Checked = False
                     chkHOPO(i).Checked = False
+                    cmbStrum(i).SelectedText = vbNullString
                     chkLF(i).Enabled = False
                     chkHOPO(i).Enabled = False
+                    cmbStrum(i).Enabled = False
             End Select
 
             For Each level As clsLevel In arrLevel
@@ -214,13 +228,16 @@ Public Class frmMusic
                 Case "GUITAR", "BASS"
                     chkLF(i).Enabled = True
                     chkHOPO(i).Enabled = True
+                    cmbStrum(i).Enabled = True
                 Case Else
                     chkLF(i).Enabled = False
                     chkHOPO(i).Enabled = False
+                    cmbStrum(i).Enabled = False
             End Select
         Else
             chkLF(i).Enabled = False
             chkHOPO(i).Enabled = False
+            cmbStrum(i).Enabled = False
         End If
     End Sub
 
@@ -290,16 +307,27 @@ Public Class frmMusic
         Dim vocalStart() As Integer = New Integer() {0, 0, 0, 0}
         Dim vocalDuration() As Integer = New Integer() {0, 0, 0, 0}
         Dim vocalsStarted() As Boolean = New Boolean() {True, True, True, True}
-        For i = 0 To 3
+        Dim staticNoise As Boolean = CType(cbGame.SelectedItem, clsRhythmGame).staticnoise
+        For i As Integer = 0 To 3
             If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") Then
                 Dim trackName As String = cbTrack(i).SelectedItem.ToString()
                 If chkHOPO(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).hopo = True
                 If chkLF(i).Checked Then CType(cbTrack(i).SelectedItem, clsTrack).lefty = True
+                Select Case cmbStrum(i).SelectedItem
+                    Case "Default"
+                        CType(cbTrack(i).SelectedItem, clsTrack).strumType = clsTrack.enumStrumType.strumDefault
+                    Case "Up"
+                        CType(cbTrack(i).SelectedItem, clsTrack).strumType = clsTrack.enumStrumType.strumUp
+                    Case "Down"
+                        CType(cbTrack(i).SelectedItem, clsTrack).strumType = clsTrack.enumStrumType.strumDown
+                    Case "Alternate"
+                        CType(cbTrack(i).SelectedItem, clsTrack).strumType = clsTrack.enumStrumType.strumAlternate
+                End Select
                 Select Case trackName
                     Case "VOCALS"
                         Dim midiPath As String = CType(cbSong.SelectedItem, clsSong).fi.FullName
                         vocalPath(i) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & ".mp3"
-                        If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath)
+                        If Not IO.File.Exists(vocalPath(i)) Then generateMP3(midiPath, staticNoise)
                         If Not IO.File.Exists(vocalPath(i)) Then
                             MsgBox("Couldn't generate vocal file.")
                             Exit Sub
@@ -308,6 +336,7 @@ Public Class frmMusic
                         vocalPart(i) = trackName
                         vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
                         vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        If vocalStart(i) = 0 Then vocalStart(i) = 1 Else vocalStart(i) = vocalStart(i) + 250
                         vocalsStarted(i) = False
                         trackCount += 1
                     Case "vocals_1_beginner", "vocals_1_easy", "vocals_1_medium", "vocals_1_hard", "vocals_1_expert"
@@ -322,6 +351,7 @@ Public Class frmMusic
                         vocalPart(i) = trackName
                         vocalDuration(i) = tf.Properties.Duration.TotalMilliseconds
                         vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                        If vocalStart(i) = 0 Then vocalStart(i) = 1 Else vocalStart(i) = vocalStart(i) + 250
                         vocalsStarted(i) = False
                         trackCount += 1
                     Case "HARM1", "HARM2", "HARM3"
@@ -332,7 +362,7 @@ Public Class frmMusic
                         harmonyPaths(2) = midiPath.Substring(0, InStrRev(midiPath, ".") - 1) & "-HARM3.mp3"
 
                         vocalPath(i) = harmonyPaths(0)
-                        If Not IO.File.Exists(vocalPath(i)) Then generateHarmMP3(midiPath)
+                        If Not IO.File.Exists(vocalPath(i)) Then generateHarmMP3(midiPath, staticNoise)
                         If Not IO.File.Exists(vocalPath(i)) Then
                             MsgBox("Couldn't generate vocal file.")
                             Exit Sub
@@ -345,6 +375,7 @@ Public Class frmMusic
                                 Dim tf As TagLib.File = TagLib.File.Create(harmonyPath)
                                 vocalDuration(i) = Math.Max(vocalDuration(i), tf.Properties.Duration.TotalMilliseconds)
                                 vocalStart(i) = tf.Tag.Comment + CType(cbGame.SelectedItem, clsRhythmGame).loadTime
+                                If vocalStart(i) = 0 Then vocalStart(i) = 1 Else vocalStart(i) = vocalStart(i) + 250
                                 If vocalPath(i) <> vbNullString Then vocalPath(i) &= "|"
                                 vocalPath(i) &= harmonyPath
                             End If
@@ -395,6 +426,44 @@ Public Class frmMusic
                 End If
             Next
         End If
+
+        For i As Integer = 0 To 3
+            If (Not cbTrack(i).SelectedItem Is Nothing) AndAlso (Not cbTrack(i).SelectedItem.ToString() = "") Then
+                Dim t As clsTrack = cbTrack(i).SelectedItem
+                Select Case t.toString()
+                    Case "GUITAR", "BASS", "RHYTHM", "GUITAR COOP"
+                        Select Case t.strumType
+                            Case clsTrack.enumStrumType.strumUp
+                                If t.strumButton <> clsController.XBButtons.btnUp Then
+                                    For Each n As clsNoteEntry In mergedNotes
+                                        If n.controller = i + 1 Then
+                                            n.noteMask = (n.noteMask And Not t.strumButton) Or clsController.XBButtons.btnUp
+                                        End If
+                                    Next
+                                End If
+                            Case clsTrack.enumStrumType.strumDown
+                                If t.strumButton <> clsController.XBButtons.btnDown Then
+                                    For Each n As clsNoteEntry In mergedNotes
+                                        If n.controller = i + 1 Then
+                                            n.noteMask = (n.noteMask And Not t.strumButton) Or clsController.XBButtons.btnDown
+                                        End If
+                                    Next
+                                End If
+                            Case clsTrack.enumStrumType.strumAlternate
+                                Dim noteIndex As Integer = 0
+                                For Each n As clsNoteEntry In mergedNotes
+                                    If n.controller = i + 1 Then
+                                        If n.noteMask And t.strumButton Then
+                                            n.noteMask = (n.noteMask And Not t.strumButton) Or IIf(noteIndex Mod 2 = 0, clsController.XBButtons.btnDown, clsController.XBButtons.btnUp)
+                                            noteIndex += 1
+                                        End If
+                                    End If
+                                Next
+                        End Select
+                End Select
+
+            End If
+        Next
 
         'Dim manlines() As String = IO.File.ReadAllLines("g:\th\pony.hopoc")
         'For i = 0 To mergedNotes.Count - 1
@@ -499,7 +568,7 @@ Public Class frmMusic
                     End If
                     curOffset = firstStart
                 End If
-                a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), Nothing)
+                a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), 0, Nothing)
                 a.index = actions.Count
                 actions.Add(a)
                 vocalsStarted(firstIdx) = True
@@ -571,7 +640,7 @@ Public Class frmMusic
                 End If
                 curOffset = firstStart
             End If
-            a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), Nothing)
+            a = New clsActionOutputAudio(New List(Of String)(vocalPath(firstIdx).Split("|")), 0, Nothing)
             a.index = actions.Count
             actions.Add(a)
             vocalsStarted(firstIdx) = True
@@ -669,7 +738,7 @@ Public Class frmMusic
         Dim errors As List(Of String) = New List(Of String)
         For Each fi As IO.FileInfo In New IO.DirectoryInfo(basepath & rg.code).GetFiles("*.mid")
             Try
-                If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".mp3") Then modVocal.generateMP3(fi.FullName)
+                If Not IO.File.Exists(fi.FullName.Substring(0, fi.FullName.Length - 4) & ".mp3") Then modVocal.generateMP3(fi.FullName, rg.staticnoise)
             Catch ex As Exception
                 errors.Add(fi.Name)
             End Try

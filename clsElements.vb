@@ -231,6 +231,14 @@ Friend Class clsTrack
     Friend index As Integer
     Friend lefty As Boolean
     Friend hopo As Boolean
+    Friend strumType As enumStrumType
+
+    Friend Enum enumStrumType
+        strumDefault
+        strumDown
+        strumUp
+        strumAlternate
+    End Enum
 
     Friend ReadOnly Property strumButton(Optional solo As Boolean = False) As Integer
         Get

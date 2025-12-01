@@ -34,6 +34,14 @@ Partial Class frmMusic
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.gbSong = New System.Windows.Forms.GroupBox()
         Me.gbParts = New System.Windows.Forms.GroupBox()
+        Me.lblStrum3 = New System.Windows.Forms.Label()
+        Me.cmbStrum3 = New System.Windows.Forms.ComboBox()
+        Me.lblStrum2 = New System.Windows.Forms.Label()
+        Me.cmbStrum2 = New System.Windows.Forms.ComboBox()
+        Me.lblStrum1 = New System.Windows.Forms.Label()
+        Me.cmbStrum1 = New System.Windows.Forms.ComboBox()
+        Me.lblStrum0 = New System.Windows.Forms.Label()
+        Me.cmbStrum0 = New System.Windows.Forms.ComboBox()
         Me.chkHOPO3 = New System.Windows.Forms.CheckBox()
         Me.chkLF3 = New System.Windows.Forms.CheckBox()
         Me.chkHOPO2 = New System.Windows.Forms.CheckBox()
@@ -131,7 +139,7 @@ Partial Class frmMusic
         'btnOk
         '
         Me.btnOk.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnOk.Location = New System.Drawing.Point(510, 170)
+        Me.btnOk.Location = New System.Drawing.Point(510, 200)
         Me.btnOk.Name = "btnOk"
         Me.btnOk.Size = New System.Drawing.Size(77, 21)
         Me.btnOk.TabIndex = 25
@@ -142,7 +150,7 @@ Partial Class frmMusic
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.Location = New System.Drawing.Point(12, 170)
+        Me.btnCancel.Location = New System.Drawing.Point(12, 200)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(77, 21)
         Me.btnCancel.TabIndex = 26
@@ -168,6 +176,14 @@ Partial Class frmMusic
         '
         Me.gbParts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbParts.Controls.Add(Me.lblStrum3)
+        Me.gbParts.Controls.Add(Me.cmbStrum3)
+        Me.gbParts.Controls.Add(Me.lblStrum2)
+        Me.gbParts.Controls.Add(Me.cmbStrum2)
+        Me.gbParts.Controls.Add(Me.lblStrum1)
+        Me.gbParts.Controls.Add(Me.cmbStrum1)
+        Me.gbParts.Controls.Add(Me.lblStrum0)
+        Me.gbParts.Controls.Add(Me.cmbStrum0)
         Me.gbParts.Controls.Add(Me.chkHOPO3)
         Me.gbParts.Controls.Add(Me.chkLF3)
         Me.gbParts.Controls.Add(Me.chkHOPO2)
@@ -188,10 +204,86 @@ Partial Class frmMusic
         Me.gbParts.Controls.Add(Me.cbLevel0)
         Me.gbParts.Location = New System.Drawing.Point(12, 68)
         Me.gbParts.Name = "gbParts"
-        Me.gbParts.Size = New System.Drawing.Size(575, 96)
+        Me.gbParts.Size = New System.Drawing.Size(575, 126)
         Me.gbParts.TabIndex = 29
         Me.gbParts.TabStop = False
         Me.gbParts.Text = "Parts"
+        '
+        'lblStrum3
+        '
+        Me.lblStrum3.AutoSize = True
+        Me.lblStrum3.Location = New System.Drawing.Point(437, 99)
+        Me.lblStrum3.Name = "lblStrum3"
+        Me.lblStrum3.Size = New System.Drawing.Size(34, 13)
+        Me.lblStrum3.TabIndex = 48
+        Me.lblStrum3.Text = "Strum"
+        '
+        'cmbStrum3
+        '
+        Me.cmbStrum3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStrum3.FormattingEnabled = True
+        Me.cmbStrum3.Items.AddRange(New Object() {"Default", "Down", "Up", "Alternate"})
+        Me.cmbStrum3.Location = New System.Drawing.Point(477, 96)
+        Me.cmbStrum3.Name = "cmbStrum3"
+        Me.cmbStrum3.Size = New System.Drawing.Size(88, 21)
+        Me.cmbStrum3.TabIndex = 47
+        '
+        'lblStrum2
+        '
+        Me.lblStrum2.AutoSize = True
+        Me.lblStrum2.Location = New System.Drawing.Point(306, 99)
+        Me.lblStrum2.Name = "lblStrum2"
+        Me.lblStrum2.Size = New System.Drawing.Size(34, 13)
+        Me.lblStrum2.TabIndex = 46
+        Me.lblStrum2.Text = "Strum"
+        '
+        'cmbStrum2
+        '
+        Me.cmbStrum2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStrum2.FormattingEnabled = True
+        Me.cmbStrum2.Items.AddRange(New Object() {"Default", "Down", "Up", "Alternate"})
+        Me.cmbStrum2.Location = New System.Drawing.Point(346, 96)
+        Me.cmbStrum2.Name = "cmbStrum2"
+        Me.cmbStrum2.Size = New System.Drawing.Size(88, 21)
+        Me.cmbStrum2.TabIndex = 45
+        '
+        'lblStrum1
+        '
+        Me.lblStrum1.AutoSize = True
+        Me.lblStrum1.Location = New System.Drawing.Point(175, 99)
+        Me.lblStrum1.Name = "lblStrum1"
+        Me.lblStrum1.Size = New System.Drawing.Size(34, 13)
+        Me.lblStrum1.TabIndex = 44
+        Me.lblStrum1.Text = "Strum"
+        '
+        'cmbStrum1
+        '
+        Me.cmbStrum1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStrum1.FormattingEnabled = True
+        Me.cmbStrum1.Items.AddRange(New Object() {"Default", "Down", "Up", "Alternate"})
+        Me.cmbStrum1.Location = New System.Drawing.Point(215, 96)
+        Me.cmbStrum1.Name = "cmbStrum1"
+        Me.cmbStrum1.Size = New System.Drawing.Size(88, 21)
+        Me.cmbStrum1.TabIndex = 43
+        '
+        'lblStrum0
+        '
+        Me.lblStrum0.AutoSize = True
+        Me.lblStrum0.Location = New System.Drawing.Point(44, 100)
+        Me.lblStrum0.Name = "lblStrum0"
+        Me.lblStrum0.Size = New System.Drawing.Size(34, 13)
+        Me.lblStrum0.TabIndex = 42
+        Me.lblStrum0.Text = "Strum"
+        '
+        'cmbStrum0
+        '
+        Me.cmbStrum0.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStrum0.FormattingEnabled = True
+        Me.cmbStrum0.Items.AddRange(New Object() {"Default", "Down", "Up", "Alternate"})
+        Me.cmbStrum0.Location = New System.Drawing.Point(84, 97)
+        Me.cmbStrum0.Name = "cmbStrum0"
+        Me.cmbStrum0.Size = New System.Drawing.Size(88, 21)
+        Me.cmbStrum0.TabIndex = 41
         '
         'chkHOPO3
         '
@@ -331,7 +423,7 @@ Partial Class frmMusic
         '
         Me.cbManual.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cbManual.AutoSize = True
-        Me.cbManual.Location = New System.Drawing.Point(418, 173)
+        Me.cbManual.Location = New System.Drawing.Point(418, 203)
         Me.cbManual.Name = "cbManual"
         Me.cbManual.Size = New System.Drawing.Size(86, 17)
         Me.cbManual.TabIndex = 31
@@ -341,7 +433,7 @@ Partial Class frmMusic
         'btnMakeVocals
         '
         Me.btnMakeVocals.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnMakeVocals.Location = New System.Drawing.Point(95, 169)
+        Me.btnMakeVocals.Location = New System.Drawing.Point(95, 199)
         Me.btnMakeVocals.Name = "btnMakeVocals"
         Me.btnMakeVocals.Size = New System.Drawing.Size(100, 23)
         Me.btnMakeVocals.TabIndex = 32
@@ -354,7 +446,7 @@ Partial Class frmMusic
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(599, 197)
+        Me.ClientSize = New System.Drawing.Size(599, 227)
         Me.ControlBox = False
         Me.Controls.Add(Me.btnMakeVocals)
         Me.Controls.Add(Me.cbManual)
@@ -401,4 +493,12 @@ Partial Class frmMusic
     Friend WithEvents chkLF1 As CheckBox
     Friend WithEvents chkHOPO0 As CheckBox
     Friend WithEvents chkLF0 As CheckBox
+    Friend WithEvents lblStrum3 As Label
+    Friend WithEvents cmbStrum3 As ComboBox
+    Friend WithEvents lblStrum2 As Label
+    Friend WithEvents cmbStrum2 As ComboBox
+    Friend WithEvents lblStrum1 As Label
+    Friend WithEvents cmbStrum1 As ComboBox
+    Friend WithEvents lblStrum0 As Label
+    Friend WithEvents cmbStrum0 As ComboBox
 End Class

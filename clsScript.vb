@@ -305,6 +305,7 @@
         Dim curTime As Integer
         Dim waitTime As Integer
         Dim inputAction As clsActionInput = Nothing
+        Dim audioActions As New List(Of clsActionOutputAudio)
         For Each controller As clsController In controllers.Values
             controller.resetController()
         Next
@@ -318,6 +319,18 @@
                 Else
                     Exit While
                 End If
+                Dim remove As New List(Of clsActionOutputAudio)
+                For Each aa As clsActionOutputAudio In audioActions
+                    Select Case aa.PlaybackState
+                        Case NAudio.Wave.PlaybackState.Playing
+                            aa.skip(amount)
+                        Case Else
+                            Remove.add(aa)
+                    End Select
+                Next
+                For Each aa As clsActionOutputAudio In remove
+                    audioActions.Remove(aa)
+                Next
             End While
             If Not inputAction Is Nothing Then
                 If Now >= inputAction.nextTest AndAlso inputAction.test Then
@@ -349,6 +362,9 @@
                             CType(curAction.parent, clsActionOutput).activate()
                         Else
                             curAction.controller.sendReport(curAction.report)
+                        End If
+                        If TypeOf curAction.parent Is clsActionOutputAudio Then
+                            audioActions.Add(curAction.parent)
                         End If
                         If i > stateActions.Count - 1 Then Exit Do
                         lastAction = curAction.parent

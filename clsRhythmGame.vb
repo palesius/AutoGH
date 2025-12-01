@@ -11,6 +11,7 @@
     Public truncation As Integer
     Public minimumDuration As Integer
     Public hopoTrigger As Dictionary(Of String, Integer)
+    Public staticnoise As Boolean
 
     Public Sub New(bn As Xml.XmlNode, base As clsRhythmGame)
         Dim n As Xml.XmlNode
@@ -55,6 +56,9 @@
             ' Nothing indicates the Guitar Hero default of a 1/12th node
             hopoTrigger = Nothing
         End If
+
+        n = bn.SelectSingleNode("StaticNoise")
+        If n Is Nothing Then staticnoise = base.staticnoise Else staticnoise = n.InnerText.ToLowerInvariant = "true"
     End Sub
 
     Private Function getBtnValue(name As String) As Integer

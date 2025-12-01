@@ -970,25 +970,41 @@ Public Class clsActionOutputAudio
     Inherits clsActionOutput
 
     Public paths As New List(Of String)
+    Public skipMS As Integer
 
     Private spInputs As List(Of NAudio.Wave.IWaveProvider)
     Private wOut As NAudio.Wave.WasapiOut
     Private aOut As NAudio.Wave.AsioOut
+    Private readers As List(Of NAudio.Wave.MediaFoundationReader)
 
-    Public Sub New(_path As String, _group As clsActionGroup)
+    Public Sub New(_path As String, _skipMS As Integer, _group As clsActionGroup)
         paths.Add(_path)
+        skipMS = _skipMS
         group = _group
     End Sub
 
-    Public Sub New(_paths As List(Of String), _group As clsActionGroup)
+    Public Sub New(_paths As List(Of String), _skipMS As Integer, _group As clsActionGroup)
         paths.AddRange(_paths)
+        skipMS = _skipMS
         group = _group
+    End Sub
+
+    Public Sub skip(ms As Integer)
+        For Each r As NAudio.Wave.MediaFoundationReader In readers
+            Debug.Print(r.CurrentTime.TotalMilliseconds)
+            r.CurrentTime = r.CurrentTime.Add(New TimeSpan(0, 0, 0, 0, ms))
+            Debug.Print(r.CurrentTime.TotalMilliseconds)
+        Next
     End Sub
 
     Public Overrides Sub init()
         spInputs = New List(Of NAudio.Wave.IWaveProvider)
+        readers = New List(Of NAudio.Wave.MediaFoundationReader)
         For Each path In paths
-            spInputs.Add(New NAudio.Wave.MediaFoundationReader(path))
+            Dim r As New NAudio.Wave.MediaFoundationReader(path)
+            If skipMS > 0 Then r.CurrentTime = New TimeSpan(0, 0, 0, 0, skipMS)
+            spInputs.Add(r)
+            readers.Add(r)
         Next
         If paths.Count = 1 Then
             wOut = New NAudio.Wave.WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 0)
@@ -1020,6 +1036,14 @@ Public Class clsActionOutputAudio
         End If
     End Sub
 
+    Public Function PlaybackState() As NAudio.Wave.PlaybackState
+        If paths.Count = 1 Then
+            Return wOut.PlaybackState
+        Else
+            Return aOut.PlaybackState
+        End If
+    End Function
+
     Public Overrides Sub cleanup()
         If paths.Count = 1 Then
             If wOut.PlaybackState <> NAudio.Wave.PlaybackState.Stopped Then wOut.Stop()
@@ -1044,10 +1068,11 @@ Public Class clsActionOutputAudio
     Public Sub New(node As XmlNode, version As Integer, _group As clsActionGroup)
         group = _group
         paths.AddRange(node.Attributes("Path").Value.Split("|"))
+        If node.Attributes("SkipMS") IsNot Nothing Then skipMS = node.Attributes("SkipMS").Value Else skipMS = 0
     End Sub
 
     Public Overrides Function Clone() As clsAction
-        Dim tmp As New clsActionOutputAudio(paths, group)
+        Dim tmp As New clsActionOutputAudio(paths, skipMS, group)
         tmp.baseClone(Me)
         Return tmp
     End Function
@@ -1057,16 +1082,26 @@ Public Class clsActionOutputAudio
     End Function
 
     Public Overrides Function getDescription() As String
-        If paths.Count = 1 Then
-            Return String.Format("Play [{0}]", paths(0))
+        If skipMS > 0 Then
+            If paths.Count = 1 Then
+                Return String.Format("Play [{0}] Skip {1}", paths(0), formatMS(skipMS))
+            Else
+                Return String.Format("Play [{0}] +{1} Skip {2}", paths(0), paths.Count - 1, formatMS(skipMS))
+            End If
         Else
-            Return String.Format("Play [{0}] +{1}", paths(0), paths.Count - 1)
+            If paths.Count = 1 Then
+                Return String.Format("Play [{0}]", paths(0))
+            Else
+                Return String.Format("Play [{0}] +{1}", paths(0), paths.Count - 1)
+            End If
         End If
+
     End Function
 
     Public Overrides Function toXML(doc As System.Xml.XmlDocument) As System.Xml.XmlElement
         Dim tmp As XmlElement = doc.CreateElement("AudioOutput")
         tmp.SetAttribute("Path", Join(paths.ToArray, "|"))
+        tmp.SetAttribute("SkipMS", skipMS)
         If comment <> vbNullString Then tmp.SetAttribute("Comment", comment)
         Return tmp
     End Function

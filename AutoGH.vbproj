@@ -58,20 +58,23 @@
     <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.66.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.66\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Asio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Asio.2.1.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
+    <Reference Include="NAudio.Asio, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Asio.2.2.1\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
+    <Reference Include="NAudio.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Core.2.2.1\lib\netstandard2.0\NAudio.Core.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Midi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Midi.2.1.0\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
+    <Reference Include="NAudio.Midi, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Midi.2.2.1\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Wasapi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Wasapi.2.1.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
+    <Reference Include="NAudio.Wasapi, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Wasapi.2.2.1\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
       <HintPath>..\packages\SlimDX.4.0.13.44\lib\NET40\SlimDX.dll</HintPath>
@@ -80,8 +83,8 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Security.AccessControl, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.6.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    <Reference Include="System.Security.AccessControl, Version=6.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.6.0.1\lib\net461\System.Security.AccessControl.dll</HintPath>
     </Reference>
     <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
@@ -92,8 +95,8 @@
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\taglib-sharp-netstandard2.0.2.1.0\lib\netstandard2.0\taglib-sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Vortice.XInput, Version=2.1.32.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vortice.XInput.2.1.32\lib\netstandard2.0\Vortice.XInput.dll</HintPath>
+    <Reference Include="Vortice.XInput, Version=2.4.2.0, Culture=neutral, PublicKeyToken=5431ec61a7e925da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vortice.XInput.2.4.2\lib\netstandard2.0\Vortice.XInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +117,7 @@
     <Compile Include="clsBBBController.cls" />
     <Compile Include="clsRhythmGame.vb" />
     <Compile Include="clsScript.vb" />
+    <Compile Include="clsScriptFile.vb" />
     <Compile Include="clsSnapshot.vb" />
     <Compile Include="clsXboxStatus.vb" />
     <Compile Include="clsPS3Controller.cls" />
@@ -147,6 +151,12 @@
     <Compile Include="frmCMIdentify.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmMLInput.Designer.vb">
+      <DependentUpon>frmMLInput.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMLInput.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmPattern.Designer.vb">
       <DependentUpon>frmPattern.vb</DependentUpon>
     </Compile>
@@ -159,6 +169,13 @@
     <Compile Include="frmMirror.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmText.Designer.vb">
+      <DependentUpon>frmText.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmText.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modConsoleTuner.vb" />
     <Compile Include="modDJH1.vb" />
     <Compile Include="modFormat.vb" />
     <Compile Include="modMusicConverter.vb" />
@@ -175,6 +192,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="modMain.vb" />
+    <Compile Include="modNet.vb" />
     <Compile Include="modTest.vb" />
     <Compile Include="modTone.vb" />
     <Compile Include="modVocal.vb" />
@@ -218,6 +236,9 @@
       <DependentUpon>frmEdit.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmMLInput.resx">
+      <DependentUpon>frmMLInput.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMusic.resx">
       <DependentUpon>frmMusic.vb</DependentUpon>
     </EmbeddedResource>
@@ -226,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMirror.resx">
       <DependentUpon>frmMirror.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmText.resx">
+      <DependentUpon>frmText.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
