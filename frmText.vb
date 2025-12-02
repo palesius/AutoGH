@@ -186,6 +186,15 @@ Public Class frmText
 				End If
 			Next
 
+			'tokens.Add(",", -1)
+			'tokens.Add(" ", -2)
+			'tokens.Add(";", -3)
+			'tokens.Add(vbTab, -4)
+			'tokens.Add(vbLf, -5)
+			'For i = 0 To txtDelOther.Text.Length - 1
+			'	tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
+			'Next
+
 			For i As Integer = 0 To src.Length - 1
 				Dim action As Integer = -1
 				Dim token As String = src.Substring(i, 1)
@@ -379,9 +388,10 @@ Public Class frmText
 		chkDelComma.Enabled = Not chkDelNone.Checked
 		chkDelTab.Enabled = Not chkDelNone.Checked
 		chkDelSpace.Enabled = Not chkDelNone.Checked
+		chkDelSemicolon.Enabled = Not chkDelNone.Checked
 		chkDelLine.Enabled = Not chkDelNone.Checked
 		chkDelOther.Enabled = Not chkDelNone.Checked
-		txtDelOther.Enabled = Not chkDelNone.Checked
+		'txtDelOther.Enabled = Not chkDelNone.Checked
 		chkNumberSuffix.Enabled = Not chkDelNone.Checked
 	End Sub
 

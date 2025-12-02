@@ -143,6 +143,14 @@ Partial Class frmText
         Me.cmbPreset = New System.Windows.Forms.ComboBox()
         Me.btnPreset = New System.Windows.Forms.Button()
         Me.gbText = New System.Windows.Forms.GroupBox()
+        Me.txtDelay_Semicolon = New System.Windows.Forms.TextBox()
+        Me.chkDelSemicolon = New System.Windows.Forms.CheckBox()
+        Me.txtDelay_Other = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Line = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Space = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Tab = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Comma = New System.Windows.Forms.TextBox()
+        Me.lblDelays = New System.Windows.Forms.Label()
         Me.chkNumberSuffix = New System.Windows.Forms.CheckBox()
         Me.chkDelNone = New System.Windows.Forms.CheckBox()
         Me.txtDelOther = New System.Windows.Forms.TextBox()
@@ -155,14 +163,6 @@ Partial Class frmText
         Me.txtInput = New System.Windows.Forms.TextBox()
         Me.btnGenerate = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.lblDelays = New System.Windows.Forms.Label()
-        Me.txtDelay_Comma = New System.Windows.Forms.TextBox()
-        Me.txtDelay_Tab = New System.Windows.Forms.TextBox()
-        Me.txtDelay_Space = New System.Windows.Forms.TextBox()
-        Me.txtDelay_Line = New System.Windows.Forms.TextBox()
-        Me.txtDelay_Other = New System.Windows.Forms.TextBox()
-        Me.txtDelay_Semicolon = New System.Windows.Forms.TextBox()
-        Me.chkDelSemicolon = New System.Windows.Forms.CheckBox()
         Me.gbMappings.SuspendLayout()
         Me.gbText.SuspendLayout()
         Me.SuspendLayout()
@@ -448,7 +448,6 @@ Partial Class frmText
         Me.txtLB.Name = "txtLB"
         Me.txtLB.Size = New System.Drawing.Size(50, 20)
         Me.txtLB.TabIndex = 69
-        Me.txtLB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtDR
         '
@@ -456,7 +455,6 @@ Partial Class frmText
         Me.txtDR.Name = "txtDR"
         Me.txtDR.Size = New System.Drawing.Size(50, 20)
         Me.txtDR.TabIndex = 70
-        Me.txtDR.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtDD
         '
@@ -464,7 +462,6 @@ Partial Class frmText
         Me.txtDD.Name = "txtDD"
         Me.txtDD.Size = New System.Drawing.Size(50, 20)
         Me.txtDD.TabIndex = 71
-        Me.txtDD.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtDL
         '
@@ -472,7 +469,6 @@ Partial Class frmText
         Me.txtDL.Name = "txtDL"
         Me.txtDL.Size = New System.Drawing.Size(50, 20)
         Me.txtDL.TabIndex = 72
-        Me.txtDL.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtA
         '
@@ -480,7 +476,6 @@ Partial Class frmText
         Me.txtA.Name = "txtA"
         Me.txtA.Size = New System.Drawing.Size(50, 20)
         Me.txtA.TabIndex = 73
-        Me.txtA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtB
         '
@@ -488,7 +483,6 @@ Partial Class frmText
         Me.txtB.Name = "txtB"
         Me.txtB.Size = New System.Drawing.Size(50, 20)
         Me.txtB.TabIndex = 74
-        Me.txtB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtX
         '
@@ -496,7 +490,6 @@ Partial Class frmText
         Me.txtX.Name = "txtX"
         Me.txtX.Size = New System.Drawing.Size(50, 20)
         Me.txtX.TabIndex = 75
-        Me.txtX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtY
         '
@@ -504,7 +497,6 @@ Partial Class frmText
         Me.txtY.Name = "txtY"
         Me.txtY.Size = New System.Drawing.Size(50, 20)
         Me.txtY.TabIndex = 76
-        Me.txtY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lblPress2
         '
@@ -571,7 +563,6 @@ Partial Class frmText
         Me.txtDU.Name = "txtDU"
         Me.txtDU.Size = New System.Drawing.Size(50, 20)
         Me.txtDU.TabIndex = 85
-        Me.txtDU.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRBWait
         '
@@ -595,7 +586,6 @@ Partial Class frmText
         Me.txtRB.Name = "txtRB"
         Me.txtRB.Size = New System.Drawing.Size(50, 20)
         Me.txtRB.TabIndex = 88
-        Me.txtRB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLTWait
         '
@@ -619,7 +609,6 @@ Partial Class frmText
         Me.txtLT.Name = "txtLT"
         Me.txtLT.Size = New System.Drawing.Size(50, 20)
         Me.txtLT.TabIndex = 91
-        Me.txtLT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRTWait
         '
@@ -643,7 +632,6 @@ Partial Class frmText
         Me.txtRT.Name = "txtRT"
         Me.txtRT.Size = New System.Drawing.Size(50, 20)
         Me.txtRT.TabIndex = 94
-        Me.txtRT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLSWait
         '
@@ -667,7 +655,6 @@ Partial Class frmText
         Me.txtLS.Name = "txtLS"
         Me.txtLS.Size = New System.Drawing.Size(50, 20)
         Me.txtLS.TabIndex = 97
-        Me.txtLS.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRSWait
         '
@@ -691,7 +678,6 @@ Partial Class frmText
         Me.txtRS.Name = "txtRS"
         Me.txtRS.Size = New System.Drawing.Size(50, 20)
         Me.txtRS.TabIndex = 100
-        Me.txtRS.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtBackWait
         '
@@ -715,7 +701,6 @@ Partial Class frmText
         Me.txtBack.Name = "txtBack"
         Me.txtBack.Size = New System.Drawing.Size(50, 20)
         Me.txtBack.TabIndex = 103
-        Me.txtBack.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtStartWait
         '
@@ -739,7 +724,6 @@ Partial Class frmText
         Me.txtStart.Name = "txtStart"
         Me.txtStart.Size = New System.Drawing.Size(50, 20)
         Me.txtStart.TabIndex = 106
-        Me.txtStart.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtGuideWait
         '
@@ -763,7 +747,6 @@ Partial Class frmText
         Me.txtGuide.Name = "txtGuide"
         Me.txtGuide.Size = New System.Drawing.Size(50, 20)
         Me.txtGuide.TabIndex = 109
-        Me.txtGuide.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtPauseWait
         '
@@ -779,7 +762,6 @@ Partial Class frmText
         Me.txtPause.Name = "txtPause"
         Me.txtPause.Size = New System.Drawing.Size(50, 20)
         Me.txtPause.TabIndex = 148
-        Me.txtPause.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRLWait
         '
@@ -803,7 +785,6 @@ Partial Class frmText
         Me.txtRL.Name = "txtRL"
         Me.txtRL.Size = New System.Drawing.Size(50, 20)
         Me.txtRL.TabIndex = 145
-        Me.txtRL.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRDWait
         '
@@ -827,7 +808,6 @@ Partial Class frmText
         Me.txtRD.Name = "txtRD"
         Me.txtRD.Size = New System.Drawing.Size(50, 20)
         Me.txtRD.TabIndex = 142
-        Me.txtRD.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRRWait
         '
@@ -851,7 +831,6 @@ Partial Class frmText
         Me.txtRR.Name = "txtRR"
         Me.txtRR.Size = New System.Drawing.Size(50, 20)
         Me.txtRR.TabIndex = 139
-        Me.txtRR.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtRUWait
         '
@@ -875,7 +854,6 @@ Partial Class frmText
         Me.txtRU.Name = "txtRU"
         Me.txtRU.Size = New System.Drawing.Size(50, 20)
         Me.txtRU.TabIndex = 136
-        Me.txtRU.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLLWait
         '
@@ -899,7 +877,6 @@ Partial Class frmText
         Me.txtLL.Name = "txtLL"
         Me.txtLL.Size = New System.Drawing.Size(50, 20)
         Me.txtLL.TabIndex = 133
-        Me.txtLL.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLDWait
         '
@@ -923,7 +900,6 @@ Partial Class frmText
         Me.txtLD.Name = "txtLD"
         Me.txtLD.Size = New System.Drawing.Size(50, 20)
         Me.txtLD.TabIndex = 130
-        Me.txtLD.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLRWait
         '
@@ -947,7 +923,6 @@ Partial Class frmText
         Me.txtLR.Name = "txtLR"
         Me.txtLR.Size = New System.Drawing.Size(50, 20)
         Me.txtLR.TabIndex = 127
-        Me.txtLR.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtLUWait
         '
@@ -998,7 +973,6 @@ Partial Class frmText
         Me.txtLU.Name = "txtLU"
         Me.txtLU.Size = New System.Drawing.Size(50, 20)
         Me.txtLU.TabIndex = 121
-        Me.txtLU.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'btnLL
         '
@@ -1411,6 +1385,73 @@ Partial Class frmText
         Me.gbText.TabStop = False
         Me.gbText.Text = "Text"
         '
+        'txtDelay_Semicolon
+        '
+        Me.txtDelay_Semicolon.Location = New System.Drawing.Point(599, 128)
+        Me.txtDelay_Semicolon.Name = "txtDelay_Semicolon"
+        Me.txtDelay_Semicolon.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Semicolon.TabIndex = 173
+        Me.txtDelay_Semicolon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'chkDelSemicolon
+        '
+        Me.chkDelSemicolon.AutoSize = True
+        Me.chkDelSemicolon.Location = New System.Drawing.Point(505, 130)
+        Me.chkDelSemicolon.Name = "chkDelSemicolon"
+        Me.chkDelSemicolon.Size = New System.Drawing.Size(75, 17)
+        Me.chkDelSemicolon.TabIndex = 172
+        Me.chkDelSemicolon.Text = "Semicolon"
+        Me.chkDelSemicolon.UseVisualStyleBackColor = True
+        '
+        'txtDelay_Other
+        '
+        Me.txtDelay_Other.Location = New System.Drawing.Point(599, 176)
+        Me.txtDelay_Other.Name = "txtDelay_Other"
+        Me.txtDelay_Other.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Other.TabIndex = 171
+        Me.txtDelay_Other.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Line
+        '
+        Me.txtDelay_Line.Location = New System.Drawing.Point(599, 151)
+        Me.txtDelay_Line.Name = "txtDelay_Line"
+        Me.txtDelay_Line.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Line.TabIndex = 170
+        Me.txtDelay_Line.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Space
+        '
+        Me.txtDelay_Space.Location = New System.Drawing.Point(599, 105)
+        Me.txtDelay_Space.Name = "txtDelay_Space"
+        Me.txtDelay_Space.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Space.TabIndex = 169
+        Me.txtDelay_Space.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Tab
+        '
+        Me.txtDelay_Tab.Location = New System.Drawing.Point(599, 82)
+        Me.txtDelay_Tab.Name = "txtDelay_Tab"
+        Me.txtDelay_Tab.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Tab.TabIndex = 168
+        Me.txtDelay_Tab.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Comma
+        '
+        Me.txtDelay_Comma.Location = New System.Drawing.Point(599, 59)
+        Me.txtDelay_Comma.Name = "txtDelay_Comma"
+        Me.txtDelay_Comma.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Comma.TabIndex = 167
+        Me.txtDelay_Comma.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'lblDelays
+        '
+        Me.lblDelays.AutoSize = True
+        Me.lblDelays.Location = New System.Drawing.Point(596, 16)
+        Me.lblDelays.Name = "lblDelays"
+        Me.lblDelays.Size = New System.Drawing.Size(42, 13)
+        Me.lblDelays.TabIndex = 10
+        Me.lblDelays.Text = "Delays:"
+        '
         'chkNumberSuffix
         '
         Me.chkNumberSuffix.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -1528,73 +1569,6 @@ Partial Class frmText
         Me.btnCancel.TabIndex = 172
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
-        '
-        'lblDelays
-        '
-        Me.lblDelays.AutoSize = True
-        Me.lblDelays.Location = New System.Drawing.Point(596, 16)
-        Me.lblDelays.Name = "lblDelays"
-        Me.lblDelays.Size = New System.Drawing.Size(42, 13)
-        Me.lblDelays.TabIndex = 10
-        Me.lblDelays.Text = "Delays:"
-        '
-        'txtDelay_Comma
-        '
-        Me.txtDelay_Comma.Location = New System.Drawing.Point(599, 59)
-        Me.txtDelay_Comma.Name = "txtDelay_Comma"
-        Me.txtDelay_Comma.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Comma.TabIndex = 167
-        Me.txtDelay_Comma.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtDelay_Tab
-        '
-        Me.txtDelay_Tab.Location = New System.Drawing.Point(599, 82)
-        Me.txtDelay_Tab.Name = "txtDelay_Tab"
-        Me.txtDelay_Tab.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Tab.TabIndex = 168
-        Me.txtDelay_Tab.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtDelay_Space
-        '
-        Me.txtDelay_Space.Location = New System.Drawing.Point(599, 105)
-        Me.txtDelay_Space.Name = "txtDelay_Space"
-        Me.txtDelay_Space.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Space.TabIndex = 169
-        Me.txtDelay_Space.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtDelay_Line
-        '
-        Me.txtDelay_Line.Location = New System.Drawing.Point(599, 151)
-        Me.txtDelay_Line.Name = "txtDelay_Line"
-        Me.txtDelay_Line.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Line.TabIndex = 170
-        Me.txtDelay_Line.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtDelay_Other
-        '
-        Me.txtDelay_Other.Location = New System.Drawing.Point(599, 176)
-        Me.txtDelay_Other.Name = "txtDelay_Other"
-        Me.txtDelay_Other.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Other.TabIndex = 171
-        Me.txtDelay_Other.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtDelay_Semicolon
-        '
-        Me.txtDelay_Semicolon.Location = New System.Drawing.Point(599, 128)
-        Me.txtDelay_Semicolon.Name = "txtDelay_Semicolon"
-        Me.txtDelay_Semicolon.Size = New System.Drawing.Size(50, 20)
-        Me.txtDelay_Semicolon.TabIndex = 173
-        Me.txtDelay_Semicolon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'chkDelSemicolon
-        '
-        Me.chkDelSemicolon.AutoSize = True
-        Me.chkDelSemicolon.Location = New System.Drawing.Point(505, 130)
-        Me.chkDelSemicolon.Name = "chkDelSemicolon"
-        Me.chkDelSemicolon.Size = New System.Drawing.Size(75, 17)
-        Me.chkDelSemicolon.TabIndex = 172
-        Me.chkDelSemicolon.Text = "Semicolon"
-        Me.chkDelSemicolon.UseVisualStyleBackColor = True
         '
         'frmText
         '
