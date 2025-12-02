@@ -163,8 +163,8 @@ Public Class frmText
 		Dim rptActions As New List(Of Integer)
 		Dim comActions As New List(Of String)
 		Dim src As String = txtInput.Text
-		src.Replace(vbCrLf, vbLf)
-		src.Replace(vbCr, vbLf)
+		src = src.Replace(vbCrLf, vbLf)
+		src = src.Replace(vbCr, vbLf)
 
 		Dim invalid As New HashSet(Of String)
 
@@ -321,18 +321,24 @@ Public Class frmText
 		If txtDelay_Line.Text <> vbNullString Then delay_line = unformatMS(txtDelay_Line.Text)
 		If txtDelay_Other.Text <> vbNullString Then delay_other = unformatMS(txtDelay_Other.Text)
 
+		Dim actIndex As Integer = 1
 		For i = 0 To txtActions.Count - 1
 			'	Private lstMask As New List(Of Integer)(New Integer() {&H100, &H800, &H200, &H400, &H10, &H20, &H40, &H80, &H1, &H2, -1, -2, &H4000, &H8000, &H2000, &H1000, &H4, -3, -4, -5, -6, -7, -8, -9, -10, -11})
 			Dim txtAction As Integer = txtActions(i)
-			Dim a As clsAction
+			Dim a As clsAction = Nothing
 			Select Case txtAction
 				Case -1 'Comma
+					If delay_comma > 0 Then a = New clsActionWait(delay_comma, Nothing)
 				Case -2 'Space
+					If delay_space > 0 Then a = New clsActionWait(delay_space, Nothing)
 				Case -3 'Semicolon
+					If delay_semicolon > 0 Then a = New clsActionWait(delay_semicolon, Nothing)
 				Case -4 'Tab
+					If delay_tab > 0 Then a = New clsActionWait(delay_tab, Nothing)
 				Case -5 'Line
+					If delay_line > 0 Then a = New clsActionWait(delay_line, Nothing)
 				Case -6 'Other
-
+					If delay_other > 0 Then a = New clsActionWait(delay_other, Nothing)
 				Case enumTextButtons.etbLT
 					a = New clsActionPress(1, 0, 255, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRT
@@ -358,9 +364,12 @@ Public Class frmText
 				Case Else
 					a = New clsActionPress(1, lstMask(txtAction), -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 			End Select
-			a.comment = comActions(i)
-			a.index = i
-			actions.Add(a)
+			If Not a Is Nothing Then
+				a.comment = comActions(i)
+				a.index = actIndex
+				actions.Add(a)
+				actIndex += 1
+			End If
 		Next
 
 		Me.Close()
