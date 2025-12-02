@@ -28,7 +28,7 @@ Public Class frmText
 		loadSettings()
 	End Sub
 
-	Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs)
+	Private Sub txtTime_Validation(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtDelay_Comma.Validating, txtDelay_Line.Validating, txtDelay_Other.Validating, txtDelay_Semicolon.Validating, txtDelay_Space.Validating, txtDelay_Tab.Validating
 		If sender.text = vbNullString Then Exit Sub
 		Dim ms As Long = unformatMS(sender.text)
 		If ms = -1 Then
@@ -83,12 +83,26 @@ Public Class frmText
 			If Not lstTxtWait(i) Is Nothing Then SaveSetting(Application.ProductName, "TTS", "Wait_" & lstName(i), lstTxtWait(i).Text)
 		Next
 		SaveSetting(Application.ProductName, "TTS", "Delim_None", IIf(chkDelNone.Checked, "True", "False"))
+
 		SaveSetting(Application.ProductName, "TTS", "Delim_Comma", IIf(chkDelComma.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delay_Comma", txtDelay_Comma.Text)
+
 		SaveSetting(Application.ProductName, "TTS", "Delim_Tab", IIf(chkDelTab.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delay_Tab", txtDelay_Tab.Text)
+
 		SaveSetting(Application.ProductName, "TTS", "Delim_Space", IIf(chkDelSpace.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delay_Space", txtDelay_Space.Text)
+
+		SaveSetting(Application.ProductName, "TTS", "Delim_Semicolon", IIf(chkDelSemicolon.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delay_Semicolon", txtDelay_Semicolon.Text)
+
 		SaveSetting(Application.ProductName, "TTS", "Delim_Line", IIf(chkDelLine.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delay_Line", txtDelay_Line.Text)
+
 		SaveSetting(Application.ProductName, "TTS", "Delim_Other", IIf(chkDelOther.Checked, "True", "False"))
 		SaveSetting(Application.ProductName, "TTS", "Delim_Other_Text", txtDelOther.Text)
+		SaveSetting(Application.ProductName, "TTS", "Delay_Other", txtDelay_Other.Text)
+
 		SaveSetting(Application.ProductName, "TTS", "Number_Suffix", IIf(chkNumberSuffix.Checked, "True", "False"))
 	End Sub
 
@@ -101,12 +115,26 @@ Public Class frmText
 			If Not lstTxtWait(i) Is Nothing Then lstTxtWait(i).Text = GetSetting(Application.ProductName, "TTS", "Wait_" & lstName(i), vbNullString)
 		Next
 		chkDelNone.Checked = GetSetting(Application.ProductName, "TTS", "Delim_None", "True") = "True"
+
 		chkDelComma.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Comma", "True") = "True"
+		txtDelay_Comma.Text = GetSetting(Application.ProductName, "TTS", "Delay_Comma", vbNullString)
+
 		chkDelTab.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Tab", "True") = "True"
+		txtDelay_Tab.Text = GetSetting(Application.ProductName, "TTS", "Delay_Tab", vbNullString)
+
 		chkDelSpace.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Space", "True") = "True"
+		txtDelay_Space.Text = GetSetting(Application.ProductName, "TTS", "Delay_Space", vbNullString)
+
+		chkDelSemicolon.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Semicolon", "True") = "True"
+		txtDelay_Semicolon.Text = GetSetting(Application.ProductName, "TTS", "Delay_Semicolon", vbNullString)
+
 		chkDelLine.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Line", "True") = "True"
+		txtDelay_Line.Text = GetSetting(Application.ProductName, "TTS", "Delay_Line", vbNullString)
+
 		chkDelOther.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Other", "False") = "True"
 		txtDelOther.Text = GetSetting(Application.ProductName, "TTS", "Delim_Other_Text", vbNullString)
+		txtDelay_Other.Text = GetSetting(Application.ProductName, "TTS", "Delay_Other", vbNullString)
+
 		chkNumberSuffix.Checked = GetSetting(Application.ProductName, "TTS", "Number_Suffix", "True") = "True"
 	End Sub
 
@@ -133,7 +161,10 @@ Public Class frmText
 		Dim tokens As New Dictionary(Of String, Integer)
 		Dim txtActions As New List(Of Integer)
 		Dim rptActions As New List(Of Integer)
+		Dim comActions As New List(Of String)
 		Dim src As String = txtInput.Text
+		src.Replace(vbCrLf, vbLf)
+		src.Replace(vbCr, vbLf)
 
 		Dim invalid As New HashSet(Of String)
 
@@ -160,7 +191,8 @@ Public Class frmText
 				Dim token As String = src.Substring(i, 1)
 				If tokens.TryGetValue(token, action) Then
 					txtActions.Add(action)
-					rptActions.add(1)
+					rptActions.Add(1)
+					comActions.Add(vbNullString)
 				Else
 					Select Case token
 						Case " ", vbCr, vbLf, vbTab
@@ -180,38 +212,57 @@ Public Class frmText
 				End If
 			Next
 
-			Dim delims As New List(Of Char)
-			If chkDelComma.Checked Then delims.Add(",")
-			If chkDelSpace.Checked Then delims.Add(" ")
-			If chkDelTab.Checked Then delims.Add("	")
-			If chkDelLine.Checked Then delims.Add(vbCr)
-			If chkDelLine.Checked Then delims.Add(vbLf)
+			Dim delims As New List(Of String)
+			If chkDelComma.Checked Then
+				delims.Add(",")
+				tokens.Add(",", -1)
+			End If
+			If chkDelSpace.Checked Then
+				delims.Add(" ")
+				tokens.Add(" ", -2)
+			End If
+			If chkDelSemicolon.Checked Then
+				delims.Add(";")
+				tokens.Add(";", -3)
+			End If
+			If chkDelTab.Checked Then
+				delims.Add(vbTab)
+				tokens.Add(vbTab, -4)
+			End If
+			If chkDelLine.Checked Then
+				delims.Add(vbLf)
+				tokens.Add(vbLf, -5)
+			End If
 			If chkDelOther.Checked Then
 				For i = 0 To txtDelOther.Text.Length - 1
 					delims.Add(txtDelOther.Text.Substring(i, 1))
+					tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
 				Next
 			End If
 			If delims.Count = 0 Then
 				MsgBox("You must select at least one delimiter.")
 				Exit Sub
 			End If
-			Dim segments() As String = src.Split(delims.ToArray(), StringSplitOptions.RemoveEmptyEntries)
-			Dim reRepeat As New Regex("^(?<token>\D+)(?<repeat>\d+)$", RegexOptions.Compiled)
+			Dim segments() As String = SplitDelims(src, delims.ToArray())
+			Dim reRepeat As New Regex("^(?<token>\D+)(?<repeat>\d+)?(\{(?<comment>.*)\})?$", RegexOptions.Compiled)
 
 			For Each segment As String In segments
 				Dim action As Integer = -1
 				Dim repeat As Integer = 1
+				Dim comment As String = vbNullString
 				If chkNumberSuffix.Checked Then
 					Dim m As Match = reRepeat.Match(segment)
 					If m.Success Then
 						segment = m.Groups("token").Value
-						repeat = m.Groups("repeat").Value
+						If m.Groups("repeat").Length > 0 Then repeat = m.Groups("repeat").Value
+						comment = m.Groups("comment").Value
 					End If
 				End If
 
 				If tokens.TryGetValue(segment, action) Then
 					txtActions.Add(action)
 					rptActions.Add(repeat)
+					comActions.Add(comment)
 				Else
 					If Not invalid.Contains(segment) Then invalid.Add(segment)
 				End If
@@ -257,36 +308,59 @@ Public Class frmText
 
 		actions = New List(Of clsAction)
 
+		Dim delay_comma As Integer = 0
+		Dim delay_space As Integer = 0
+		Dim delay_semicolon As Integer = 0
+		Dim delay_tab As Integer = 0
+		Dim delay_line As Integer = 0
+		Dim delay_other As Integer = 0
+		If txtDelay_Comma.Text <> vbNullString Then delay_comma = unformatMS(txtDelay_Comma.Text)
+		If txtDelay_Space.Text <> vbNullString Then delay_space = unformatMS(txtDelay_Space.Text)
+		If txtDelay_Semicolon.Text <> vbNullString Then delay_semicolon = unformatMS(txtDelay_Semicolon.Text)
+		If txtDelay_Tab.Text <> vbNullString Then delay_tab = unformatMS(txtDelay_Tab.Text)
+		If txtDelay_Line.Text <> vbNullString Then delay_line = unformatMS(txtDelay_Line.Text)
+		If txtDelay_Other.Text <> vbNullString Then delay_other = unformatMS(txtDelay_Other.Text)
+
 		For i = 0 To txtActions.Count - 1
 			'	Private lstMask As New List(Of Integer)(New Integer() {&H100, &H800, &H200, &H400, &H10, &H20, &H40, &H80, &H1, &H2, -1, -2, &H4000, &H8000, &H2000, &H1000, &H4, -3, -4, -5, -6, -7, -8, -9, -10, -11})
 			Dim txtAction As Integer = txtActions(i)
+			Dim a As clsAction
 			Select Case txtAction
+				Case -1 'Comma
+				Case -2 'Space
+				Case -3 'Semicolon
+				Case -4 'Tab
+				Case -5 'Line
+				Case -6 'Other
+
 				Case enumTextButtons.etbLT
-					actions.Add(New clsActionPress(1, 0, 255, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, 255, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRT
-					actions.Add(New clsActionPress(1, 0, -1, 255, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, 255, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbLU
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(0, -32512), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(0, -32512), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbLR
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(32512, 0), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(32512, 0), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbLD
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(0, 32512), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(0, 32512), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbLL
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(-32512, 0), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(-32512, 0), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRU
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(0, -32512), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(0, -32512), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRR
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(32512, 0), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(32512, 0), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRD
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(0, 32512), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(0, 32512), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbRL
-					actions.Add(New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(-32512, 0), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, 0, -1, -1, New Point(-32768, -32768), New Point(-32512, 0), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 				Case enumTextButtons.etbPause
-					actions.Add(New clsActionWait(wait(txtAction), Nothing))
+					a = New clsActionWait(wait(txtAction), Nothing)
 				Case Else
-					actions.Add(New clsActionPress(1, lstMask(txtAction), -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing))
+					a = New clsActionPress(1, lstMask(txtAction), -1, -1, New Point(-32768, -32768), New Point(-32768, -32768), press(txtAction), wait(txtAction), rptActions(i), Nothing)
 			End Select
-			actions(i).index = i
+			a.comment = comActions(i)
+			a.index = i
+			actions.Add(a)
 		Next
 
 		Me.Close()
@@ -309,4 +383,6 @@ Public Class frmText
 	Private Sub frmText_Shown(sender As Object, e As EventArgs) Handles Me.Shown
 		txtInput.Focus()
 	End Sub
+
+
 End Class

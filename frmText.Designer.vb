@@ -143,6 +143,8 @@ Partial Class frmText
         Me.cmbPreset = New System.Windows.Forms.ComboBox()
         Me.btnPreset = New System.Windows.Forms.Button()
         Me.gbText = New System.Windows.Forms.GroupBox()
+        Me.chkNumberSuffix = New System.Windows.Forms.CheckBox()
+        Me.chkDelNone = New System.Windows.Forms.CheckBox()
         Me.txtDelOther = New System.Windows.Forms.TextBox()
         Me.chkDelOther = New System.Windows.Forms.CheckBox()
         Me.chkDelLine = New System.Windows.Forms.CheckBox()
@@ -153,8 +155,14 @@ Partial Class frmText
         Me.txtInput = New System.Windows.Forms.TextBox()
         Me.btnGenerate = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.chkDelNone = New System.Windows.Forms.CheckBox()
-        Me.chkNumberSuffix = New System.Windows.Forms.CheckBox()
+        Me.lblDelays = New System.Windows.Forms.Label()
+        Me.txtDelay_Comma = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Tab = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Space = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Line = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Other = New System.Windows.Forms.TextBox()
+        Me.txtDelay_Semicolon = New System.Windows.Forms.TextBox()
+        Me.chkDelSemicolon = New System.Windows.Forms.CheckBox()
         Me.gbMappings.SuspendLayout()
         Me.gbText.SuspendLayout()
         Me.SuspendLayout()
@@ -1375,6 +1383,17 @@ Partial Class frmText
         '
         'gbText
         '
+        Me.gbText.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbText.Controls.Add(Me.txtDelay_Semicolon)
+        Me.gbText.Controls.Add(Me.chkDelSemicolon)
+        Me.gbText.Controls.Add(Me.txtDelay_Other)
+        Me.gbText.Controls.Add(Me.txtDelay_Line)
+        Me.gbText.Controls.Add(Me.txtDelay_Space)
+        Me.gbText.Controls.Add(Me.txtDelay_Tab)
+        Me.gbText.Controls.Add(Me.txtDelay_Comma)
+        Me.gbText.Controls.Add(Me.lblDelays)
         Me.gbText.Controls.Add(Me.chkNumberSuffix)
         Me.gbText.Controls.Add(Me.chkDelNone)
         Me.gbText.Controls.Add(Me.txtDelOther)
@@ -1387,22 +1406,43 @@ Partial Class frmText
         Me.gbText.Controls.Add(Me.txtInput)
         Me.gbText.Location = New System.Drawing.Point(12, 314)
         Me.gbText.Name = "gbText"
-        Me.gbText.Size = New System.Drawing.Size(668, 179)
+        Me.gbText.Size = New System.Drawing.Size(668, 254)
         Me.gbText.TabIndex = 170
         Me.gbText.TabStop = False
         Me.gbText.Text = "Text"
         '
+        'chkNumberSuffix
+        '
+        Me.chkNumberSuffix.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkNumberSuffix.AutoSize = True
+        Me.chkNumberSuffix.Location = New System.Drawing.Point(505, 226)
+        Me.chkNumberSuffix.Name = "chkNumberSuffix"
+        Me.chkNumberSuffix.Size = New System.Drawing.Size(100, 17)
+        Me.chkNumberSuffix.TabIndex = 9
+        Me.chkNumberSuffix.Text = "# Repeat Suffix"
+        Me.chkNumberSuffix.UseVisualStyleBackColor = True
+        '
+        'chkDelNone
+        '
+        Me.chkDelNone.AutoSize = True
+        Me.chkDelNone.Location = New System.Drawing.Point(505, 38)
+        Me.chkDelNone.Name = "chkDelNone"
+        Me.chkDelNone.Size = New System.Drawing.Size(52, 17)
+        Me.chkDelNone.TabIndex = 8
+        Me.chkDelNone.Text = "None"
+        Me.chkDelNone.UseVisualStyleBackColor = True
+        '
         'txtDelOther
         '
-        Me.txtDelOther.Location = New System.Drawing.Point(581, 84)
+        Me.txtDelOther.Location = New System.Drawing.Point(561, 176)
         Me.txtDelOther.Name = "txtDelOther"
-        Me.txtDelOther.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelOther.Size = New System.Drawing.Size(35, 20)
         Me.txtDelOther.TabIndex = 7
         '
         'chkDelOther
         '
         Me.chkDelOther.AutoSize = True
-        Me.chkDelOther.Location = New System.Drawing.Point(525, 84)
+        Me.chkDelOther.Location = New System.Drawing.Point(505, 176)
         Me.chkDelOther.Name = "chkDelOther"
         Me.chkDelOther.Size = New System.Drawing.Size(52, 17)
         Me.chkDelOther.TabIndex = 6
@@ -1412,7 +1452,7 @@ Partial Class frmText
         'chkDelLine
         '
         Me.chkDelLine.AutoSize = True
-        Me.chkDelLine.Location = New System.Drawing.Point(592, 61)
+        Me.chkDelLine.Location = New System.Drawing.Point(505, 153)
         Me.chkDelLine.Name = "chkDelLine"
         Me.chkDelLine.Size = New System.Drawing.Size(46, 17)
         Me.chkDelLine.TabIndex = 5
@@ -1422,7 +1462,7 @@ Partial Class frmText
         'chkDelSpace
         '
         Me.chkDelSpace.AutoSize = True
-        Me.chkDelSpace.Location = New System.Drawing.Point(592, 38)
+        Me.chkDelSpace.Location = New System.Drawing.Point(505, 107)
         Me.chkDelSpace.Name = "chkDelSpace"
         Me.chkDelSpace.Size = New System.Drawing.Size(57, 17)
         Me.chkDelSpace.TabIndex = 4
@@ -1432,7 +1472,7 @@ Partial Class frmText
         'chkDelTab
         '
         Me.chkDelTab.AutoSize = True
-        Me.chkDelTab.Location = New System.Drawing.Point(525, 61)
+        Me.chkDelTab.Location = New System.Drawing.Point(505, 84)
         Me.chkDelTab.Name = "chkDelTab"
         Me.chkDelTab.Size = New System.Drawing.Size(45, 17)
         Me.chkDelTab.TabIndex = 3
@@ -1442,7 +1482,7 @@ Partial Class frmText
         'chkDelComma
         '
         Me.chkDelComma.AutoSize = True
-        Me.chkDelComma.Location = New System.Drawing.Point(525, 38)
+        Me.chkDelComma.Location = New System.Drawing.Point(505, 61)
         Me.chkDelComma.Name = "chkDelComma"
         Me.chkDelComma.Size = New System.Drawing.Size(61, 17)
         Me.chkDelComma.TabIndex = 2
@@ -1452,7 +1492,7 @@ Partial Class frmText
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(522, 16)
+        Me.Label9.Location = New System.Drawing.Point(502, 16)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(55, 13)
         Me.Label9.TabIndex = 1
@@ -1460,16 +1500,19 @@ Partial Class frmText
         '
         'txtInput
         '
+        Me.txtInput.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtInput.Location = New System.Drawing.Point(7, 20)
         Me.txtInput.Multiline = True
         Me.txtInput.Name = "txtInput"
         Me.txtInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtInput.Size = New System.Drawing.Size(499, 148)
+        Me.txtInput.Size = New System.Drawing.Size(479, 223)
         Me.txtInput.TabIndex = 0
         '
         'btnGenerate
         '
-        Me.btnGenerate.Location = New System.Drawing.Point(604, 499)
+        Me.btnGenerate.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnGenerate.Location = New System.Drawing.Point(604, 574)
         Me.btnGenerate.Name = "btnGenerate"
         Me.btnGenerate.Size = New System.Drawing.Size(75, 23)
         Me.btnGenerate.TabIndex = 171
@@ -1478,38 +1521,86 @@ Partial Class frmText
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(523, 499)
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCancel.Location = New System.Drawing.Point(523, 574)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 172
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'chkDelNone
+        'lblDelays
         '
-        Me.chkDelNone.AutoSize = True
-        Me.chkDelNone.Location = New System.Drawing.Point(592, 15)
-        Me.chkDelNone.Name = "chkDelNone"
-        Me.chkDelNone.Size = New System.Drawing.Size(52, 17)
-        Me.chkDelNone.TabIndex = 8
-        Me.chkDelNone.Text = "None"
-        Me.chkDelNone.UseVisualStyleBackColor = True
+        Me.lblDelays.AutoSize = True
+        Me.lblDelays.Location = New System.Drawing.Point(596, 16)
+        Me.lblDelays.Name = "lblDelays"
+        Me.lblDelays.Size = New System.Drawing.Size(42, 13)
+        Me.lblDelays.TabIndex = 10
+        Me.lblDelays.Text = "Delays:"
         '
-        'chkNumberSuffix
+        'txtDelay_Comma
         '
-        Me.chkNumberSuffix.AutoSize = True
-        Me.chkNumberSuffix.Location = New System.Drawing.Point(525, 151)
-        Me.chkNumberSuffix.Name = "chkNumberSuffix"
-        Me.chkNumberSuffix.Size = New System.Drawing.Size(100, 17)
-        Me.chkNumberSuffix.TabIndex = 9
-        Me.chkNumberSuffix.Text = "# Repeat Suffix"
-        Me.chkNumberSuffix.UseVisualStyleBackColor = True
+        Me.txtDelay_Comma.Location = New System.Drawing.Point(599, 59)
+        Me.txtDelay_Comma.Name = "txtDelay_Comma"
+        Me.txtDelay_Comma.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Comma.TabIndex = 167
+        Me.txtDelay_Comma.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Tab
+        '
+        Me.txtDelay_Tab.Location = New System.Drawing.Point(599, 82)
+        Me.txtDelay_Tab.Name = "txtDelay_Tab"
+        Me.txtDelay_Tab.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Tab.TabIndex = 168
+        Me.txtDelay_Tab.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Space
+        '
+        Me.txtDelay_Space.Location = New System.Drawing.Point(599, 105)
+        Me.txtDelay_Space.Name = "txtDelay_Space"
+        Me.txtDelay_Space.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Space.TabIndex = 169
+        Me.txtDelay_Space.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Line
+        '
+        Me.txtDelay_Line.Location = New System.Drawing.Point(599, 151)
+        Me.txtDelay_Line.Name = "txtDelay_Line"
+        Me.txtDelay_Line.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Line.TabIndex = 170
+        Me.txtDelay_Line.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Other
+        '
+        Me.txtDelay_Other.Location = New System.Drawing.Point(599, 176)
+        Me.txtDelay_Other.Name = "txtDelay_Other"
+        Me.txtDelay_Other.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Other.TabIndex = 171
+        Me.txtDelay_Other.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDelay_Semicolon
+        '
+        Me.txtDelay_Semicolon.Location = New System.Drawing.Point(599, 128)
+        Me.txtDelay_Semicolon.Name = "txtDelay_Semicolon"
+        Me.txtDelay_Semicolon.Size = New System.Drawing.Size(50, 20)
+        Me.txtDelay_Semicolon.TabIndex = 173
+        Me.txtDelay_Semicolon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'chkDelSemicolon
+        '
+        Me.chkDelSemicolon.AutoSize = True
+        Me.chkDelSemicolon.Location = New System.Drawing.Point(505, 130)
+        Me.chkDelSemicolon.Name = "chkDelSemicolon"
+        Me.chkDelSemicolon.Size = New System.Drawing.Size(75, 17)
+        Me.chkDelSemicolon.TabIndex = 172
+        Me.chkDelSemicolon.Text = "Semicolon"
+        Me.chkDelSemicolon.UseVisualStyleBackColor = True
         '
         'frmText
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(691, 528)
+        Me.ClientSize = New System.Drawing.Size(691, 603)
         Me.ControlBox = False
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnGenerate)
@@ -1662,4 +1753,12 @@ Partial Class frmText
     Friend WithEvents btnPause As Button
     Friend WithEvents chkDelNone As CheckBox
     Friend WithEvents chkNumberSuffix As CheckBox
+    Friend WithEvents lblDelays As Label
+    Friend WithEvents txtDelay_Other As TextBox
+    Friend WithEvents txtDelay_Line As TextBox
+    Friend WithEvents txtDelay_Space As TextBox
+    Friend WithEvents txtDelay_Tab As TextBox
+    Friend WithEvents txtDelay_Comma As TextBox
+    Friend WithEvents txtDelay_Semicolon As TextBox
+    Friend WithEvents chkDelSemicolon As CheckBox
 End Class

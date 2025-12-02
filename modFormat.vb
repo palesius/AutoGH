@@ -34,4 +34,32 @@ Module modFormat
         Dim ts As New TimeSpan(strD, strH, strM, strS, strMs)
         Return Math.Floor(ts.TotalMilliseconds)
     End Function
+
+    Public Function splitDelims(src As String, delims() As String) As String()
+        Dim tokens As New List(Of String)
+        Dim startPos As Integer = 1
+        Dim done As Boolean = False
+        Do
+            Dim nearPos As Integer = -1
+            Dim nearDelim As String = vbNullString
+            For Each delim As String In delims
+                Dim curPos As Integer = InStr(startPos, src, delim)
+                If curPos > 0 Then
+                    If nearPos < 0 Or curPos < nearPos Then
+                        nearPos = curPos
+                        nearDelim = delim
+                    End If
+                End If
+            Next
+            If nearPos = -1 Then
+                If startPos <= src.Length Then tokens.Add(src.Substring(startPos - 1, src.Length - startPos + 1))
+                done = True
+            Else
+                If nearPos > startPos Then tokens.Add(src.Substring(startPos - 1, nearPos - startPos))
+                tokens.Add(nearDelim)
+                startPos = nearPos + nearDelim.Length
+            End If
+        Loop Until done
+        Return tokens.ToArray()
+    End Function
 End Module

@@ -1580,14 +1580,22 @@ Public Class frmEdit
         Dim ss As New frmText
         ss.ShowDialog()
         If Not ss.actions Is Nothing Then
-            activeGroup.actions.Clear()
+            If activeGroup.actions.Count > 0 Then
+                If MsgBox("Replace existing script?" & vbCrLf & "Answer no to append.", vbYesNo) = MsgBoxResult.Yes Then
+                    activeGroup.actions.Clear()
+                Else
+                    For Each act As clsAction In ss.actions
+                        act.index += activeGroup.actions.Count
+                    Next
+                End If
+            End If
             For Each act As clsAction In ss.actions
-                act.group = activeGroup
-                activeGroup.actions.Add(act)
-            Next
-            refreshGroup()
-        End If
-        ss.Dispose()
+                    act.group = activeGroup
+                    activeGroup.actions.Add(act)
+                Next
+                refreshGroup()
+            End If
+            ss.Dispose()
         ss = Nothing
     End Sub
 End Class
