@@ -186,14 +186,16 @@ Public Class frmText
 				End If
 			Next
 
-			tokens.Add(",", -1)
-			tokens.Add(" ", -2)
-			tokens.Add(";", -3)
-			tokens.Add(vbTab, -4)
-			tokens.Add(vbLf, -5)
-			For i = 0 To txtDelOther.Text.Length - 1
-				tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
-			Next
+			If chkDelComma.Checked Then tokens.Add(",", -1)
+			If chkDelSpace.Checked Then tokens.Add(" ", -2)
+			If chkDelSemicolon.Checked Then tokens.Add(";", -3)
+			If chkDelTab.Checked Then tokens.Add(vbTab, -4)
+			If chkDelLine.Checked Then tokens.Add(vbLf, -5)
+			If chkDelOther.Checked Then
+				For i = 0 To txtDelOther.Text.Length - 1
+					tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
+				Next
+			End If
 
 			Dim c As Integer
 			Do While c < src.Length
@@ -209,6 +211,7 @@ Public Class frmText
 									sbDigits.Append(src.Substring(c + 1, 1))
 									c = c + 1
 								Case Else
+									Exit While
 							End Select
 						End While
 					End If
