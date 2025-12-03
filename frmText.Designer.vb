@@ -152,7 +152,7 @@ Partial Class frmText
         Me.txtDelay_Comma = New System.Windows.Forms.TextBox()
         Me.lblDelays = New System.Windows.Forms.Label()
         Me.chkNumberSuffix = New System.Windows.Forms.CheckBox()
-        Me.chkDelNone = New System.Windows.Forms.CheckBox()
+        Me.chkDelRequired = New System.Windows.Forms.CheckBox()
         Me.txtDelOther = New System.Windows.Forms.TextBox()
         Me.chkDelOther = New System.Windows.Forms.CheckBox()
         Me.chkDelLine = New System.Windows.Forms.CheckBox()
@@ -1369,7 +1369,7 @@ Partial Class frmText
         Me.gbText.Controls.Add(Me.txtDelay_Comma)
         Me.gbText.Controls.Add(Me.lblDelays)
         Me.gbText.Controls.Add(Me.chkNumberSuffix)
-        Me.gbText.Controls.Add(Me.chkDelNone)
+        Me.gbText.Controls.Add(Me.chkDelRequired)
         Me.gbText.Controls.Add(Me.txtDelOther)
         Me.gbText.Controls.Add(Me.chkDelOther)
         Me.gbText.Controls.Add(Me.chkDelLine)
@@ -1463,15 +1463,15 @@ Partial Class frmText
         Me.chkNumberSuffix.Text = "# Repeat Suffix"
         Me.chkNumberSuffix.UseVisualStyleBackColor = True
         '
-        'chkDelNone
+        'chkDelRequired
         '
-        Me.chkDelNone.AutoSize = True
-        Me.chkDelNone.Location = New System.Drawing.Point(505, 38)
-        Me.chkDelNone.Name = "chkDelNone"
-        Me.chkDelNone.Size = New System.Drawing.Size(52, 17)
-        Me.chkDelNone.TabIndex = 8
-        Me.chkDelNone.Text = "None"
-        Me.chkDelNone.UseVisualStyleBackColor = True
+        Me.chkDelRequired.AutoSize = True
+        Me.chkDelRequired.Location = New System.Drawing.Point(505, 38)
+        Me.chkDelRequired.Name = "chkDelRequired"
+        Me.chkDelRequired.Size = New System.Drawing.Size(69, 17)
+        Me.chkDelRequired.TabIndex = 8
+        Me.chkDelRequired.Text = "Required"
+        Me.chkDelRequired.UseVisualStyleBackColor = True
         '
         'txtDelOther
         '
@@ -1725,7 +1725,7 @@ Partial Class frmText
     Friend WithEvents btnGenerate As Button
     Friend WithEvents btnCancel As Button
     Friend WithEvents btnPause As Button
-    Friend WithEvents chkDelNone As CheckBox
+    Friend WithEvents chkDelRequired As CheckBox
     Friend WithEvents chkNumberSuffix As CheckBox
     Friend WithEvents lblDelays As Label
     Friend WithEvents txtDelay_Other As TextBox

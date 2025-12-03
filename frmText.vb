@@ -82,7 +82,7 @@ Public Class frmText
 			If Not lstTxtPress(i) Is Nothing Then SaveSetting(Application.ProductName, "TTS", "Press_" & lstName(i), lstTxtPress(i).Text)
 			If Not lstTxtWait(i) Is Nothing Then SaveSetting(Application.ProductName, "TTS", "Wait_" & lstName(i), lstTxtWait(i).Text)
 		Next
-		SaveSetting(Application.ProductName, "TTS", "Delim_None", IIf(chkDelNone.Checked, "True", "False"))
+		SaveSetting(Application.ProductName, "TTS", "Delim_Required", IIf(chkDelRequired.Checked, "True", "False"))
 
 		SaveSetting(Application.ProductName, "TTS", "Delim_Comma", IIf(chkDelComma.Checked, "True", "False"))
 		SaveSetting(Application.ProductName, "TTS", "Delay_Comma", txtDelay_Comma.Text)
@@ -114,7 +114,7 @@ Public Class frmText
 			If Not lstTxtPress(i) Is Nothing Then lstTxtPress(i).Text = GetSetting(Application.ProductName, "TTS", "Press_" & lstName(i), vbNullString)
 			If Not lstTxtWait(i) Is Nothing Then lstTxtWait(i).Text = GetSetting(Application.ProductName, "TTS", "Wait_" & lstName(i), vbNullString)
 		Next
-		chkDelNone.Checked = GetSetting(Application.ProductName, "TTS", "Delim_None", "True") = "True"
+		chkDelRequired.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Required", "True") = "True"
 
 		chkDelComma.Checked = GetSetting(Application.ProductName, "TTS", "Delim_Comma", "True") = "True"
 		txtDelay_Comma.Text = GetSetting(Application.ProductName, "TTS", "Delay_Comma", vbNullString)
@@ -168,7 +168,7 @@ Public Class frmText
 
 		Dim invalid As New HashSet(Of String)
 
-		If chkDelNone.Checked Then
+		If Not chkDelRequired.Checked Then
 			For i As Integer = enumTextButtons.etbUp To enumTextButtons.etbPause
 				If Not lstTxtButton Is Nothing Then
 					Select Case lstTxtButton(i).Text.Length
@@ -186,41 +186,48 @@ Public Class frmText
 				End If
 			Next
 
-			'tokens.Add(",", -1)
-			'tokens.Add(" ", -2)
-			'tokens.Add(";", -3)
-			'tokens.Add(vbTab, -4)
-			'tokens.Add(vbLf, -5)
-			'For i = 0 To txtDelOther.Text.Length - 1
-			'	tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
-			'Next
+			tokens.Add(",", -1)
+			tokens.Add(" ", -2)
+			tokens.Add(";", -3)
+			tokens.Add(vbTab, -4)
+			tokens.Add(vbLf, -5)
+			For i = 0 To txtDelOther.Text.Length - 1
+				tokens.Add(txtDelOther.Text.Substring(i, 1), -6)
+			Next
 
-			For i As Integer = 0 To src.Length - 1
+			Dim c As Integer
+			Do While c < src.Length
 				Dim action As Integer = -1
-				Dim token As String = src.Substring(i, 1)
+				Dim token As String = src.Substring(c, 1)
 				If tokens.TryGetValue(token, action) Then
 					txtActions.Add(action)
-					rptActions.Add(1)
-					comActions.Add(vbNullString)
-				Else
-					Select Case token
-						Case " ", vbCr, vbLf, vbTab
+					Dim sbDigits As New Text.StringBuilder
+					If chkNumberSuffix.Checked Then
+						While (c + 1) < src.Length
+							Select Case src.Substring(c + 1, 1)
+								Case "0" To "9"
+									sbDigits.Append(src.Substring(c + 1, 1))
+									c = c + 1
+								Case Else
+							End Select
+						End While
+					End If
+					If sbDigits.Length > 0 Then
+							rptActions.Add(CInt(sbDigits.ToString()))
+						Else
+							rptActions.Add(1)
+						End If
+						comActions.Add(vbNullString)
+					Else
+						Select Case token
+						Case " ", vbLf, vbTab
 						Case Else
 							If Not invalid.Contains(token) Then invalid.Add(token)
 					End Select
 				End If
-			Next
+				c = c + 1
+			Loop
 		Else
-			For i As Integer = enumTextButtons.etbUp To enumTextButtons.etbPause
-				If (Not lstTxtButton(i) Is Nothing) AndAlso lstTxtButton(i).Text <> vbNullString Then
-					If tokens.ContainsKey(lstTxtButton(i).Text) Then
-						MsgBox("Button values must be unique.")
-						Exit Sub
-					End If
-					tokens.Add(lstTxtButton(i).Text, i)
-				End If
-			Next
-
 			Dim delims As New List(Of String)
 			If chkDelComma.Checked Then
 				delims.Add(",")
@@ -252,7 +259,18 @@ Public Class frmText
 				MsgBox("You must select at least one delimiter.")
 				Exit Sub
 			End If
-			Dim segments() As String = SplitDelims(src, delims.ToArray())
+
+			For i As Integer = enumTextButtons.etbUp To enumTextButtons.etbPause
+				If (Not lstTxtButton(i) Is Nothing) AndAlso lstTxtButton(i).Text <> vbNullString Then
+					If tokens.ContainsKey(lstTxtButton(i).Text) Then
+						MsgBox("Button values must be unique.")
+						Exit Sub
+					End If
+					tokens.Add(lstTxtButton(i).Text, i)
+				End If
+			Next
+
+			Dim segments() As String = splitDelims(src, delims.ToArray())
 			Dim reRepeat As New Regex("^(?<token>\D+)(?<repeat>\d+)?(\{(?<comment>.*)\})?$", RegexOptions.Compiled)
 
 			For Each segment As String In segments
@@ -308,7 +326,7 @@ Public Class frmText
 			End If
 			If lstTxtWait(i) Is Nothing Then
 				wait.Add(0)
-			ElseIf lstTxtwait(i).Text = vbNullString Then
+			ElseIf lstTxtWait(i).Text = vbNullString Then
 				wait.Add(wait_default)
 			Else
 				wait.Add(unformatMS(lstTxtWait(i).Text))
@@ -384,15 +402,15 @@ Public Class frmText
 		Me.Close()
 	End Sub
 
-	Private Sub chkDelNone_CheckedChanged(sender As Object, e As EventArgs) Handles chkDelNone.CheckedChanged
-		chkDelComma.Enabled = Not chkDelNone.Checked
-		chkDelTab.Enabled = Not chkDelNone.Checked
-		chkDelSpace.Enabled = Not chkDelNone.Checked
-		chkDelSemicolon.Enabled = Not chkDelNone.Checked
-		chkDelLine.Enabled = Not chkDelNone.Checked
-		chkDelOther.Enabled = Not chkDelNone.Checked
+	Private Sub chkDelNone_CheckedChanged(sender As Object, e As EventArgs) Handles chkDelRequired.CheckedChanged
+		'chkDelComma.Enabled = Not chkDelRequired.Checked
+		'chkDelTab.Enabled = Not chkDelRequired.Checked
+		'chkDelSpace.Enabled = Not chkDelRequired.Checked
+		'chkDelSemicolon.Enabled = Not chkDelRequired.Checked
+		'chkDelLine.Enabled = Not chkDelRequired.Checked
+		'chkDelOther.Enabled = Not chkDelRequired.Checked
 		'txtDelOther.Enabled = Not chkDelNone.Checked
-		chkNumberSuffix.Enabled = Not chkDelNone.Checked
+		chkNumberSuffix.Enabled = Not chkDelRequired.Checked
 	End Sub
 
 	Private Sub gbText_Enter(sender As Object, e As EventArgs) Handles gbText.Enter
